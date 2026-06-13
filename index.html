@@ -26,6 +26,12 @@
       box-sizing: border-box;
     }
 
+    @property --sweep-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -147,31 +153,49 @@
     }
 
     .ring::before {
-      content: "";
-      position: absolute;
-      inset: -5px;
-      border-radius: 50%;
-      background: conic-gradient(
-        from 0deg,
-        transparent 0deg,
-        transparent 245deg,
-        rgba(255, 255, 255, 0.95) 267deg,
-        transparent 290deg,
-        transparent 360deg
-      );
-      -webkit-mask: radial-gradient(
-        farthest-side,
-        transparent calc(100% - 16px),
-        black calc(100% - 15px)
-      );
-      mask: radial-gradient(
-        farthest-side,
-        transparent calc(100% - 16px),
-        black calc(100% - 15px)
-      );
-      animation: ringSweep 3.2s linear infinite;
-      opacity: 0.75;
-    }
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from var(--sweep-angle),
+    transparent 0deg,
+    transparent 245deg,
+    rgba(255, 255, 255, 0.95) 267deg,
+    transparent 290deg,
+    transparent 360deg
+  );
+
+  -webkit-mask:
+    radial-gradient(
+      farthest-side,
+      transparent calc(100% - 16px),
+      black calc(100% - 15px)
+    ),
+    conic-gradient(
+      from -90deg,
+      black 0deg var(--angle),
+      transparent var(--angle) 360deg
+    );
+
+  mask:
+    radial-gradient(
+      farthest-side,
+      transparent calc(100% - 16px),
+      black calc(100% - 15px)
+    ),
+    conic-gradient(
+      from -90deg,
+      black 0deg var(--angle),
+      transparent var(--angle) 360deg
+    );
+
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+
+  animation: ringSweep 3.2s linear infinite;
+  opacity: 0.75;
+}
 
     .ring::after {
       content: "";
@@ -304,13 +328,13 @@
     }
 
     @keyframes ringSweep {
-      from {
-        transform: rotate(0deg);
-      }
-      to {
-        transform: rotate(360deg);
-      }
-    }
+  from {
+    --sweep-angle: 0deg;
+  }
+  to {
+    --sweep-angle: 360deg;
+  }
+}
 
     @keyframes barSweep {
       from {
@@ -494,8 +518,8 @@
       },
       {
         label: "Ausdauer",
-        valueText: `${Math.round(staminaPercent)}%`,
-        subText: getStaminaStage(staminaPercent),
+        valueText: getStaminaStage(staminaPercent),
+        subText: `${Math.round(staminaPercent)}%`,
         percent: staminaPercent,
         color: "var(--stamina-color)"
       }
