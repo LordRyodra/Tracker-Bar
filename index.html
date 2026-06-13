@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ryo Status Widget</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="widget">
+    <section class="stat-block">
+      <div class="stat-header">
+        <span>HP</span>
+        <span id="hpValue">34</span>
+      </div>
+      <div class="bar">
+        <div id="hpFill" class="bar-fill"></div>
+      </div>
+    </section>
+
+    <section class="stat-block">
+      <div class="stat-header">
+        <span>Mana</span>
+        <span id="manaValue">undefined</span>
+      </div>
+      <div class="bar">
+        <div id="manaFill" class="bar-fill mana"></div>
+      </div>
+    </section>
+
+    <section class="stat-block stamina-block">
+      <div class="stat-header">
+        <span>Ausdauer</span>
+        <span id="staminaValue">90%</span>
+      </div>
+
+      <div class="stamina-labels">
+        <span style="left: 13%;">Stark<br>Erschöpft</span>
+        <span style="left: 29%;">Erschöpft</span>
+        <span style="left: 49%;">Leicht<br>Erschöpft</span>
+        <span style="left: 77%;">Fit</span>
+        <span style="left: 91%;">Erholt</span>
+      </div>
+
+      <div class="bar">
+        <div id="staminaFill" class="bar-fill"></div>
+      </div>
+    </section>
+
+    <section class="stat-block">
+      <div class="stat-header">
+        <span>Synchronisation</span>
+        <span id="syncValue">20%</span>
+      </div>
+      <div class="bar">
+        <div id="syncFill" class="bar-fill"></div>
+      </div>
+    </section>
+
+    <section class="buttons">
+      <button onclick="toggleEditor()">Bearbeiten</button>
+      <button onclick="changeNumber('hp')">HP</button>
+      <button onclick="changeNumber('mana')">Mana</button>
+      <button onclick="changeNumber('stamina')">Ausdauer</button>
+      <button onclick="changeNumber('sync')">Synchronisation</button>
+    </section>
+
+    <section id="editor" class="editor hidden">
+      <label>
+        HP
+        <input id="hpInput" type="number" min="0" />
+      </label>
+
+      <label>
+        Max HP
+        <input id="maxHpInput" type="number" min="1" />
+      </label>
+
+      <label>
+        Mana
+        <input id="manaInput" type="text" placeholder="z.B. 10 oder undefined" />
+      </label>
+
+      <label>
+        Max Mana
+        <input id="maxManaInput" type="number" min="1" />
+      </label>
+
+      <label>
+        Ausdauer %
+        <input id="staminaInput" type="number" min="0" max="100" />
+      </label>
+
+      <label>
+        Synchronisation %
+        <input id="syncInput" type="number" min="0" max="100" />
+      </label>
+
+      <button onclick="saveEditor()">Speichern</button>
+      <button onclick="resetStats()">Reset</button>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
