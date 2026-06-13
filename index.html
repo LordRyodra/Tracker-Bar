@@ -109,7 +109,7 @@
       font-size: 14px;
     }
 
-    . {
+    .rings {
       position: relative;
       z-index: 2;
       display: grid;
@@ -206,7 +206,7 @@
   mix-blend-mode: screen;
 
   animation:
-    weep var(--sweep-speed, 4.8s) linear infinite,
+    ringSweep var(--sweep-speed, 4.8s) linear infinite,
     ringPulse var(--pulse-speed, 2.9s) ease-in-out infinite;
 
   animation-delay:
@@ -345,7 +345,7 @@
       animation: barSweep 2.7s linear infinite;
     }
 
-    @keyframes weep {
+    @keyframes ringSweep {
   from {
     --sweep-angle: 0deg;
   }
@@ -401,7 +401,7 @@
         padding: 16px;
       }
 
-      . {
+      .rings {
         gap: 10px;
       }
 
@@ -431,7 +431,7 @@
       <span>Isekai Sync</span>
     </div>
 
-    <section class="" id=""></section>
+    <section class="rings" id="rings"></section>
 
     <section class="attributes" id="attributes"></section>
 
