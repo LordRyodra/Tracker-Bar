@@ -109,7 +109,7 @@
       font-size: 14px;
     }
 
-    .rings {
+    . {
       position: relative;
       z-index: 2;
       display: grid;
@@ -206,7 +206,7 @@
   mix-blend-mode: screen;
 
   animation:
-    ringSweep var(--sweep-speed, 4.8s) linear infinite,
+    weep var(--sweep-speed, 4.8s) linear infinite,
     ringPulse var(--pulse-speed, 2.9s) ease-in-out infinite;
 
   animation-delay:
@@ -244,7 +244,6 @@
   font-weight: 700;
   line-height: 1.05;
   text-align: center;
-}
     }
 
     .ring-sub {
@@ -346,7 +345,7 @@
       animation: barSweep 2.7s linear infinite;
     }
 
-    @keyframes ringSweep {
+    @keyframes weep {
   from {
     --sweep-angle: 0deg;
   }
@@ -402,7 +401,7 @@
         padding: 16px;
       }
 
-      .rings {
+      . {
         gap: 10px;
       }
 
@@ -432,7 +431,7 @@
       <span>Isekai Sync</span>
     </div>
 
-    <section class="rings" id="rings"></section>
+    <section class="" id=""></section>
 
     <section class="attributes" id="attributes"></section>
 
@@ -546,7 +545,7 @@
         valueText: `${stats.hp}/${stats.hpMax}`,
         subText: `${Math.round(hpPercent)}%`,
         percent: hpPercent,
-        color: getHpColor(hpPercent)
+        color: getHpColor(hpPercent),
         speed: 4.4,
         delay: -0.6,
         pulseDelay: -0.2
@@ -556,7 +555,7 @@
         valueText: stats.manaMax > 0 ? `${stats.mana}/${stats.manaMax}` : "—",
         subText: stats.manaMax > 0 ? `${Math.round(manaPercent)}%` : "Nicht erwacht",
         percent: manaPercent,
-        color: "var(--mana-color)"
+        color: "var(--mana-color)",
         speed: 5.2,
         delay: -1.8,
         pulseDelay: -1.1
@@ -566,7 +565,7 @@
         valueText: getStaminaStage(staminaPercent),
         subText: `${Math.round(staminaPercent)}%`,
         percent: staminaPercent,
-        color: "var(--stamina-color)"
+        color: "var(--stamina-color)",
         speed: 4.8,
         delay: -2.6,
         pulseDelay: -0.7
