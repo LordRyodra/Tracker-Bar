@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Status Tracker</title>
+
+  <style>
+    :root {
+      --bg: #181818;
+      --text: #ffffff;
+      --track: #343434;
+
+      --hp-color: #CC2114;
+      --mana-color: #146ACC;
+      --stamina-color: #14CC14;
+      --sync-color: #14CC92;
+
+      --font-size: 18px;
+      --bar-height: 10px;
+      --bar-radius: 999px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Georgia, "Times New Roman", serif;
+      padding: 28px 35px;
+    }
+
+    .tracker {
+      display: flex;
+      flex-direction: column;
+      gap: 34px;
+    }
+
+    .row-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--font-size);
+      margin-bottom: 10px;
+    }
+
+    .label {
+      color: var(--text);
+    }
+
+    .value {
+      color: var(--text);
+      font-weight: bold;
+    }
+
+    .bar {
+      position: relative;
+      width: 100%;
+      height: var(--bar-height);
+      background: var(--track);
+      border-radius: var(--bar-radius);
+      overflow: visible;
+    }
+
+    .fill {
+      height: 100%;
+      border-radius: var(--bar-radius);
+      width: var(--value);
+      background: var(--color);
+    }
+
+    .stage-marker {
+      position: absolute;
+      top: -63px;
+      transform: translateX(-50%);
+      background: #333;
+      padding: 7px 10px;
+      font-size: 18px;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .stage-marker::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -7px;
+      transform: translateX(-50%);
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 7px solid #333;
+    }
+
+    .stamina-row {
+      margin-top: 28px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="tracker" id="tracker"></div>
+
+  <script>
+    const bars = [
+      {
+        name: "HP",
+        value: 97,
+        display: "34",
+        color: "var(--hp-color)"
+      },
+      {
+        name: "Mana",
+        value: 0,
+        display: "undefined",
+        color: "var(--mana-color)"
+      },
+      {
+        name: "Ausdauer",
+        value: 90,
+        color: "var(--stamina-color)",
+        showStageInsteadOfPercent: true,
+        stages: [
+          { min: 0, label: "Zusammenbruch" },
+          { min: 15, label: "Stark<br>Erschöpft" },
+          { min: 30, label: "Erschöpft" },
+          { min: 55, label: "Leicht<br>Erschöpft" },
+          { min: 75, label: "Fit" },
+          { min: 90, label: "Erholt" }
+        ],
+        showMarkers: true
+      },
+      {
+        name: "Synchronisation",
+        value: 20,
+        display: "20%",
+        color: "var(--sync-color)"
+      }
+    ];
+
+    function getStage(bar) {
+      if (!bar.stages) return "";
+
+      let currentStage = bar.stages[0];
+
+      for (const stage of bar.stages) {
+        if (bar.value >= stage.min) {
+          currentStage = stage;
+        }
+      }
+
+      return currentStage.label.replace("<br>", " ");
+    }
+
+    function createBar(bar) {
+      const wrapper = document.createElement("div");
+      wrapper.className = bar.name === "Ausdauer" ? "row stamina-row" : "row";
+
+      const rightText = bar.showStageInsteadOfPercent
+        ? getStage(bar)
+        : bar.display ?? `${bar.value}%`;
+
+      wrapper.innerHTML = `
+        <div class="row-header">
+          <div class="label">${bar.name}</div>
+          <div class="value">${rightText}</div>
+        </div>
+
+        <div class="bar">
+          <div 
+            class="fill" 
+            style="--value: ${bar.value}%; --color: ${bar.color};"
+          ></div>
+        </div>
+      `;
+
+      const barElement = wrapper.querySelector(".bar");
+
+      if (bar.showMarkers && bar.stages) {
+        for (const stage of bar.stages) {
+          const marker = document.createElement("div");
+          marker.className = "stage-marker";
+          marker.style.left = `${stage.min}%`;
+          marker.innerHTML = stage.label;
+          barElement.appendChild(marker);
+        }
+      }
+
+      return wrapper;
+    }
+
+    const tracker = document.getElementById("tracker");
+
+    bars.forEach(bar => {
+      tracker.appendChild(createBar(bar));
+    });
+  </script>
+</body>
+</html>
