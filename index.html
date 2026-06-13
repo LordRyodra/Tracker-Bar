@@ -25,7 +25,7 @@
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      font-family: Georgia, "Calibri", serif;
+      font-family: Calibri, Georgia, "Times New Roman", serif;
       padding: 28px 35px;
     }
 
@@ -91,7 +91,7 @@
     }
 
     .stamina-row {
-      margin-top: 28px;
+      margin-top: 0;
     }
   </style>
 </head>
@@ -103,8 +103,8 @@
     const bars = [
       {
         name: "HP",
-        value: 97,
-        display: "34",
+        current: 34,
+        max: 35,
         color: "var(--hp-color)"
       },
       {
@@ -147,17 +147,19 @@
         }
       }
 
-      return currentStage.label.replace("<br>", " ");
+      return currentStage.label.replace(/<br\s*\/?>/g, " ");
     }
 
     function createBar(bar) {
       const wrapper = document.createElement("div");
       wrapper.className = bar.name === "Ausdauer" ? "row stamina-row" : "row";
 
-      const rightText = bar.showStageInsteadOfPercent
-        ? getStage(bar)
-        : bar.display ?? `${bar.value}%`;
+      const percent = bar.max ? Math.round((bar.current / bar.max) * 100) : bar.value;
 
+const rightText = bar.showStageInsteadOfPercent
+  ? getStage({ ...bar, value: percent })
+  : bar.display ?? (bar.max ? `${bar.current}` : `${percent}%`);
+      
       wrapper.innerHTML = `
         <div class="row-header">
           <div class="label">${bar.name}</div>
@@ -167,7 +169,7 @@
         <div class="bar">
           <div 
             class="fill" 
-            style="--value: ${bar.value}%; --color: ${bar.color};"
+            style="--value: ${percent}%; --color: ${bar.color};"
           ></div>
         </div>
       `;
