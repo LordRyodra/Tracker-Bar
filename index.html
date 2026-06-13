@@ -157,12 +157,17 @@
   position: absolute;
   inset: -5px;
   border-radius: 50%;
+
   background: conic-gradient(
     from var(--sweep-angle),
     transparent 0deg,
-    transparent 245deg,
-    rgba(255, 255, 255, 0.95) 267deg,
-    transparent 290deg,
+    transparent 214deg,
+    rgba(255, 255, 255, 0.04) 232deg,
+    rgba(255, 255, 255, 0.22) 246deg,
+    rgba(255, 255, 255, 0.85) 258deg,
+    rgba(255, 255, 255, 0.38) 270deg,
+    rgba(255, 255, 255, 0.08) 288deg,
+    transparent 310deg,
     transparent 360deg
   );
 
@@ -193,8 +198,20 @@
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 
-  animation: ringSweep 3.2s linear infinite;
-  opacity: 0.75;
+  opacity: 0.7;
+  filter:
+    blur(0.6px)
+    drop-shadow(0 0 5px var(--ring-color));
+
+  mix-blend-mode: screen;
+
+  animation:
+    ringSweep var(--sweep-speed, 4.8s) linear infinite,
+    ringPulse var(--pulse-speed, 2.9s) ease-in-out infinite;
+
+  animation-delay:
+    var(--sweep-delay, 0s),
+    var(--pulse-delay, 0s);
 }
 
     .ring::after {
@@ -223,9 +240,11 @@
     }
 
     .ring-value {
-      font-size: clamp(18px, 4vw, 25px);
-      font-weight: 700;
-      line-height: 1;
+  font-size: clamp(15px, 3.4vw, 24px);
+  font-weight: 700;
+  line-height: 1.05;
+  text-align: center;
+}
     }
 
     .ring-sub {
@@ -331,11 +350,31 @@
   from {
     --sweep-angle: 0deg;
   }
+
   to {
     --sweep-angle: 360deg;
   }
 }
 
+@keyframes ringPulse {
+  0%, 100% {
+    opacity: 0.38;
+    filter:
+      blur(0.9px)
+      drop-shadow(0 0 3px var(--ring-color));
+  }
+
+  42% {
+    opacity: 0.85;
+    filter:
+      blur(0.35px)
+      drop-shadow(0 0 9px var(--ring-color));
+  }
+
+  68% {
+    opacity: 0.55;
+  }
+}
     @keyframes barSweep {
       from {
         left: -35%;
@@ -508,6 +547,9 @@
         subText: `${Math.round(hpPercent)}%`,
         percent: hpPercent,
         color: getHpColor(hpPercent)
+        speed: 4.4,
+        delay: -0.6,
+        pulseDelay: -0.2
       },
       {
         label: "Mana",
@@ -515,6 +557,9 @@
         subText: stats.manaMax > 0 ? `${Math.round(manaPercent)}%` : "Nicht erwacht",
         percent: manaPercent,
         color: "var(--mana-color)"
+        speed: 5.2,
+        delay: -1.8,
+        pulseDelay: -1.1
       },
       {
         label: "Ausdauer",
@@ -522,6 +567,9 @@
         subText: `${Math.round(staminaPercent)}%`,
         percent: staminaPercent,
         color: "var(--stamina-color)"
+        speed: 4.8,
+        delay: -2.6,
+        pulseDelay: -0.7
       }
     ];
 
@@ -541,6 +589,9 @@
       card.className = "ring-card";
       card.style.setProperty("--ring-color", ring.color);
       card.style.setProperty("--angle", `${ring.percent * 3.6}deg`);
+      card.style.setProperty("--sweep-speed", `${ring.speed}s`);
+      card.style.setProperty("--sweep-delay", `${ring.delay}s`);
+      card.style.setProperty("--pulse-delay", `${ring.pulseDelay}s`);
 
       card.innerHTML = `
         <div class="ring-label">${ring.label}</div>
