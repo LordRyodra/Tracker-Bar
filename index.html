@@ -7,193 +7,546 @@
 
   <style>
     :root {
-      --bg: #181818;
-      --text: #ffffff;
-      --track: #343434;
+      --bg: #071012;
+      --panel: rgba(8, 22, 25, 0.88);
+      --text: #eaffff;
+      --muted: rgba(234, 255, 255, 0.68);
+      --cyan: #14ccff;
+      --track: rgba(120, 255, 255, 0.13);
 
-      --hp-color: #CC2114;
-      --mana-color: #146ACC;
-      --stamina-color: #14CC14;
-      --sync-color: #14CC92;
+      --hp-color: #14cc14;
+      --mana-color: #146acc;
+      --stamina-color: #14cc92;
+      --sync-color: #14ccff;
 
-      --font-size: 18px;
-      --bar-height: 10px;
-      --bar-radius: 999px;
+      --font-main: Calibri, Georgia, "Times New Roman", serif;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      background: var(--bg);
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(20, 204, 255, 0.12), transparent 34%),
+        radial-gradient(circle at 80% 100%, rgba(20, 204, 146, 0.10), transparent 34%),
+        var(--bg);
       color: var(--text);
-      font-family: Calibri, Georgia, "Times New Roman", serif;
-      padding: 28px 35px;
+      font-family: var(--font-main);
+      padding: 22px;
+      overflow: hidden;
     }
 
-    .tracker {
-      display: flex;
-      flex-direction: column;
-      gap: 34px;
+    .interface {
+      position: relative;
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 22px;
+      border: 1px solid rgba(120, 255, 255, 0.28);
+      border-radius: 22px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.045), transparent 35%),
+        var(--panel);
+      box-shadow:
+        0 0 18px rgba(20, 204, 255, 0.20),
+        inset 0 0 24px rgba(20, 204, 255, 0.08);
+      overflow: hidden;
     }
 
-    .row-header {
+    .interface::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.035) 0px,
+        rgba(255, 255, 255, 0.035) 1px,
+        transparent 1px,
+        transparent 7px
+      );
+      opacity: 0.34;
+      pointer-events: none;
+    }
+
+    .interface::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -20%;
+      width: 45%;
+      height: 200%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(180, 255, 255, 0.10),
+        transparent
+      );
+      transform: rotate(18deg);
+      animation: panelSweep 7s linear infinite;
+      pointer-events: none;
+    }
+
+    .title {
+      position: relative;
+      z-index: 2;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: var(--font-size);
-      margin-bottom: 10px;
+      margin-bottom: 18px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(234, 255, 255, 0.9);
+      text-shadow: 0 0 10px rgba(20, 204, 255, 0.8);
+      font-size: 14px;
     }
 
-    .label {
-      color: var(--text);
-    }
-
-    .value {
-      color: var(--text);
-      font-weight: bold;
-    }
-
-    .bar {
+    .rings {
       position: relative;
-      width: 100%;
-      height: var(--bar-height);
-      background: var(--track);
-      border-radius: var(--bar-radius);
-      overflow: visible;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 20px;
     }
 
-    .fill {
-      height: 100%;
-      border-radius: var(--bar-radius);
-      width: var(--value);
-      background: var(--color);
+    .ring-card {
+      min-width: 0;
+      padding: 14px 10px 12px;
+      border: 1px solid rgba(120, 255, 255, 0.18);
+      border-radius: 18px;
+      background: rgba(0, 0, 0, 0.18);
+      box-shadow: inset 0 0 18px rgba(20, 204, 255, 0.05);
+      text-align: center;
     }
 
-    .stage-marker {
-      position: absolute;
-      top: -63px;
-      transform: translateX(-50%);
-      background: #333;
-      padding: 7px 10px;
-      font-size: 18px;
-      line-height: 1.2;
-      white-space: nowrap;
+    .ring-label {
+      margin-bottom: 10px;
+      font-size: 17px;
+      color: var(--text);
+      text-shadow: 0 0 8px var(--ring-color);
     }
 
-    .stage-marker::after {
+    .ring {
+      position: relative;
+      width: clamp(92px, 22vw, 140px);
+      aspect-ratio: 1;
+      margin: 0 auto;
+      border-radius: 50%;
+      background:
+        conic-gradient(
+          from -90deg,
+          var(--ring-color) var(--angle),
+          var(--track) 0deg
+        );
+      box-shadow:
+        0 0 15px color-mix(in srgb, var(--ring-color), transparent 45%),
+        inset 0 0 15px rgba(255, 255, 255, 0.08);
+    }
+
+    .ring::before {
       content: "";
       position: absolute;
-      left: 50%;
-      bottom: -7px;
-      transform: translateX(-50%);
-      border-left: 7px solid transparent;
-      border-right: 7px solid transparent;
-      border-top: 7px solid #333;
+      inset: -5px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        transparent 245deg,
+        rgba(255, 255, 255, 0.95) 267deg,
+        transparent 290deg,
+        transparent 360deg
+      );
+      -webkit-mask: radial-gradient(
+        farthest-side,
+        transparent calc(100% - 16px),
+        black calc(100% - 15px)
+      );
+      mask: radial-gradient(
+        farthest-side,
+        transparent calc(100% - 16px),
+        black calc(100% - 15px)
+      );
+      animation: ringSweep 3.2s linear infinite;
+      opacity: 0.75;
     }
 
-    .stamina-row {
-      margin-top: 0;
+    .ring::after {
+      content: "";
+      position: absolute;
+      inset: 15px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, rgba(20, 204, 255, 0.08), transparent 62%),
+        rgba(4, 13, 15, 0.96);
+      box-shadow:
+        inset 0 0 18px rgba(20, 204, 255, 0.10),
+        0 0 10px rgba(0, 0, 0, 0.6);
+    }
+
+    .ring-content {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-shadow: 0 0 10px var(--ring-color);
+    }
+
+    .ring-value {
+      font-size: clamp(18px, 4vw, 25px);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .ring-sub {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.1;
+    }
+
+    .attributes {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      overflow: hidden;
+      border: 1px solid rgba(120, 255, 255, 0.22);
+      border-radius: 16px;
+      margin-bottom: 20px;
+      background: rgba(0, 0, 0, 0.18);
+    }
+
+    .attribute {
+      padding: 11px 6px;
+      text-align: center;
+      border-right: 1px solid rgba(120, 255, 255, 0.16);
+    }
+
+    .attribute:last-child {
+      border-right: none;
+    }
+
+    .attr-name {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .attr-value {
+      margin-top: 4px;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      text-shadow: 0 0 9px rgba(20, 204, 255, 0.7);
+    }
+
+    .sync-section {
+      position: relative;
+      z-index: 2;
+    }
+
+    .sync-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 17px;
+      text-shadow: 0 0 8px rgba(20, 204, 255, 0.7);
+    }
+
+    .sync-bar {
+      position: relative;
+      height: 13px;
+      border-radius: 999px;
+      background: var(--track);
+      overflow: hidden;
+      box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.65);
+    }
+
+    .sync-fill {
+      position: relative;
+      height: 100%;
+      width: var(--sync);
+      border-radius: inherit;
+      background: linear-gradient(
+        90deg,
+        rgba(20, 204, 146, 0.75),
+        var(--sync-color),
+        rgba(200, 255, 255, 0.95)
+      );
+      box-shadow:
+        0 0 12px rgba(20, 204, 255, 0.65),
+        0 0 24px rgba(20, 204, 255, 0.25);
+      overflow: hidden;
+    }
+
+    .sync-fill::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -35%;
+      width: 35%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.9),
+        transparent
+      );
+      animation: barSweep 2.7s linear infinite;
+    }
+
+    @keyframes ringSweep {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes barSweep {
+      from {
+        left: -35%;
+      }
+      to {
+        left: 110%;
+      }
+    }
+
+    @keyframes panelSweep {
+      from {
+        transform: translateX(-120%) rotate(18deg);
+      }
+      to {
+        transform: translateX(320%) rotate(18deg);
+      }
+    }
+
+    @media (max-width: 620px) {
+      body {
+        padding: 12px;
+      }
+
+      .interface {
+        padding: 16px;
+      }
+
+      .rings {
+        gap: 10px;
+      }
+
+      .ring-card {
+        padding: 10px 6px;
+      }
+
+      .attributes {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .attribute:nth-child(3) {
+        border-right: none;
+      }
+
+      .attribute:nth-child(-n + 3) {
+        border-bottom: 1px solid rgba(120, 255, 255, 0.16);
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="tracker" id="tracker"></div>
+  <main class="interface">
+    <div class="title">
+      <span>Status Interface</span>
+      <span>Isekai Sync</span>
+    </div>
+
+    <section class="rings" id="rings"></section>
+
+    <section class="attributes" id="attributes"></section>
+
+    <section class="sync-section">
+      <div class="sync-header">
+        <span>Synchronisation</span>
+        <strong id="syncText">20%</strong>
+      </div>
+      <div class="sync-bar">
+        <div class="sync-fill" id="syncFill"></div>
+      </div>
+    </section>
+  </main>
 
   <script>
-    const bars = [
-      {
-        name: "HP",
-        current: 34,
-        max: 35,
-        color: "var(--hp-color)"
-      },
-      {
-        name: "Mana",
-        value: 0,
-        display: "undefined",
-        color: "var(--mana-color)"
-      },
-      {
-        name: "Ausdauer",
-        value: 90,
-        color: "var(--stamina-color)",
-        showStageInsteadOfPercent: true,
-        stages: [
-          { min: 0, label: "Zusammenbruch" },
-          { min: 15, label: "Stark<br>Erschöpft" },
-          { min: 30, label: "Erschöpft" },
-          { min: 55, label: "Leicht<br>Erschöpft" },
-          { min: 75, label: "Fit" },
-          { min: 90, label: "Erholt" }
-        ],
-        showMarkers: false
-      },
-      {
-        name: "Synchronisation",
-        value: 20,
-        display: "20%",
-        color: "var(--sync-color)"
+    const params = new URLSearchParams(window.location.search);
+
+    function getNumber(names, fallback) {
+      const nameList = Array.isArray(names) ? names : [names];
+
+      for (const name of nameList) {
+        const value = params.get(name);
+        if (value !== null && value !== "") {
+          const parsed = Number(value.replace(",", "."));
+          if (!Number.isNaN(parsed)) return parsed;
+        }
       }
-    ];
 
-    function getStage(bar) {
-      if (!bar.stages) return "";
+      return fallback;
+    }
 
-      let currentStage = bar.stages[0];
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
 
-      for (const stage of bar.stages) {
-        if (bar.value >= stage.min) {
+    function percent(current, max) {
+      if (!max || max <= 0) return 0;
+      return clamp((current / max) * 100, 0, 100);
+    }
+
+    function mixColor(colorA, colorB, amount) {
+      const a = colorA.match(/\w\w/g).map(hex => parseInt(hex, 16));
+      const b = colorB.match(/\w\w/g).map(hex => parseInt(hex, 16));
+
+      const mixed = a.map((value, index) => {
+        return Math.round(value + (b[index] - value) * amount);
+      });
+
+      return `rgb(${mixed[0]}, ${mixed[1]}, ${mixed[2]})`;
+    }
+
+    function getHpColor(hpPercent) {
+      const red = "cc2114";
+      const yellow = "ffc229";
+      const green = "14cc14";
+
+      if (hpPercent <= 50) {
+        return mixColor(red, yellow, hpPercent / 50);
+      }
+
+      return mixColor(yellow, green, (hpPercent - 50) / 50);
+    }
+
+    function getStaminaStage(value) {
+      const stages = [
+        { min: 0, label: "Zusammenbruch" },
+        { min: 15, label: "Stark Erschöpft" },
+        { min: 30, label: "Erschöpft" },
+        { min: 55, label: "Leicht Erschöpft" },
+        { min: 75, label: "Fit" },
+        { min: 90, label: "Erholt" }
+      ];
+
+      let currentStage = stages[0];
+
+      for (const stage of stages) {
+        if (value >= stage.min) {
           currentStage = stage;
         }
       }
 
-      return currentStage.label.replace(/<br\s*\/?>/g, " ");
+      return currentStage.label;
     }
 
-    function createBar(bar) {
-      const wrapper = document.createElement("div");
-      wrapper.className = bar.name === "Ausdauer" ? "row stamina-row" : "row";
+    const stats = {
+      hp: getNumber("hp", 34),
+      hpMax: getNumber(["hpmax", "hpMax"], 34),
 
-      const percent = bar.max ? Math.round((bar.current / bar.max) * 100) : bar.value;
+      mana: getNumber("mana", 0),
+      manaMax: getNumber(["manamax", "manaMax"], 0),
 
-const rightText = bar.showStageInsteadOfPercent
-  ? getStage({ ...bar, value: percent })
-  : bar.display ?? (bar.max ? `${bar.current}` : `${percent}%`);
-      
-      wrapper.innerHTML = `
-        <div class="row-header">
-          <div class="label">${bar.name}</div>
-          <div class="value">${rightText}</div>
-        </div>
+      stamina: getNumber(["ausdauer", "stamina"], 90),
+      sync: getNumber(["sync", "synchronisation"], 20),
 
-        <div class="bar">
-          <div 
-            class="fill" 
-            style="--value: ${percent}%; --color: ${bar.color};"
-          ></div>
+      str: getNumber("str", 16),
+      dex: getNumber("dex", 10),
+      con: getNumber("con", 16),
+      int: getNumber("int", 9),
+      wis: getNumber("wis", 16),
+      cha: getNumber("cha", 20)
+    };
+
+    const hpPercent = percent(stats.hp, stats.hpMax);
+    const manaPercent = percent(stats.mana, stats.manaMax);
+    const staminaPercent = clamp(stats.stamina, 0, 100);
+    const syncPercent = clamp(stats.sync, 0, 100);
+
+    const rings = [
+      {
+        label: "HP",
+        valueText: `${stats.hp}/${stats.hpMax}`,
+        subText: `${Math.round(hpPercent)}%`,
+        percent: hpPercent,
+        color: getHpColor(hpPercent)
+      },
+      {
+        label: "Mana",
+        valueText: stats.manaMax > 0 ? `${stats.mana}/${stats.manaMax}` : "—",
+        subText: stats.manaMax > 0 ? `${Math.round(manaPercent)}%` : "Nicht erwacht",
+        percent: manaPercent,
+        color: "var(--mana-color)"
+      },
+      {
+        label: "Ausdauer",
+        valueText: `${Math.round(staminaPercent)}%`,
+        subText: getStaminaStage(staminaPercent),
+        percent: staminaPercent,
+        color: "var(--stamina-color)"
+      }
+    ];
+
+    const attributes = [
+      { name: "STR", value: stats.str },
+      { name: "DEX", value: stats.dex },
+      { name: "CON", value: stats.con },
+      { name: "INT", value: stats.int },
+      { name: "WIS", value: stats.wis },
+      { name: "CHA", value: stats.cha }
+    ];
+
+    const ringsContainer = document.getElementById("rings");
+
+    rings.forEach(ring => {
+      const card = document.createElement("div");
+      card.className = "ring-card";
+      card.style.setProperty("--ring-color", ring.color);
+      card.style.setProperty("--angle", `${ring.percent * 3.6}deg`);
+
+      card.innerHTML = `
+        <div class="ring-label">${ring.label}</div>
+        <div class="ring">
+          <div class="ring-content">
+            <div class="ring-value">${ring.valueText}</div>
+            <div class="ring-sub">${ring.subText}</div>
+          </div>
         </div>
       `;
 
-      const barElement = wrapper.querySelector(".bar");
-
-      if (bar.showMarkers && bar.stages) {
-        for (const stage of bar.stages) {
-          const marker = document.createElement("div");
-          marker.className = "stage-marker";
-          marker.style.left = `${stage.min}%`;
-          marker.innerHTML = stage.label;
-          barElement.appendChild(marker);
-        }
-      }
-
-      return wrapper;
-    }
-
-    const tracker = document.getElementById("tracker");
-
-    bars.forEach(bar => {
-      tracker.appendChild(createBar(bar));
+      ringsContainer.appendChild(card);
     });
+
+    const attributesContainer = document.getElementById("attributes");
+
+    attributes.forEach(attribute => {
+      const cell = document.createElement("div");
+      cell.className = "attribute";
+
+      cell.innerHTML = `
+        <div class="attr-name">${attribute.name}</div>
+        <div class="attr-value">${attribute.value}</div>
+      `;
+
+      attributesContainer.appendChild(cell);
+    });
+
+    document.getElementById("syncText").textContent = `${Math.round(syncPercent)}%`;
+    document.getElementById("syncFill").style.setProperty("--sync", `${syncPercent}%`);
   </script>
 </body>
 </html>
