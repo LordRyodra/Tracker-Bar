@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
@@ -673,6 +673,10 @@ function getText(names, fallback) {
     }
 
     const stats = {
+      name: getText("name", "Ryo"),
+      level: getNumber("level", ???),
+      species: getText(["species", "spezies"], "Mensch (nicht bestätigt)"),
+      
       hp: getNumber("hp", 34),
       hpMax: getNumber(["hpmax", "hpMax"], 34),
 
@@ -690,6 +694,11 @@ function getText(names, fallback) {
       cha: getNumber("cha", 20)
     };
 
+    document.getElementById("characterName").textContent = stats.name;
+    document.getElementById("characterLevel").textContent = stats.level;
+    document.getElementById("characterSpecies").textContent = stats.species;
+    document.getElementById("syncLink").href = links.sync;
+
     const hpPercent = percent(stats.hp, stats.hpMax);
     const manaPercent = percent(stats.mana, stats.manaMax);
     const staminaPercent = clamp(stats.stamina, 0, 100);
@@ -702,6 +711,7 @@ function getText(names, fallback) {
         subText: `${Math.round(hpPercent)}%`,
         percent: hpPercent,
         color: getHpColor(hpPercent),
+        link: links.hp,
         speed: 4.4,
         delay: -0.6,
         pulseDelay: -0.2
@@ -712,6 +722,7 @@ function getText(names, fallback) {
         subText: stats.manaMax > 0 ? `${Math.round(manaPercent)}%` : "Nicht erwacht",
         percent: manaPercent,
         color: "var(--mana-color)",
+        link: links.mana,
         speed: 5.2,
         delay: -1.8,
         pulseDelay: -1.1
@@ -722,6 +733,7 @@ function getText(names, fallback) {
         subText: `${Math.round(staminaPercent)}%`,
         percent: staminaPercent,
         color: "var(--stamina-color)",
+        link: links.stamina,
         speed: 4.8,
         delay: -2.6,
         pulseDelay: -0.7
@@ -729,18 +741,21 @@ function getText(names, fallback) {
     ];
 
     const attributes = [
-      { name: "STR", value: stats.str },
-      { name: "DEX", value: stats.dex },
-      { name: "CON", value: stats.con },
-      { name: "INT", value: stats.int },
-      { name: "WIS", value: stats.wis },
-      { name: "CHA", value: stats.cha }
-    ];
+  { name: "STR", value: stats.str, link: links.str },
+  { name: "DEX", value: stats.dex, link: links.dex },
+  { name: "CON", value: stats.con, link: links.con },
+  { name: "INT", value: stats.int, link: links.int },
+  { name: "WIS", value: stats.wis, link: links.wis },
+  { name: "CHA", value: stats.cha, link: links.cha }
+];
 
     const ringsContainer = document.getElementById("rings");
 
     rings.forEach(ring => {
-      const card = document.createElement("div");
+      const card = document.createElement("a");
+      card.href = ring.link;
+      card.target = "_blank";
+      card.rel = "noopener noreferrer";
       card.className = "ring-card";
       card.style.setProperty("--ring-color", ring.color);
       card.style.setProperty("--angle", `${ring.percent * 3.6}deg`);
@@ -764,7 +779,10 @@ function getText(names, fallback) {
     const attributesContainer = document.getElementById("attributes");
 
     attributes.forEach(attribute => {
-      const cell = document.createElement("div");
+      const cell = document.createElement("a");
+      cell.href = attribute.link;
+      cell.target = "_blank";
+      cell.rel = "noopener noreferrer";
       cell.className = "attribute";
 
       cell.innerHTML = `
