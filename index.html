@@ -376,6 +376,109 @@
       text-shadow: 0 0 9px rgba(20, 204, 255, 0.7);
     }
 
+.body-status {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 20px;
+  border: 1px solid rgba(120, 255, 255, 0.22);
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.18);
+  padding: 16px;
+  box-shadow:
+    inset 0 0 18px rgba(20, 204, 255, 0.05),
+    0 0 10px rgba(20, 204, 255, 0.08);
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  font-size: 16px;
+  text-shadow: 0 0 8px rgba(20, 204, 255, 0.7);
+}
+
+.body-status-panel {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 18px;
+  align-items: center;
+}
+
+.body-legend {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.legend-color {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.level-0 { background: rgba(120,255,255,0.08); }
+.level-1 { background: #ffe066; }
+.level-2 { background: #ffb347; }
+.level-3 { background: #ff6b3d; }
+.level-4 { background: #d90429; }
+
+.body-map-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.body-map {
+  width: 200px;
+  max-width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 16px rgba(20, 204, 255, 0.15));
+}
+
+.body-zone,
+.body-base {
+  stroke: rgba(180, 255, 255, 0.38);
+  stroke-width: 2;
+}
+
+.body-base {
+  fill: rgba(120, 255, 255, 0.08);
+}
+
+.body-zone {
+  fill: rgba(120, 255, 255, 0.08);
+  transition:
+    fill 0.35s ease,
+    filter 0.35s ease,
+    stroke 0.35s ease;
+}
+
+.body-zone:hover {
+  stroke: rgba(255,255,255,0.8);
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.35));
+}
+
+@media (max-width: 620px) {
+  .body-status-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .body-legend {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+      
     .sync-section {
       position: relative;
       z-index: 2;
@@ -556,6 +659,58 @@
 
     <section class="attributes" id="attributes"></section>
 
+<section class="body-status">
+  <div class="section-title">
+    <span>Körperschaden</span>
+    <span id="bodyStatusLabel">Analyse aktiv</span>
+  </div>
+
+  <div class="body-status-panel">
+    <div class="body-legend">
+      <div class="legend-item"><span class="legend-color level-0"></span> Unverletzt</div>
+      <div class="legend-item"><span class="legend-color level-1"></span> Leicht</div>
+      <div class="legend-item"><span class="legend-color level-2"></span> Mittel</div>
+      <div class="legend-item"><span class="legend-color level-3"></span> Schwer</div>
+      <div class="legend-item"><span class="legend-color level-4"></span> Kritisch</div>
+    </div>
+
+    <div class="body-map-wrap">
+      <svg class="body-map" viewBox="0 0 220 420" xmlns="http://www.w3.org/2000/svg">
+        <!-- Kopf -->
+        <circle id="zone-head" class="body-zone" cx="110" cy="42" r="26" />
+
+        <!-- Hals -->
+        <rect x="98" y="68" width="24" height="18" rx="8" class="body-base" />
+
+        <!-- Brust -->
+        <rect id="zone-chest" class="body-zone" x="70" y="84" width="80" height="62" rx="24" />
+
+        <!-- Bauch -->
+        <rect id="zone-abdomen" class="body-zone" x="78" y="145" width="64" height="56" rx="18" />
+
+        <!-- Becken -->
+        <rect id="zone-pelvis" class="body-zone" x="80" y="198" width="60" height="34" rx="14" />
+
+        <!-- Linker Arm -->
+        <rect id="zone-leftArm" class="body-zone" x="36" y="92" width="26" height="98" rx="12" />
+        <rect id="zone-leftHand" class="body-zone" x="34" y="186" width="30" height="28" rx="12" />
+
+        <!-- Rechter Arm -->
+        <rect id="zone-rightArm" class="body-zone" x="158" y="92" width="26" height="98" rx="12" />
+        <rect id="zone-rightHand" class="body-zone" x="156" y="186" width="30" height="28" rx="12" />
+
+        <!-- Linkes Bein -->
+        <rect id="zone-leftLeg" class="body-zone" x="84" y="232" width="24" height="116" rx="14" />
+        <rect id="zone-leftFoot" class="body-zone" x="78" y="346" width="38" height="18" rx="8" />
+
+        <!-- Rechtes Bein -->
+        <rect id="zone-rightLeg" class="body-zone" x="112" y="232" width="24" height="116" rx="14" />
+        <rect id="zone-rightFoot" class="body-zone" x="104" y="346" width="38" height="18" rx="8" />
+      </svg>
+    </div>
+  </div>
+</section>
+      
     <section class="sync-section">
   <a 
     class="sync-link" 
@@ -672,6 +827,35 @@ function getText(names, fallback) {
       return currentStage.label;
     }
 
+function getInjuryColor(level) {
+  const injuryColors = {
+    0: "rgba(120, 255, 255, 0.08)",
+    1: "#ffe066",
+    2: "#ffb347",
+    3: "#ff6b3d",
+    4: "#d90429"
+  };
+
+  return injuryColors[clamp(level, 0, 4)] || injuryColors[0];
+}
+
+function applyInjury(zoneId, level) {
+  const el = document.getElementById(zoneId);
+  if (!el) return;
+
+  const clampedLevel = clamp(level, 0, 4);
+  const color = getInjuryColor(clampedLevel);
+
+  el.style.fill = color;
+  el.style.stroke = clampedLevel > 0
+    ? "rgba(255, 240, 240, 0.82)"
+    : "rgba(180, 255, 255, 0.38)";
+
+  el.style.filter = clampedLevel > 0
+    ? `drop-shadow(0 0 ${4 + clampedLevel * 2}px ${color})`
+    : "none";
+}
+      
     const stats = {
       name: getText("name", "Ryo"),
       level: getNumber("level", "???"),
@@ -691,7 +875,24 @@ function getText(names, fallback) {
       con: getNumber("con", 16),
       int: getNumber("int", 9),
       wis: getNumber("wis", 16),
-      cha: getNumber("cha", 20)
+      cha: getNumber("cha", 20),
+
+        injuries: {
+  head: getNumber("head", 0),
+  chest: getNumber("chest", 0),
+  abdomen: getNumber("abdomen", 0),
+  pelvis: getNumber("pelvis", 0),
+
+  leftArm: getNumber(["leftarm", "larm"], 0),
+  rightArm: getNumber(["rightarm", "rarm"], 0),
+  leftHand: getNumber(["lefthand", "lhand"], 0),
+  rightHand: getNumber(["righthand", "rhand"], 0),
+
+  leftLeg: getNumber(["leftleg", "lleg"], 0),
+  rightLeg: getNumber(["rightleg", "rleg"], 0),
+  leftFoot: getNumber(["leftfoot", "lfoot"], 0),
+  rightFoot: getNumber(["rightfoot", "rfoot"], 0)
+},
     };
 
     document.getElementById("characterName").textContent = stats.name;
@@ -795,6 +996,22 @@ function getText(names, fallback) {
 
     document.getElementById("syncText").textContent = `${Math.round(syncPercent)}%`;
     document.getElementById("syncFill").style.setProperty("--sync", `${syncPercent}%`);
+
+applyInjury("zone-head", stats.injuries.head);
+applyInjury("zone-chest", stats.injuries.chest);
+applyInjury("zone-abdomen", stats.injuries.abdomen);
+applyInjury("zone-pelvis", stats.injuries.pelvis);
+
+applyInjury("zone-leftArm", stats.injuries.leftArm);
+applyInjury("zone-rightArm", stats.injuries.rightArm);
+applyInjury("zone-leftHand", stats.injuries.leftHand);
+applyInjury("zone-rightHand", stats.injuries.rightHand);
+
+applyInjury("zone-leftLeg", stats.injuries.leftLeg);
+applyInjury("zone-rightLeg", stats.injuries.rightLeg);
+applyInjury("zone-leftFoot", stats.injuries.leftFoot);
+applyInjury("zone-rightFoot", stats.injuries.rightFoot);
+      
   </script>
 </body>
 </html>
