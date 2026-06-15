@@ -412,6 +412,109 @@
       pointer-events: none;
     }
 
+    .scan-dna {
+  position: absolute;
+  left: 24px;
+  top: 88px;
+  width: 62px;
+  height: 310px;
+  z-index: 1;
+  opacity: 0.22;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0 15px,
+      rgba(130, 245, 255, 0.38) 15px 17px,
+      transparent 17px 32px
+    );
+  filter: drop-shadow(0 0 8px rgba(130, 245, 255, 0.18));
+  animation: dnaDrift 7.5s linear infinite;
+}
+
+.scan-dna::before,
+.scan-dna::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 14px;
+  height: 100%;
+  border-radius: 999px;
+  border-left: 2px solid rgba(130, 245, 255, 0.55);
+  opacity: 0.8;
+}
+
+.scan-dna::before {
+  left: 6px;
+  transform: skewY(-18deg);
+}
+
+.scan-dna::after {
+  right: 6px;
+  transform: skewY(18deg);
+}
+
+.scan-data {
+  position: absolute;
+  right: 22px;
+  bottom: 26px;
+  z-index: 1;
+  display: grid;
+  gap: 6px;
+  max-width: 190px;
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(210, 250, 255, 0.36);
+  text-shadow: 0 0 7px rgba(120, 245, 255, 0.20);
+  pointer-events: none;
+  animation: dataFlicker 4.8s ease-in-out infinite;
+}
+
+.scan-data span {
+  white-space: nowrap;
+}
+
+@keyframes dnaDrift {
+  0% {
+    transform: translateY(0);
+    opacity: 0.16;
+  }
+
+  50% {
+    transform: translateY(18px);
+    opacity: 0.28;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 0.16;
+  }
+}
+
+@keyframes dataFlicker {
+  0%, 100% {
+    opacity: 0.22;
+  }
+
+  35% {
+    opacity: 0.42;
+  }
+
+  38% {
+    opacity: 0.18;
+  }
+
+  42% {
+    opacity: 0.46;
+  }
+
+  70% {
+    opacity: 0.30;
+  }
+}
+
     .body-image-stage {
   position: relative;
   width: min(100%, 410px);
@@ -421,7 +524,7 @@
   filter:
     drop-shadow(0 0 12px rgba(40, 245, 255, 0.12))
     drop-shadow(0 0 22px rgba(40, 245, 255, 0.06));
-  animation: bodyFloat 5.4s ease-in-out infinite;
+  animation: none;
 }
 
     .body-image-stage::before {
@@ -1015,6 +1118,16 @@
 
         <div class="body-layout">
           <div class="body-map-wrap">
+            <div class="scan-dna"></div>
+
+            <div class="scan-data">
+              <span>GENOME MAP 04-A</span>
+              <span>CELL SYNC 87.2%</span>
+              <span>MANA TRACE: STABLE</span>
+              <span>BLOOD FLOW: ACTIVE</span>
+              <span>SCAN DEPTH: LAYER III</span>
+            </div>
+            
             <div class="body-image-stage">
               <img
                 class="body-base-image"
@@ -1525,15 +1638,15 @@
       mana: getNumber("mana", 0),
       manaMax: getNumber(["manamax", "manaMax"], 0),
 
-      stamina: getNumber(["ausdauer", "stamina"], 90),
+      stamina: getNumber(["ausdauer", "stamina"], 100),
       sync: getNumber(["sync", "synchronisation"], 20),
 
-      str: getNumber("str", 16),
-      dex: getNumber("dex", 10),
-      con: getNumber("con", 16),
-      int: getNumber("int", 9),
-      wis: getNumber("wis", 16),
-      cha: getNumber("cha", 20),
+      str: getNumber("str", 13),
+      dex: getNumber("dex", 14),
+      con: getNumber("con", 12),
+      int: getNumber("int", 15),
+      wis: getNumber("wis", 14),
+      cha: getNumber("cha", 12),
 
       injuries: {
         head: getNumber("head", 0),
