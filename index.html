@@ -359,7 +359,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 720px;
+      min-height: 620px;
       padding: 16px 12px;
       border: 1px solid rgba(180, 230, 255, 0.10);
       border-radius: 18px;
@@ -409,8 +409,8 @@
 
     .body-image-stage {
       position: relative;
-      width: min(100%, 420px);
-      aspect-ratio: 614 / 1385;
+      width: min(100%, 440px);
+      aspect-ratio: 1024 / 1336;
       margin: 0 auto;
       z-index: 2;
       filter:
@@ -861,11 +861,11 @@
         opacity: 0.35;
       }
       50% {
-        transform: translateY(540px);
+        transform: translateY(470px);
         opacity: 0.75;
       }
       100% {
-        transform: translateY(920px);
+        transform: translateY(760px);
         opacity: 0;
       }
     }
@@ -976,12 +976,12 @@
             <div class="body-image-stage">
               <img
                 class="body-base-image"
-                src="body-base-v2.png"
+                src="body-base-v3.png"
                 alt="Körper-Scan"
               >
 
-              <svg class="body-overlay" viewBox="0 0 614 1385" xmlns="http://www.w3.org/2000/svg">
-                <g class="body-zones-layer">
+              <svg class="body-overlay" viewBox="0 0 1024 1336" xmlns="http://www.w3.org/2000/svg">
+                <g class="body-zones-layer" transform="scale(1.66775 0.96462)">
                   <ellipse id="zone-head" class="body-zone" cx="307" cy="142" rx="54" ry="88" />
 
                   <path id="zone-chest" class="body-zone"
@@ -1136,6 +1136,9 @@
 
   <script>
     const params = new URLSearchParams(window.location.search);
+
+    const OVERLAY_SCALE_X = 1024 / 614;
+    const OVERLAY_SCALE_Y = 1336 / 1385;
 
     const links = {
       hp: "https://app.notion.com/p/HP-37e07d209dc08040ab7afe7e2c54058b?source=copy_link",
@@ -1374,7 +1377,13 @@
         rightFoot: { x: 436, y: 1340 }
       };
 
-      return centers[zoneKey] || null;
+      const center = centers[zoneKey];
+      if (!center) return null;
+
+      return {
+        x: center.x * OVERLAY_SCALE_X,
+        y: center.y * OVERLAY_SCALE_Y
+      };
     }
 
     function getMarkerOffset(zoneKey) {
@@ -1401,7 +1410,12 @@
         rightFoot: { dx: 62, dy: -16 }
       };
 
-      return offsets[zoneKey] || { dx: 72, dy: 0 };
+      const offset = offsets[zoneKey] || { dx: 72, dy: 0 };
+
+      return {
+        dx: offset.dx * OVERLAY_SCALE_X,
+        dy: offset.dy * OVERLAY_SCALE_Y
+      };
     }
 
     function addStatusMarker(zoneKey, code, type) {
