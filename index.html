@@ -358,10 +358,11 @@
     }
 
     .body-map-wrap {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 420px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 420px;
+  padding: 8px 0;
     }
 
     .scan-map {
@@ -419,32 +420,48 @@
     }
 
     .body-core {
-      fill: rgba(255, 255, 255, 0.075);
-      stroke: rgba(255, 255, 255, 0.58);
-      stroke-width: 2;
-      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.09));
-    }
+  fill: rgba(255, 255, 255, 0.07);
+  stroke: rgba(255, 255, 255, 0.58);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.08));
+}
 
-    .body-detail {
-      stroke: rgba(255, 255, 255, 0.14);
-      stroke-width: 1;
-    }
+.body-detail {
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 1;
+}
 
-    .body-zone {
-      fill: rgba(180, 220, 255, 0.04);
-      stroke: rgba(255, 255, 255, 0.20);
-      stroke-width: 1.4;
-      transition:
-        fill 0.35s ease,
-        stroke 0.35s ease,
-        filter 0.35s ease,
-        opacity 0.35s ease;
-    }
+.body-zone {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 1.5;
+  opacity: 0;
+  transition:
+    fill 0.25s ease,
+    stroke 0.25s ease,
+    filter 0.25s ease,
+    opacity 0.25s ease;
+}
 
-    .body-zone:hover {
-      stroke: rgba(255, 255, 255, 0.85);
-      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.18));
-    }
+.body-zone.active {
+  opacity: 1;
+}
+
+.body-zone:hover {
+  stroke: rgba(255, 255, 255, 0.9);
+}
+
+@keyframes woundPulse {
+  0%, 100% {
+    opacity: 0.72;
+    filter: drop-shadow(0 0 6px var(--injury-color));
+  }
+
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 18px var(--injury-color));
+  }
+  }
 
     .condition-panel {
       display: flex;
@@ -960,59 +977,164 @@
                      Q162 224 162 184 Z" />
 
                 <path id="zone-pelvis" class="body-zone"
-                  d="M176 244
-                     Q190 255 210 255
-                     Q230 255 244 244
-                     L242 280
-                     Q228 290 210 290
-                     Q192 290 178 280 Z" />
+<g class="body-base-layer">
+  <ellipse class="body-core" cx="210" cy="84" rx="26" ry="31" />
+  <rect class="body-core" x="200" y="112" width="20" height="16" rx="8" />
 
-                <path id="zone-leftArm" class="body-zone"
-                  d="M154 142
-                     Q134 154 122 184
-                     Q112 214 104 248
-                     Q100 262 106 270
-                     Q114 276 124 272
-                     Q130 268 132 258
-                     Q142 216 148 190
-                     Q154 164 170 146 Z" />
+  <path class="body-core"
+    d="M165 132
+       Q185 118 210 118
+       Q235 118 255 132
+       Q269 147 273 177
+       Q276 208 258 233
+       Q243 254 210 258
+       Q177 254 162 233
+       Q144 208 147 177
+       Q151 147 165 132 Z" />
 
-                <ellipse id="zone-leftHand" class="body-zone" cx="98" cy="292" rx="15" ry="12" />
+  <path class="body-core"
+    d="M165 136
+       Q148 145 136 170
+       Q125 194 116 224
+       Q109 248 104 266
+       Q101 279 108 287
+       Q117 294 128 289
+       Q136 285 138 272
+       Q143 248 150 221
+       Q158 187 175 145 Z" />
 
-                <path id="zone-rightArm" class="body-zone"
-                  d="M266 142
-                     Q286 154 298 184
-                     Q308 214 316 248
-                     Q320 262 314 270
-                     Q306 276 296 272
-                     Q290 268 288 258
-                     Q278 216 272 190
-                     Q266 164 250 146 Z" />
+  <path class="body-core"
+    d="M255 136
+       Q272 145 284 170
+       Q295 194 304 224
+       Q311 248 316 266
+       Q319 279 312 287
+       Q303 294 292 289
+       Q284 285 282 272
+       Q277 248 270 221
+       Q262 187 245 145 Z" />
 
-                <ellipse id="zone-rightHand" class="body-zone" cx="322" cy="292" rx="15" ry="12" />
+  <ellipse class="body-core" cx="102" cy="297" rx="14" ry="11" />
+  <ellipse class="body-core" cx="318" cy="297" rx="14" ry="11" />
 
-                <path id="zone-leftLeg" class="body-zone"
-                  d="M178 282
-                     Q188 292 188 320
-                     Q188 354 184 404
-                     Q183 430 168 430
-                     Q154 430 154 404
-                     Q154 350 152 314
-                     Q150 292 160 278 Z" />
+  <path class="body-core"
+    d="M176 258
+       Q189 270 191 294
+       Q193 328 189 382
+       Q187 420 183 434
+       Q179 446 167 446
+       Q155 446 151 434
+       Q147 420 147 382
+       Q147 330 149 296
+       Q151 271 166 258 Z" />
 
-                <ellipse id="zone-leftFoot" class="body-zone" cx="166" cy="446" rx="20" ry="8" />
+  <path class="body-core"
+    d="M244 258
+       Q231 270 229 294
+       Q227 328 231 382
+       Q233 420 237 434
+       Q241 446 253 446
+       Q265 446 269 434
+       Q273 420 273 382
+       Q273 330 271 296
+       Q269 271 254 258 Z" />
 
-                <path id="zone-rightLeg" class="body-zone"
-                  d="M242 282
-                     Q232 292 232 320
-                     Q232 354 236 404
-                     Q237 430 252 430
-                     Q266 430 266 404
-                     Q266 350 268 314
-                     Q270 292 260 278 Z" />
+  <ellipse class="body-core" cx="166" cy="456" rx="21" ry="8" />
+  <ellipse class="body-core" cx="254" cy="456" rx="21" ry="8" />
+</g>
 
-                <ellipse id="zone-rightFoot" class="body-zone" cx="254" cy="446" rx="20" ry="8" />
-              </g>
+<g class="body-detail-layer">
+  <line class="body-detail" x1="210" y1="54" x2="210" y2="258" />
+  <line class="body-detail" x1="170" y1="150" x2="250" y2="150" />
+  <line class="body-detail" x1="163" y1="184" x2="257" y2="184" />
+  <line class="body-detail" x1="173" y1="217" x2="247" y2="217" />
+  <line class="body-detail" x1="180" y1="245" x2="240" y2="245" />
+  <line class="body-detail" x1="178" y1="286" x2="242" y2="286" />
+  <line class="body-detail" x1="176" y1="320" x2="244" y2="320" />
+  <line class="body-detail" x1="174" y1="356" x2="246" y2="356" />
+</g>
+
+<g class="body-zones-layer">
+  <ellipse id="zone-head" class="body-zone" cx="210" cy="84" rx="26" ry="31" />
+
+  <path id="zone-chest" class="body-zone"
+    d="M168 142
+       Q186 130 210 130
+       Q234 130 252 142
+       Q256 156 254 178
+       Q232 187 210 187
+       Q188 187 166 178
+       Q164 156 168 142 Z" />
+
+  <path id="zone-abdomen" class="body-zone"
+    d="M166 178
+       Q188 187 210 187
+       Q232 187 254 178
+       Q254 210 245 228
+       Q232 242 210 242
+       Q188 242 175 228
+       Q166 210 166 178 Z" />
+
+  <path id="zone-pelvis" class="body-zone"
+    d="M178 242
+       Q192 250 210 250
+       Q228 250 242 242
+       L239 273
+       Q227 281 210 281
+       Q193 281 181 273 Z" />
+
+  <path id="zone-leftArm" class="body-zone"
+    d="M165 145
+       Q150 153 139 176
+       Q129 198 121 226
+       Q114 250 110 265
+       Q108 275 113 280
+       Q119 284 127 281
+       Q133 278 135 269
+       Q140 250 146 224
+       Q154 193 169 149 Z" />
+
+  <ellipse id="zone-leftHand" class="body-zone" cx="102" cy="297" rx="14" ry="11" />
+
+  <path id="zone-rightArm" class="body-zone"
+    d="M255 145
+       Q270 153 281 176
+       Q291 198 299 226
+       Q306 250 310 265
+       Q312 275 307 280
+       Q301 284 293 281
+       Q287 278 285 269
+       Q280 250 274 224
+       Q266 193 251 149 Z" />
+
+  <ellipse id="zone-rightHand" class="body-zone" cx="318" cy="297" rx="14" ry="11" />
+
+  <path id="zone-leftLeg" class="body-zone"
+    d="M178 281
+       Q188 291 189 315
+       Q190 347 186 397
+       Q184 432 180 442
+       Q176 448 167 448
+       Q158 448 154 442
+       Q150 432 150 397
+       Q150 349 151 316
+       Q152 292 162 281 Z" />
+
+  <ellipse id="zone-leftFoot" class="body-zone" cx="166" cy="456" rx="21" ry="8" />
+
+  <path id="zone-rightLeg" class="body-zone"
+    d="M242 281
+       Q232 291 231 315
+       Q230 347 234 397
+       Q236 432 240 442
+       Q244 448 253 448
+       Q262 448 266 442
+       Q270 432 270 397
+       Q270 349 269 316
+       Q268 292 258 281 Z" />
+
+  <ellipse id="zone-rightFoot" class="body-zone" cx="254" cy="456" rx="21" ry="8" />
+</g>
             </svg>
           </div>
 
@@ -1180,21 +1302,38 @@
     }
 
     function applyInjury(zoneId, level) {
-      const el = document.getElementById(zoneId);
-      if (!el) return;
+  const el = document.getElementById(zoneId);
+  if (!el) return;
 
-      const clampedLevel = clamp(level, 0, 4);
-      const color = getInjuryColor(clampedLevel);
+  const clampedLevel = clamp(level, 0, 4);
 
-      el.style.fill = color;
-      el.style.fillOpacity = clampedLevel === 0 ? "0.08" : "0.78";
-      el.style.stroke = clampedLevel > 0
-        ? "rgba(255, 250, 250, 0.88)"
-        : "rgba(255, 255, 255, 0.16)";
+  if (clampedLevel === 0) {
+    el.classList.remove("active");
+    el.style.removeProperty("--injury-color");
+    el.style.fill = "transparent";
+    el.style.stroke = "transparent";
+    el.style.filter = "none";
+    el.style.animation = "none";
+    el.style.opacity = "0";
+    return;
+  }
 
-      el.style.filter = clampedLevel > 0
-        ? `drop-shadow(0 0 ${4 + clampedLevel * 2}px ${color})`
-        : "none";
+  const color = getInjuryColor(clampedLevel);
+
+  const pulseDurations = {
+    1: "2.8s",
+    2: "2.2s",
+    3: "1.7s",
+    4: "1.2s"
+  };
+
+  el.classList.add("active");
+  el.style.setProperty("--injury-color", color);
+  el.style.fill = color;
+  el.style.stroke = "rgba(255, 248, 248, 0.92)";
+  el.style.opacity = "1";
+  el.style.filter = `drop-shadow(0 0 ${5 + clampedLevel * 3}px ${color})`;
+  el.style.animation = `woundPulse ${pulseDurations[clampedLevel]} ease-in-out infinite`;
     }
 
     const stats = {
