@@ -414,17 +414,17 @@
 
     .scan-dna {
       position: absolute;
-      left: 26px;
-      top: 92px;
-      width: 82px;
-      height: 330px;
+      left: 34px;
+      top: 108px;
+      width: 54px;
+      height: 250px;
       z-index: 1;
-      opacity: 0.23;
+      opacity: 0.16;
       pointer-events: none;
       filter:
-        drop-shadow(0 0 8px rgba(130, 245, 255, 0.16))
+        drop-shadow(0 0 8px rgba(130, 245, 255, 0.14))
         blur(0.05px);
-      animation: dnaFloat 7.5s ease-in-out infinite;
+      animation: dnaFloat 9s ease-in-out infinite;
     }
 
     .scan-dna svg {
@@ -435,29 +435,29 @@
 
     .dna-strand {
       fill: none;
-      stroke: rgba(130, 245, 255, 0.52);
-      stroke-width: 2.2;
+      stroke: rgba(130, 245, 255, 0.38);
+      stroke-width: 1.8;
       stroke-linecap: round;
-      stroke-dasharray: 9 10;
-      animation: dnaFlow 7.2s linear infinite;
+      stroke-dasharray: 18 12;
+      animation: dnaFlow 9.5s linear infinite;
     }
 
     .dna-strand.alt {
-      opacity: 0.66;
-      animation-delay: -3.6s;
+      opacity: 0.62;
+      animation-delay: -4.7s;
     }
 
     .dna-rung {
-      stroke: rgba(130, 245, 255, 0.28);
-      stroke-width: 1.4;
+      stroke: rgba(170, 255, 255, 0.24);
+      stroke-width: 1.15;
       stroke-linecap: round;
-      animation: dnaRungPulse 4.6s ease-in-out infinite;
+      animation: dnaRungPulse 5.8s ease-in-out infinite;
     }
 
     .dna-node {
-      fill: rgba(190, 255, 255, 0.58);
-      filter: drop-shadow(0 0 5px rgba(130, 245, 255, 0.35));
-      animation: dnaNodePulse 4.6s ease-in-out infinite;
+      fill: rgba(190, 255, 255, 0.46);
+      filter: drop-shadow(0 0 4px rgba(130, 245, 255, 0.28));
+      animation: dnaNodePulse 5.8s ease-in-out infinite;
     }
 
     .scan-data {
@@ -487,43 +487,43 @@
         stroke-dashoffset: 0;
       }
       to {
-        stroke-dashoffset: -38;
+        stroke-dashoffset: -30;
       }
     }
 
-    @keyframes dnaFloat {
+@keyframes dnaFloat {
       0%, 100% {
         transform: translateY(0);
-        opacity: 0.18;
+        opacity: 0.12;
       }
 
       50% {
-        transform: translateY(10px);
-        opacity: 0.30;
+        transform: translateY(8px);
+        opacity: 0.20;
       }
     }
 
-    @keyframes dnaRungPulse {
+@keyframes dnaRungPulse {
       0%, 100% {
-        opacity: 0.18;
+        opacity: 0.16;
       }
 
       50% {
-        opacity: 0.46;
+        opacity: 0.38;
       }
     }
 
-    @keyframes dnaNodePulse {
+@keyframes dnaNodePulse {
       0%, 100% {
-        opacity: 0.28;
+        opacity: 0.22;
       }
 
       50% {
-        opacity: 0.72;
+        opacity: 0.56;
       }
     }
 
-    @keyframes dataFlicker {
+@keyframes dataFlicker {
       0%, 100% {
         opacity: 0.18;
       }
@@ -658,7 +658,7 @@
     }
 
     .body-zone.active {
-      opacity: 0.34;
+      opacity: 0.30;
     }
 
     @keyframes woundPulse {
@@ -1205,28 +1205,28 @@
 
               <svg class="body-overlay" viewBox="0 0 1024 1336" xmlns="http://www.w3.org/2000/svg">
                 <g class="body-zones-layer">
-                  <ellipse id="zone-head" class="body-zone" cx="512" cy="112" rx="58" ry="82" />
+                  <ellipse id="zone-head" class="body-zone" cx="512" cy="112" rx="56" ry="78" />
 
                   <path id="zone-chest" class="body-zone"
-                    d="M356 292
-                       C404 256 620 256 668 292
-                       C694 350 686 416 650 462
-                       C592 488 432 488 374 462
-                       C338 416 330 350 356 292 Z" />
+                    d="M352 270
+                       C404 236 620 236 672 270
+                       C694 326 686 388 648 432
+                       C588 456 436 456 376 432
+                       C338 388 330 326 352 270 Z" />
 
                   <path id="zone-abdomen" class="body-zone"
-                    d="M374 462
-                       C432 488 592 488 650 462
-                       C660 536 634 628 590 682
-                       C548 712 476 712 434 682
-                       C390 628 364 536 374 462 Z" />
+                    d="M376 432
+                       C436 456 588 456 648 432
+                       C656 502 632 584 586 636
+                       C544 660 480 660 438 636
+                       C392 584 368 502 376 432 Z" />
 
                   <path id="zone-pelvis" class="body-zone"
-                    d="M434 682
-                       C476 712 548 712 590 682
-                       C616 734 606 792 570 828
-                       C536 852 488 852 454 828
-                       C418 792 408 734 434 682 Z" />
+                    d="M438 636
+                       C480 660 544 660 586 636
+                       C610 690 600 750 566 792
+                       C532 814 492 814 458 792
+                       C424 750 414 690 438 636 Z" />
 
                   <path id="zone-leftUpperArm" class="body-zone"
                     d="M344 324
@@ -1312,7 +1312,6 @@
                        C586 1348 622 1370 684 1364
                        C736 1358 752 1314 718 1276 Z" />
                 </g>
-
                 <g id="statusMarkers" class="status-marker-layer"></g>
               </svg>    
             </div>
@@ -1579,9 +1578,9 @@
     function getMarkerCenter(zoneKey) {
       const centers = {
         head: { x: 512, y: 112 },
-        chest: { x: 512, y: 390 },
-        abdomen: { x: 512, y: 575 },
-        pelvis: { x: 512, y: 760 },
+        chest: { x: 512, y: 360 },
+        abdomen: { x: 512, y: 535 },
+        pelvis: { x: 512, y: 715 },
 
         leftUpperArm: { x: 294, y: 520 },
         leftForearm: { x: 228, y: 805 },
