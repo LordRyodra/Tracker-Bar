@@ -418,24 +418,24 @@
 
     .body-glow {
   fill: none;
-  stroke: rgba(40, 245, 255, 0.38);
-  stroke-width: 7;
-  filter: blur(3px) drop-shadow(0 0 14px rgba(40, 245, 255, 0.32));
+  stroke: rgba(40, 245, 255, 0.34);
+  stroke-width: 8;
+  filter: blur(3px) drop-shadow(0 0 14px rgba(40, 245, 255, 0.28));
   opacity: 0.55;
 }
 
 .body-silhouette {
   fill: rgba(40, 245, 255, 0.07);
-  stroke: rgba(90, 250, 255, 0.92);
+  stroke: rgba(90, 250, 255, 0.95);
   stroke-width: 2.2;
   filter:
-    drop-shadow(0 0 7px rgba(40, 245, 255, 0.35))
+    drop-shadow(0 0 8px rgba(40, 245, 255, 0.35))
     drop-shadow(0 0 18px rgba(40, 245, 255, 0.10));
 }
 
 .body-inner-line {
   fill: none;
-  stroke: rgba(210, 255, 255, 0.18);
+  stroke: rgba(215, 255, 255, 0.16);
   stroke-width: 1.1;
   stroke-linecap: round;
 }
@@ -443,7 +443,7 @@
 .body-zone {
   fill: transparent;
   stroke: transparent;
-  stroke-width: 1.3;
+  stroke-width: 1.2;
   opacity: 0;
   transition:
     fill 0.25s ease,
@@ -457,7 +457,7 @@
 }
 
 .body-zone:hover {
-  stroke: rgba(255, 255, 255, 0.92);
+  stroke: rgba(255, 255, 255, 0.9);
 }
 
 @keyframes woundPulse {
@@ -470,6 +470,59 @@
     opacity: 1;
     filter: drop-shadow(0 0 18px var(--injury-color));
   }
+}
+
+/* Marker direkt am Körper */
+.status-marker-layer {
+  pointer-events: none;
+}
+
+.status-marker line {
+  stroke: rgba(190, 255, 255, 0.72);
+  stroke-width: 1.2;
+}
+
+.status-marker-dot {
+  fill: rgba(190, 255, 255, 0.96);
+  filter: drop-shadow(0 0 6px rgba(190, 255, 255, 0.65));
+}
+
+.status-marker-tag {
+  fill: rgba(7, 16, 20, 0.94);
+  stroke: rgba(120, 255, 255, 0.48);
+  stroke-width: 1;
+}
+
+.status-marker-text {
+  fill: rgba(245, 255, 255, 0.96);
+  font-family: "Courier New", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.status-marker[data-type="bleeding"] .status-marker-tag {
+  stroke: rgba(255, 120, 120, 0.6);
+}
+
+.status-marker[data-type="poisoned"] .status-marker-tag {
+  stroke: rgba(120, 255, 120, 0.6);
+}
+
+.status-marker[data-type="burning"] .status-marker-tag {
+  stroke: rgba(255, 177, 107, 0.6);
+}
+
+.status-marker[data-type="fractured"] .status-marker-tag {
+  stroke: rgba(240, 240, 240, 0.55);
+}
+
+.status-marker[data-type="frostbite"] .status-marker-tag {
+  stroke: rgba(143, 232, 255, 0.68);
+}
+
+.status-marker[data-type="necrosis"] .status-marker-tag {
+  stroke: rgba(212, 255, 122, 0.68);
 }
 
 /* Statusmarker direkt am Körper */
@@ -893,47 +946,50 @@
           <div class="body-map-wrap">
             <svg class="body-map scan-map" viewBox="0 0 420 520" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <path id="humanSilhouette"
-      d="M210 48
-         C226 48 239 64 239 84
-         C239 101 230 113 220 119
-         L220 129
-         C234 130 249 135 261 144
-         C278 157 288 181 294 208
-         C300 236 306 257 311 277
-         C314 289 307 297 296 295
-         C286 293 281 285 278 273
-         L268 231
-         C262 206 255 181 244 164
-         C247 191 250 215 250 235
-         C250 254 246 276 238 291
-         C232 304 228 319 229 342
-         C230 378 235 415 240 444
-         C242 455 250 462 260 465
-         C268 468 269 474 263 478
-         C248 485 227 483 220 474
-         C213 464 211 426 210 385
-         C209 426 207 464 200 474
-         C193 483 172 485 157 478
-         C151 474 152 468 160 465
-         C170 462 178 455 180 444
-         C185 415 190 378 191 342
-         C192 319 188 304 182 291
-         C174 276 170 254 170 235
-         C170 215 173 191 176 164
-         C165 181 158 206 152 231
-         L142 273
-         C139 285 134 293 124 295
-         C113 297 106 289 109 277
-         C114 257 120 236 126 208
-         C132 181 142 157 159 144
-         C171 135 186 130 200 129
-         L200 119
-         C190 113 181 101 181 84
-         C181 64 194 48 210 48 Z" />
+    <ellipse id="headShape" cx="210" cy="82" rx="18" ry="28" />
+
+    <path id="bodyShape"
+      d="M176 128
+         C164 132 154 140 147 152
+         C141 163 138 181 137 200
+         L135 263
+         C134 279 130 294 123 306
+         C118 314 116 325 121 331
+         C126 337 136 335 143 327
+         C152 316 157 300 160 281
+         L166 220
+         C168 202 171 190 176 178
+         C174 198 174 221 175 240
+         C176 259 179 278 184 293
+         C188 305 190 317 190 332
+         C190 359 186 394 181 429
+         C178 448 174 460 169 467
+         C168 472 171 474 177 474
+         C188 472 196 467 201 454
+         C206 439 208 405 210 362
+         C212 405 214 439 219 454
+         C224 467 232 472 243 474
+         C249 474 252 472 251 467
+         C246 460 242 448 239 429
+         C234 394 230 359 230 332
+         C230 317 232 305 236 293
+         C241 278 244 259 245 240
+         C246 221 246 198 244 178
+         C249 190 252 202 254 220
+         L260 281
+         C263 300 268 316 277 327
+         C284 335 294 337 299 331
+         C304 325 302 314 297 306
+         C290 294 286 279 285 263
+         L283 200
+         C282 181 279 163 273 152
+         C266 140 256 132 244 128
+         C234 123 222 121 210 121
+         C198 121 186 123 176 128 Z" />
 
     <clipPath id="bodyClip">
-      <use href="#humanSilhouette" />
+      <use href="#headShape" />
+      <use href="#bodyShape" />
     </clipPath>
   </defs>
 
@@ -963,90 +1019,91 @@
     <text class="scan-label tiny" x="55" y="136">MASS</text>
   </g>
 
-  <use href="#humanSilhouette" class="body-glow" />
-  <use href="#humanSilhouette" class="body-silhouette" />
+  <use href="#headShape" class="body-glow" />
+  <use href="#bodyShape" class="body-glow" />
+
+  <use href="#headShape" class="body-silhouette" />
+  <use href="#bodyShape" class="body-silhouette" />
 
   <g class="body-detail-layer">
-    <path class="body-inner-line" d="M210 118 L210 382" />
-    <path class="body-inner-line" d="M178 154 C192 162 228 162 242 154" />
-    <path class="body-inner-line" d="M172 184 C192 193 228 193 248 184" />
-    <path class="body-inner-line" d="M176 220 C193 228 227 228 244 220" />
-    <path class="body-inner-line" d="M188 289 C198 296 222 296 232 289" />
-    <path class="body-inner-line" d="M194 300 C191 340 187 392 181 444" />
-    <path class="body-inner-line" d="M226 300 C229 340 233 392 239 444" />
+    <path class="body-inner-line" d="M210 110 L210 360" />
+    <path class="body-inner-line" d="M180 154 C193 162 227 162 240 154" />
+    <path class="body-inner-line" d="M174 186 C192 194 228 194 246 186" />
+    <path class="body-inner-line" d="M178 219 C194 227 226 227 242 219" />
+    <path class="body-inner-line" d="M192 292 C199 298 221 298 228 292" />
+    <path class="body-inner-line" d="M194 301 C192 343 188 391 183 439" />
+    <path class="body-inner-line" d="M226 301 C228 343 232 391 237 439" />
   </g>
 
-  <!-- Verletzungszonen, sauber an Silhouette geclippt -->
   <g class="body-zones-layer" clip-path="url(#bodyClip)">
-    <ellipse id="zone-head" class="body-zone" cx="210" cy="84" rx="27" ry="35" />
+    <ellipse id="zone-head" class="body-zone" cx="210" cy="82" rx="18" ry="28" />
 
     <path id="zone-chest" class="body-zone"
-      d="M168 142
-         C183 132 237 132 252 142
-         C256 159 255 176 251 190
-         C231 198 189 198 169 190
-         C165 176 164 159 168 142 Z" />
+      d="M172 141
+         C185 132 235 132 248 141
+         C252 158 251 175 247 188
+         C229 195 191 195 173 188
+         C169 175 168 158 172 141 Z" />
 
     <path id="zone-abdomen" class="body-zone"
-      d="M169 190
-         C190 198 230 198 251 190
-         C252 215 246 236 233 249
-         C221 257 199 257 187 249
-         C174 236 168 215 169 190 Z" />
+      d="M173 188
+         C191 196 229 196 247 188
+         C248 213 242 233 230 246
+         C219 253 201 253 190 246
+         C178 233 172 213 173 188 Z" />
 
     <path id="zone-pelvis" class="body-zone"
-      d="M188 248
-         C198 255 222 255 232 248
-         C236 260 235 277 228 292
-         C220 299 200 299 192 292
-         C185 277 184 260 188 248 Z" />
+      d="M190 246
+         C199 253 221 253 230 246
+         C234 258 233 275 227 289
+         C219 296 201 296 193 289
+         C187 275 186 258 190 246 Z" />
 
     <path id="zone-leftArm" class="body-zone"
       d="M177 150
-         C164 167 156 190 149 220
-         L141 258
-         C138 275 133 287 124 292
-         C118 289 114 283 115 274
-         L124 234
-         C131 201 141 172 155 155
-         C162 149 170 147 177 150 Z" />
+         C165 167 157 189 151 218
+         L144 255
+         C141 272 137 284 130 293
+         C125 290 123 283 124 274
+         L132 233
+         C138 201 147 173 159 156
+         C165 150 171 148 177 150 Z" />
 
-    <ellipse id="zone-leftHand" class="body-zone" cx="122" cy="296" rx="13" ry="12" />
+    <ellipse id="zone-leftHand" class="body-zone" cx="127" cy="301" rx="11" ry="13" />
 
     <path id="zone-rightArm" class="body-zone"
       d="M243 150
-         C256 167 264 190 271 220
-         L279 258
-         C282 275 287 287 296 292
-         C302 289 306 283 305 274
-         L296 234
-         C289 201 279 172 265 155
-         C258 149 250 147 243 150 Z" />
+         C255 167 263 189 269 218
+         L276 255
+         C279 272 283 284 290 293
+         C295 290 297 283 296 274
+         L288 233
+         C282 201 273 173 261 156
+         C255 150 249 148 243 150 Z" />
 
-    <ellipse id="zone-rightHand" class="body-zone" cx="298" cy="296" rx="13" ry="12" />
+    <ellipse id="zone-rightHand" class="body-zone" cx="293" cy="301" rx="11" ry="13" />
 
     <path id="zone-leftLeg" class="body-zone"
-      d="M191 293
-         C198 305 198 337 194 386
-         C191 421 187 444 180 456
-         C175 462 164 464 155 460
-         C161 452 173 444 177 420
-         C183 376 188 330 191 293 Z" />
+      d="M191 289
+         C198 302 198 336 194 383
+         C191 418 188 441 183 453
+         C178 461 169 464 160 461
+         C166 453 174 442 177 421
+         C182 379 188 332 191 289 Z" />
 
-    <ellipse id="zone-leftFoot" class="body-zone" cx="161" cy="461" rx="22" ry="9" />
+    <ellipse id="zone-leftFoot" class="body-zone" cx="163" cy="463" rx="17" ry="8" />
 
     <path id="zone-rightLeg" class="body-zone"
-      d="M229 293
-         C222 305 222 337 226 386
-         C229 421 233 444 240 456
-         C245 462 256 464 265 460
-         C259 452 247 444 243 420
-         C237 376 232 330 229 293 Z" />
+      d="M229 289
+         C222 302 222 336 226 383
+         C229 418 232 441 237 453
+         C242 461 251 464 260 461
+         C254 453 246 442 243 421
+         C238 379 232 332 229 289 Z" />
 
-    <ellipse id="zone-rightFoot" class="body-zone" cx="259" cy="461" rx="22" ry="9" />
+    <ellipse id="zone-rightFoot" class="body-zone" cx="257" cy="463" rx="17" ry="8" />
   </g>
 
-  <!-- Marker für Statuseffekte -->
   <g id="statusMarkers" class="status-marker-layer"></g>
 </svg>
           </div>
@@ -1288,13 +1345,13 @@
       },
 
       conditions: {
-        bleeding: getFlag(["bleeding", "blutung"], false),
-        poisoned: getFlag(["poisoned", "vergiftet"], false),
-        burning: getFlag(["burning", "verbrannt"], false),
-        fractured: getFlag(["fractured", "bruch"], false),
-        frostbite: getFlag(["frostbite", "frost", "erfrierung", "erfroren"], false),
-        necrosis: getFlag(["necrosis", "nekrose", "verderbnis"], false)
-      }
+  bleeding: getConditionInput(["bleeding", "blutung"]),
+  poisoned: getConditionInput(["poisoned", "vergiftet", "toxin"]),
+  burning: getConditionInput(["burning", "verbrannt", "brand"]),
+  fractured: getConditionInput(["fractured", "bruch", "fraktur"]),
+  frostbite: getConditionInput(["frostbite", "frost", "erfrierung", "erfroren"]),
+  necrosis: getConditionInput(["necrosis", "nekrose", "verderbnis"])
+}
     };
 
     document.getElementById("characterName").textContent = stats.name;
@@ -1353,14 +1410,13 @@
     ];
 
    const conditionConfig = [
-  { key: "bleeding",  label: "Blutung",     code: "BLD", zones: ["zone-chest", "zone-leftArm", "zone-rightArm", "zone-leftLeg", "zone-rightLeg"] },
-  { key: "poisoned",  label: "Vergiftung",  code: "TOX", zones: ["zone-leftArm", "zone-rightArm"] },
-  { key: "burning",   label: "Verbrennung", code: "BRN", zones: ["zone-chest", "zone-leftArm", "zone-rightArm"] },
-  { key: "fractured", label: "Fraktur",     code: "FRX", zones: ["zone-leftArm", "zone-rightArm", "zone-leftLeg", "zone-rightLeg"] },
-  { key: "frostbite", label: "Erfrierung",  code: "FRS", zones: ["zone-leftHand", "zone-rightHand", "zone-leftFoot", "zone-rightFoot"] },
-  { key: "necrosis",  label: "Nekrose",     code: "NEC", zones: ["zone-abdomen", "zone-leftArm", "zone-rightArm", "zone-leftLeg", "zone-rightLeg"] }
+  { key: "bleeding",  label: "Blutung",     code: "BLD" },
+  { key: "poisoned",  label: "Vergiftung",  code: "TOX" },
+  { key: "burning",   label: "Verbrennung", code: "BRN" },
+  { key: "fractured", label: "Fraktur",     code: "FRX" },
+  { key: "frostbite", label: "Erfrierung",  code: "FRS" },
+  { key: "necrosis",  label: "Nekrose",     code: "NEC" }
 ];
-
     const ringsContainer = document.getElementById("rings");
 
     rings.forEach(ring => {
@@ -1409,7 +1465,8 @@
 
     conditionConfig.forEach(condition => {
   const chip = document.createElement("div");
-  const active = stats.conditions[condition.key];
+  const state = stats.conditions[condition.key];
+  const active = state.active;
 
   chip.className = `condition-chip${active ? " active" : ""}`;
   chip.dataset.type = condition.key;
@@ -1420,14 +1477,14 @@
 
   conditionGrid.appendChild(chip);
 
-  if (active && Array.isArray(condition.zones)) {
-    condition.zones.forEach(zoneId => {
-      addStatusMarker(zoneId, condition.code, condition.key);
+  if (active && state.zones.length > 0) {
+    state.zones.forEach(zoneKey => {
+      addStatusMarker(zoneKey, condition.code, condition.key);
     });
   }
 });
 
-    const activeConditionCount = Object.values(stats.conditions).filter(Boolean).length;
+    const activeConditionCount = Object.values(stats.conditions).filter(condition => condition.active).length;
     document.getElementById("bodyStatusLabel").textContent =
       activeConditionCount > 0
         ? `${activeConditionCount} Status aktiv`
@@ -1527,6 +1584,151 @@ function addStatusMarker(zoneId, code, type) {
   markerLayer.appendChild(group);
 }
 
+function normalizeZoneName(zone) {
+  const normalized = zone.trim().toLowerCase().replace(/[\s_-]+/g, "");
+
+  const aliases = {
+    head: "head",
+    chest: "chest",
+    abdomen: "abdomen",
+    belly: "abdomen",
+    pelvis: "pelvis",
+
+    leftarm: "leftArm",
+    larm: "leftArm",
+    rightarm: "rightArm",
+    rarm: "rightArm",
+
+    lefthand: "leftHand",
+    lhand: "leftHand",
+    righthand: "rightHand",
+    rhand: "rightHand",
+
+    leftleg: "leftLeg",
+    lleg: "leftLeg",
+    rightleg: "rightLeg",
+    rleg: "rightLeg",
+
+    leftfoot: "leftFoot",
+    lfoot: "leftFoot",
+    rightfoot: "rightFoot",
+    rfoot: "rightFoot"
+  };
+
+  return aliases[normalized] || null;
+}
+
+function getConditionInput(names) {
+  const raw = getText(names, "");
+  if (!raw) return { active: false, zones: [] };
+
+  const normalized = raw.trim().toLowerCase();
+
+  if (["1", "true", "yes", "ja", "on", "active"].includes(normalized)) {
+    return { active: true, zones: [] };
+  }
+
+  if (["0", "false", "no", "nein", "off", "inactive"].includes(normalized)) {
+    return { active: false, zones: [] };
+  }
+
+  const zones = raw
+    .split(/[;,|]/)
+    .flatMap(part => part.split(","))
+    .map(part => normalizeZoneName(part))
+    .filter(Boolean);
+
+  return {
+    active: zones.length > 0,
+    zones
+  };
+}
+
+function toZoneId(zoneKey) {
+  return zoneKey.startsWith("zone-") ? zoneKey : `zone-${zoneKey}`;
+}
+
+function getZoneCenter(zoneKey) {
+  const el = document.getElementById(toZoneId(zoneKey));
+  if (!el) return null;
+
+  const box = el.getBBox();
+  return {
+    x: box.x + box.width / 2,
+    y: box.y + box.height / 2
+  };
+}
+
+function getMarkerOffset(zoneKey) {
+  const offsets = {
+    head:      { dx: 38, dy: -16 },
+    chest:     { dx: 50, dy: -10 },
+    abdomen:   { dx: 54, dy: 0 },
+    pelvis:    { dx: 54, dy: 10 },
+
+    leftArm:   { dx: -54, dy: -10 },
+    rightArm:  { dx: 54, dy: -10 },
+    leftHand:  { dx: -48, dy: 0 },
+    rightHand: { dx: 48, dy: 0 },
+
+    leftLeg:   { dx: -48, dy: 10 },
+    rightLeg:  { dx: 48, dy: 10 },
+    leftFoot:  { dx: -48, dy: 0 },
+    rightFoot: { dx: 48, dy: 0 }
+  };
+
+  return offsets[zoneKey] || { dx: 42, dy: 0 };
+}
+
+function addStatusMarker(zoneKey, code, type) {
+  const center = getZoneCenter(zoneKey);
+  if (!center) return;
+
+  const { dx, dy } = getMarkerOffset(zoneKey);
+  const tx = center.x + dx;
+  const ty = center.y + dy;
+
+  const layer = document.getElementById("statusMarkers");
+
+  const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  group.setAttribute("class", "status-marker");
+  group.setAttribute("data-type", type);
+
+  const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  line.setAttribute("x1", center.x);
+  line.setAttribute("y1", center.y);
+  line.setAttribute("x2", tx);
+  line.setAttribute("y2", ty);
+
+  const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  dot.setAttribute("class", "status-marker-dot");
+  dot.setAttribute("cx", center.x);
+  dot.setAttribute("cy", center.y);
+  dot.setAttribute("r", "3.2");
+
+  const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  rect.setAttribute("class", "status-marker-tag");
+  rect.setAttribute("x", tx - 18);
+  rect.setAttribute("y", ty - 11);
+  rect.setAttribute("width", "36");
+  rect.setAttribute("height", "22");
+  rect.setAttribute("rx", "6");
+
+  const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  text.setAttribute("class", "status-marker-text");
+  text.setAttribute("x", tx);
+  text.setAttribute("y", ty + 4);
+  text.setAttribute("text-anchor", "middle");
+  text.textContent = code;
+
+  group.appendChild(line);
+  group.appendChild(dot);
+  group.appendChild(rect);
+  group.appendChild(text);
+
+  layer.appendChild(group);
+}
+    
     document.getElementById("syncText").textContent = `${Math.round(syncPercent)}%`;
     document.getElementById("syncFill").style.setProperty("--sync", `${syncPercent}%`);
   </script>
