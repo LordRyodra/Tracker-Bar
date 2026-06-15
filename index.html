@@ -406,19 +406,19 @@
 
     .body-glow {
       fill: none;
-      stroke: rgba(40, 245, 255, 0.28);
-      stroke-width: 9;
-      filter: blur(3px) drop-shadow(0 0 15px rgba(40, 245, 255, 0.25));
-      opacity: 0.6;
+      stroke: rgba(40, 245, 255, 0.24);
+      stroke-width: 5;
+      filter: blur(2px) drop-shadow(0 0 12px rgba(40, 245, 255, 0.26));
+      opacity: 0.75;
     }
 
     .body-silhouette {
-      fill: rgba(40, 245, 255, 0.055);
+      fill: rgba(40, 245, 255, 0.045);
       stroke: rgba(90, 250, 255, 0.95);
-      stroke-width: 2.2;
+      stroke-width: 2;
       filter:
-        drop-shadow(0 0 8px rgba(40, 245, 255, 0.35))
-        drop-shadow(0 0 18px rgba(40, 245, 255, 0.10));
+        drop-shadow(0 0 7px rgba(40, 245, 255, 0.35))
+        drop-shadow(0 0 16px rgba(40, 245, 255, 0.10));
     }
 
     .body-inner-line {
@@ -450,6 +450,7 @@
         opacity: 0.68;
         filter: drop-shadow(0 0 6px var(--injury-color));
       }
+
       50% {
         opacity: 1;
         filter: drop-shadow(0 0 18px var(--injury-color));
@@ -877,50 +878,147 @@
               <defs>
                 <ellipse id="headShape" cx="210" cy="84" rx="23" ry="35" />
 
-                <path id="bodyShape"
-                  d="M202 120
-                     L202 132
-                     C186 134 172 141 161 153
-                     C149 166 142 185 139 207
-                     C136 230 134 255 131 279
-                     C129 298 124 316 116 334
-                     C110 349 111 361 118 367
-                     C126 373 136 369 143 356
-                     C150 343 155 326 159 307
-                     C164 281 168 250 172 220
-                     C174 201 177 182 183 168
-                     C180 190 179 211 179 232
-                     C179 260 184 284 192 302
-                     C197 314 199 327 199 341
-                     C199 376 194 416 188 452
-                     C185 469 178 482 168 491
-                     C161 497 162 502 171 504
-                     C185 507 199 500 204 489
-                     C208 477 209 436 209 388
-                     L211 388
-                     C211 436 212 477 216 489
-                     C221 500 235 507 249 504
-                     C258 502 259 497 252 491
-                     C242 482 235 469 232 452
-                     C226 416 221 376 221 341
-                     C221 327 223 314 228 302
-                     C236 284 241 260 241 232
-                     C241 211 240 190 237 168
-                     C243 182 246 201 248 220
-                     C252 250 256 281 261 307
-                     C265 326 270 343 277 356
-                     C284 369 294 373 302 367
-                     C309 361 310 349 304 334
-                     C296 316 291 298 289 279
-                     C286 255 284 230 281 207
-                     C278 185 271 166 259 153
-                     C248 141 234 134 218 132
-                     L218 120
+                <path id="neckShape"
+                  d="M201 117
+                     L219 117
+                     L219 138
+                     C214 141 206 141 201 138
+                     Z" />
+
+                <path id="torsoShape"
+                  d="M168 148
+                     C181 138 196 134 210 134
+                     C224 134 239 138 252 148
+                     C260 164 264 181 265 199
+                     C267 229 260 257 246 282
+                     C237 299 230 318 227 337
+                     C221 332 216 329 210 329
+                     C204 329 199 332 193 337
+                     C190 318 183 299 174 282
+                     C160 257 153 229 155 199
+                     C156 181 160 164 168 148
+                     Z" />
+
+                <path id="leftUpperArmShape"
+                  d="M169 153
+                     C154 160 146 180 141 207
+                     C138 226 135 244 132 262
+                     C137 267 145 267 151 261
+                     C154 242 158 220 162 199
+                     C166 178 172 163 181 154
+                     Z" />
+
+                <path id="leftForearmShape"
+                  d="M132 262
+                     C128 280 123 299 116 319
+                     C111 334 105 348 103 358
+                     C106 365 114 369 122 366
+                     C132 361 137 347 141 332
+                     C146 311 150 286 151 261
+                     C145 267 137 267 132 262
+                     Z" />
+
+                <path id="leftHandShape"
+                  d="M103 357
+                     C96 364 96 375 103 382
+                     C110 389 124 386 133 375
+                     C130 369 124 365 122 366
+                     C114 369 106 365 103 357
+                     Z" />
+
+                <path id="rightUpperArmShape"
+                  d="M251 153
+                     C266 160 274 180 279 207
+                     C282 226 285 244 288 262
+                     C283 267 275 267 269 261
+                     C266 242 262 220 258 199
+                     C254 178 248 163 239 154
+                     Z" />
+
+                <path id="rightForearmShape"
+                  d="M288 262
+                     C292 280 297 299 304 319
+                     C309 334 315 348 317 358
+                     C314 365 306 369 298 366
+                     C288 361 283 347 279 332
+                     C274 311 270 286 269 261
+                     C275 267 283 267 288 262
+                     Z" />
+
+                <path id="rightHandShape"
+                  d="M317 357
+                     C324 364 324 375 317 382
+                     C310 389 296 386 287 375
+                     C290 369 296 365 298 366
+                     C306 369 314 365 317 357
+                     Z" />
+
+                <path id="leftThighShape"
+                  d="M193 335
+                     C200 350 200 373 197 400
+                     C195 420 192 439 188 457
+                     C183 463 174 464 168 459
+                     C173 436 177 411 180 386
+                     C183 360 187 343 193 335
+                     Z" />
+
+                <path id="leftLowerLegShape"
+                  d="M168 459
+                     C165 474 159 489 151 500
+                     C159 508 177 506 187 496
+                     C190 485 190 470 188 457
+                     C183 463 174 464 168 459
+                     Z" />
+
+                <path id="leftFootShape"
+                  d="M151 500
+                     C143 505 145 513 157 515
+                     C170 517 187 511 190 504
+                     C190 500 189 498 187 496
+                     C177 506 159 508 151 500
+                     Z" />
+
+                <path id="rightThighShape"
+                  d="M227 335
+                     C220 350 220 373 223 400
+                     C225 420 228 439 232 457
+                     C237 463 246 464 252 459
+                     C247 436 243 411 240 386
+                     C237 360 233 343 227 335
+                     Z" />
+
+                <path id="rightLowerLegShape"
+                  d="M252 459
+                     C255 474 261 489 269 500
+                     C261 508 243 506 233 496
+                     C230 485 230 470 232 457
+                     C237 463 246 464 252 459
+                     Z" />
+
+                <path id="rightFootShape"
+                  d="M269 500
+                     C277 505 275 513 263 515
+                     C250 517 233 511 230 504
+                     C230 500 231 498 233 496
+                     C243 506 261 508 269 500
                      Z" />
 
                 <clipPath id="bodyClip">
                   <use href="#headShape" />
-                  <use href="#bodyShape" />
+                  <use href="#neckShape" />
+                  <use href="#torsoShape" />
+                  <use href="#leftUpperArmShape" />
+                  <use href="#leftForearmShape" />
+                  <use href="#leftHandShape" />
+                  <use href="#rightUpperArmShape" />
+                  <use href="#rightForearmShape" />
+                  <use href="#rightHandShape" />
+                  <use href="#leftThighShape" />
+                  <use href="#leftLowerLegShape" />
+                  <use href="#leftFootShape" />
+                  <use href="#rightThighShape" />
+                  <use href="#rightLowerLegShape" />
+                  <use href="#rightFootShape" />
                 </clipPath>
               </defs>
 
@@ -951,24 +1049,52 @@
               </g>
 
               <use href="#headShape" class="body-glow" />
-              <use href="#bodyShape" class="body-glow" />
+              <use href="#neckShape" class="body-glow" />
+              <use href="#torsoShape" class="body-glow" />
+              <use href="#leftUpperArmShape" class="body-glow" />
+              <use href="#leftForearmShape" class="body-glow" />
+              <use href="#leftHandShape" class="body-glow" />
+              <use href="#rightUpperArmShape" class="body-glow" />
+              <use href="#rightForearmShape" class="body-glow" />
+              <use href="#rightHandShape" class="body-glow" />
+              <use href="#leftThighShape" class="body-glow" />
+              <use href="#leftLowerLegShape" class="body-glow" />
+              <use href="#leftFootShape" class="body-glow" />
+              <use href="#rightThighShape" class="body-glow" />
+              <use href="#rightLowerLegShape" class="body-glow" />
+              <use href="#rightFootShape" class="body-glow" />
+
               <use href="#headShape" class="body-silhouette" />
-              <use href="#bodyShape" class="body-silhouette" />
+              <use href="#neckShape" class="body-silhouette" />
+              <use href="#torsoShape" class="body-silhouette" />
+              <use href="#leftUpperArmShape" class="body-silhouette" />
+              <use href="#leftForearmShape" class="body-silhouette" />
+              <use href="#leftHandShape" class="body-silhouette" />
+              <use href="#rightUpperArmShape" class="body-silhouette" />
+              <use href="#rightForearmShape" class="body-silhouette" />
+              <use href="#rightHandShape" class="body-silhouette" />
+              <use href="#leftThighShape" class="body-silhouette" />
+              <use href="#leftLowerLegShape" class="body-silhouette" />
+              <use href="#leftFootShape" class="body-silhouette" />
+              <use href="#rightThighShape" class="body-silhouette" />
+              <use href="#rightLowerLegShape" class="body-silhouette" />
+              <use href="#rightFootShape" class="body-silhouette" />
 
               <g class="body-detail-layer">
                 <path class="body-inner-line" d="M210 118 L210 388" />
-                <path class="body-inner-line" d="M178 157 C191 164 229 164 242 157" />
-                <path class="body-inner-line" d="M173 190 C191 198 229 198 247 190" />
+                <path class="body-inner-line" d="M178 158 C191 165 229 165 242 158" />
+                <path class="body-inner-line" d="M173 190 C191 199 229 199 247 190" />
                 <path class="body-inner-line" d="M178 224 C194 232 226 232 242 224" />
                 <path class="body-inner-line" d="M191 259 C200 264 220 264 229 259" />
 
-                <path class="body-inner-line" d="M164 176 C158 203 152 236 148 270" />
-                <path class="body-inner-line" d="M256 176 C262 203 268 236 272 270" />
+                <path class="body-inner-line" d="M151 262 C147 284 141 310 134 333" />
+                <path class="body-inner-line" d="M269 262 C273 284 279 310 286 333" />
 
                 <path class="body-inner-line" d="M196 305 C194 338 190 392 184 452" />
                 <path class="body-inner-line" d="M224 305 C226 338 230 392 236 452" />
-                <path class="body-inner-line" d="M202 289 C203 326 203 357 202 388" />
-                <path class="body-inner-line" d="M218 289 C217 326 217 357 218 388" />
+
+                <path class="body-inner-line" d="M181 386 C188 390 194 390 199 386" />
+                <path class="body-inner-line" d="M221 386 C226 390 232 390 239 386" />
               </g>
 
               <g class="body-zones-layer" clip-path="url(#bodyClip)">
@@ -995,81 +1121,21 @@
                      C219 304 201 304 193 297
                      C187 283 186 266 190 253 Z" />
 
-                <path id="zone-leftUpperArm" class="body-zone"
-                  d="M175 154
-                     C165 168 159 185 155 205
-                     C151 223 147 240 144 256
-                     C140 258 136 258 132 256
-                     C133 244 136 228 141 209
-                     C146 189 154 169 164 156
-                     C168 153 172 152 175 154 Z" />
+                <use id="zone-leftUpperArm" href="#leftUpperArmShape" class="body-zone" />
+                <use id="zone-leftForearm" href="#leftForearmShape" class="body-zone" />
+                <use id="zone-leftHand" href="#leftHandShape" class="body-zone" />
 
-                <path id="zone-leftForearm" class="body-zone"
-                  d="M144 256
-                     C140 273 136 289 131 304
-                     C127 316 123 326 118 334
-                     C114 334 111 331 110 326
-                     C111 316 114 303 119 288
-                     C124 273 128 263 132 256
-                     C136 254 140 254 144 256 Z" />
+                <use id="zone-rightUpperArm" href="#rightUpperArmShape" class="body-zone" />
+                <use id="zone-rightForearm" href="#rightForearmShape" class="body-zone" />
+                <use id="zone-rightHand" href="#rightHandShape" class="body-zone" />
 
-                <ellipse id="zone-leftHand" class="body-zone" cx="125" cy="348" rx="12" ry="16" />
+                <use id="zone-leftThigh" href="#leftThighShape" class="body-zone" />
+                <use id="zone-leftLowerLeg" href="#leftLowerLegShape" class="body-zone" />
+                <use id="zone-leftFoot" href="#leftFootShape" class="body-zone" />
 
-                <path id="zone-rightUpperArm" class="body-zone"
-                  d="M245 154
-                     C255 168 261 185 265 205
-                     C269 223 273 240 276 256
-                     C280 258 284 258 288 256
-                     C287 244 284 228 279 209
-                     C274 189 266 169 256 156
-                     C252 153 248 152 245 154 Z" />
-
-                <path id="zone-rightForearm" class="body-zone"
-                  d="M276 256
-                     C280 273 284 289 289 304
-                     C293 316 297 326 302 334
-                     C306 334 309 331 310 326
-                     C309 316 306 303 301 288
-                     C296 273 292 263 288 256
-                     C284 254 280 254 276 256 Z" />
-
-                <ellipse id="zone-rightHand" class="body-zone" cx="295" cy="348" rx="12" ry="16" />
-
-                <path id="zone-leftThigh" class="body-zone"
-                  d="M194 299
-                     C199 315 199 340 197 366
-                     C194 386 191 403 188 421
-                     C182 424 176 424 171 421
-                     C174 399 179 377 184 348
-                     C188 327 191 309 194 299 Z" />
-
-                <path id="zone-leftLowerLeg" class="body-zone"
-                  d="M188 421
-                     C186 437 183 452 178 464
-                     C174 474 169 480 163 484
-                     C159 481 158 476 160 469
-                     C166 454 171 438 175 421
-                     C179 419 184 419 188 421 Z" />
-
-                <ellipse id="zone-leftFoot" class="body-zone" cx="173" cy="492" rx="18" ry="8" />
-
-                <path id="zone-rightThigh" class="body-zone"
-                  d="M226 299
-                     C221 315 221 340 223 366
-                     C226 386 229 403 232 421
-                     C238 424 244 424 249 421
-                     C246 399 241 377 236 348
-                     C232 327 229 309 226 299 Z" />
-
-                <path id="zone-rightLowerLeg" class="body-zone"
-                  d="M232 421
-                     C234 437 237 452 242 464
-                     C246 474 251 480 257 484
-                     C261 481 262 476 260 469
-                     C254 454 249 438 245 421
-                     C241 419 236 419 232 421 Z" />
-
-                <ellipse id="zone-rightFoot" class="body-zone" cx="247" cy="492" rx="18" ry="8" />
+                <use id="zone-rightThigh" href="#rightThighShape" class="body-zone" />
+                <use id="zone-rightLowerLeg" href="#rightLowerLegShape" class="body-zone" />
+                <use id="zone-rightFoot" href="#rightFootShape" class="body-zone" />
               </g>
 
               <g id="statusMarkers" class="status-marker-layer"></g>
@@ -1132,15 +1198,18 @@
 
     function getText(names, fallback) {
       const nameList = Array.isArray(names) ? names : [names];
+
       for (const name of nameList) {
         const value = params.get(name);
         if (value !== null && value !== "") return value;
       }
+
       return fallback;
     }
 
     function getNumber(names, fallback) {
       const nameList = Array.isArray(names) ? names : [names];
+
       for (const name of nameList) {
         const value = params.get(name);
         if (value !== null && value !== "") {
@@ -1148,6 +1217,7 @@
           if (!Number.isNaN(parsed)) return parsed;
         }
       }
+
       return fallback;
     }
 
@@ -1163,9 +1233,11 @@
     function mixColor(colorA, colorB, amount) {
       const a = colorA.match(/\w\w/g).map(hex => parseInt(hex, 16));
       const b = colorB.match(/\w\w/g).map(hex => parseInt(hex, 16));
+
       const mixed = a.map((value, index) => {
         return Math.round(value + (b[index] - value) * amount);
       });
+
       return `rgb(${mixed[0]}, ${mixed[1]}, ${mixed[2]})`;
     }
 
@@ -1192,9 +1264,11 @@
       ];
 
       let currentStage = stages[0];
+
       for (const stage of stages) {
         if (value >= stage.min) currentStage = stage;
       }
+
       return currentStage.label;
     }
 
@@ -1206,6 +1280,7 @@
         3: "#ff6b3d",
         4: "#d90429"
       };
+
       return injuryColors[clamp(level, 0, 4)] || injuryColors[0];
     }
 
@@ -1242,12 +1317,6 @@
       el.style.opacity = "1";
       el.style.filter = `drop-shadow(0 0 ${5 + clampedLevel * 3}px ${color})`;
       el.style.animation = `woundPulse ${pulseDurations[clampedLevel]} ease-in-out infinite`;
-    }
-
-    function getLegacyAwareLevel(primaryKeys, legacyKeys = []) {
-      const direct = getNumber(primaryKeys, null);
-      if (direct !== null) return direct;
-      return getNumber(legacyKeys, 0);
     }
 
     function expandZoneToken(zone) {
@@ -1326,50 +1395,62 @@
       };
     }
 
-    function toZoneId(zoneKey) {
-      return zoneKey.startsWith("zone-") ? zoneKey : `zone-${zoneKey}`;
-    }
+    function getMarkerCenter(zoneKey) {
+      const centers = {
+        head: { x: 210, y: 84 },
+        chest: { x: 210, y: 172 },
+        abdomen: { x: 210, y: 224 },
+        pelvis: { x: 210, y: 276 },
 
-    function getZoneCenter(zoneKey) {
-      const el = document.getElementById(toZoneId(zoneKey));
-      if (!el) return null;
+        leftUpperArm: { x: 151, y: 210 },
+        leftForearm: { x: 124, y: 316 },
+        leftHand: { x: 116, y: 371 },
 
-      const box = el.getBBox();
-      return {
-        x: box.x + box.width / 2,
-        y: box.y + box.height / 2
+        rightUpperArm: { x: 269, y: 210 },
+        rightForearm: { x: 296, y: 316 },
+        rightHand: { x: 304, y: 371 },
+
+        leftThigh: { x: 184, y: 386 },
+        leftLowerLeg: { x: 170, y: 478 },
+        leftFoot: { x: 169, y: 508 },
+
+        rightThigh: { x: 236, y: 386 },
+        rightLowerLeg: { x: 250, y: 478 },
+        rightFoot: { x: 251, y: 508 }
       };
+
+      return centers[zoneKey] || null;
     }
 
     function getMarkerOffset(zoneKey) {
       const offsets = {
-        head:           { dx: 42, dy: -18 },
-        chest:          { dx: 60, dy: -16 },
-        abdomen:        { dx: 64, dy: -2 },
-        pelvis:         { dx: 60, dy: 10 },
+        head: { dx: 42, dy: -18 },
+        chest: { dx: 60, dy: -16 },
+        abdomen: { dx: 64, dy: -2 },
+        pelvis: { dx: 60, dy: 10 },
 
-        leftUpperArm:   { dx: -70, dy: -10 },
-        leftForearm:    { dx: -78, dy: 8 },
-        leftHand:       { dx: -56, dy: 0 },
+        leftUpperArm: { dx: -70, dy: -10 },
+        leftForearm: { dx: -78, dy: 8 },
+        leftHand: { dx: -56, dy: 0 },
 
-        rightUpperArm:  { dx: 70, dy: -10 },
-        rightForearm:   { dx: 78, dy: 8 },
-        rightHand:      { dx: 56, dy: 0 },
+        rightUpperArm: { dx: 70, dy: -10 },
+        rightForearm: { dx: 78, dy: 8 },
+        rightHand: { dx: 56, dy: 0 },
 
-        leftThigh:      { dx: -58, dy: 6 },
-        leftLowerLeg:   { dx: -58, dy: 12 },
-        leftFoot:       { dx: -44, dy: 0 },
+        leftThigh: { dx: -58, dy: 6 },
+        leftLowerLeg: { dx: -58, dy: 12 },
+        leftFoot: { dx: -44, dy: 0 },
 
-        rightThigh:     { dx: 58, dy: 6 },
-        rightLowerLeg:  { dx: 58, dy: 12 },
-        rightFoot:      { dx: 44, dy: 0 }
+        rightThigh: { dx: 58, dy: 6 },
+        rightLowerLeg: { dx: 58, dy: 12 },
+        rightFoot: { dx: 44, dy: 0 }
       };
 
       return offsets[zoneKey] || { dx: 42, dy: 0 };
     }
 
     function addStatusMarker(zoneKey, code, type) {
-      const center = getZoneCenter(zoneKey);
+      const center = getMarkerCenter(zoneKey);
       if (!center) return;
 
       const { dx, dy } = getMarkerOffset(zoneKey);
@@ -1413,6 +1494,7 @@
       group.appendChild(dot);
       group.appendChild(rect);
       group.appendChild(text);
+
       layer.appendChild(group);
     }
 
