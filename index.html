@@ -1205,7 +1205,14 @@
 
               <svg class="body-overlay" viewBox="0 0 1024 1336" xmlns="http://www.w3.org/2000/svg">
                 <g class="body-zones-layer">
-                  <ellipse id="zone-head" class="body-zone" cx="512" cy="110" rx="48" ry="70" />
+                  <path id="zone-head" class="body-zone"
+                    d="M512 44
+                       C538 44 555 63 560 92
+                       C564 119 560 146 549 171
+                       C541 189 528 201 512 205
+                       C496 201 483 189 475 171
+                       C464 146 460 119 464 92
+                       C469 63 486 44 512 44 Z" />
 
                   <path id="zone-chest" class="body-zone"
                     d="M414 312
@@ -1577,7 +1584,7 @@
 
     function getMarkerCenter(zoneKey) {
       const centers = {
-        head: { x: 512, y: 120 },
+        head: { x: 512, y: 122 },
         chest: { x: 512, y: 352 },
         abdomen: { x: 512, y: 488 },
         pelvis: { x: 512, y: 622 },
