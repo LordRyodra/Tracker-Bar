@@ -244,7 +244,6 @@
         transparent 310deg,
         transparent 360deg
       );
-
       -webkit-mask:
         radial-gradient(
           farthest-side,
@@ -256,7 +255,6 @@
           black 0deg var(--angle),
           transparent var(--angle) 360deg
         );
-
       mask:
         radial-gradient(
           farthest-side,
@@ -268,21 +266,16 @@
           black 0deg var(--angle),
           transparent var(--angle) 360deg
         );
-
       -webkit-mask-composite: source-in;
       mask-composite: intersect;
-
       opacity: 0.7;
       filter:
         blur(0.6px)
         drop-shadow(0 0 5px var(--ring-color));
-
       mix-blend-mode: screen;
-
       animation:
         ringSweep var(--sweep-speed, 4.8s) linear infinite,
         ringPulse var(--pulse-speed, 2.9s) ease-in-out infinite;
-
       animation-delay:
         var(--sweep-delay, 0s),
         var(--pulse-delay, 0s);
@@ -411,168 +404,108 @@
       font-size: 8px;
     }
 
-    .scan-cross line {
-      stroke: rgba(255, 255, 255, 0.68);
-      stroke-width: 1.35;
+    .body-glow {
+      fill: none;
+      stroke: rgba(40, 245, 255, 0.32);
+      stroke-width: 8;
+      filter: blur(3px) drop-shadow(0 0 14px rgba(40, 245, 255, 0.26));
+      opacity: 0.6;
     }
 
-    .body-glow {
-  fill: none;
-  stroke: rgba(40, 245, 255, 0.34);
-  stroke-width: 8;
-  filter: blur(3px) drop-shadow(0 0 14px rgba(40, 245, 255, 0.28));
-  opacity: 0.55;
-}
+    .body-silhouette {
+      fill: rgba(40, 245, 255, 0.06);
+      stroke: rgba(90, 250, 255, 0.95);
+      stroke-width: 2.2;
+      filter:
+        drop-shadow(0 0 8px rgba(40, 245, 255, 0.35))
+        drop-shadow(0 0 18px rgba(40, 245, 255, 0.10));
+    }
 
-.body-silhouette {
-  fill: rgba(40, 245, 255, 0.07);
-  stroke: rgba(90, 250, 255, 0.95);
-  stroke-width: 2.2;
-  filter:
-    drop-shadow(0 0 8px rgba(40, 245, 255, 0.35))
-    drop-shadow(0 0 18px rgba(40, 245, 255, 0.10));
-}
+    .body-inner-line {
+      fill: none;
+      stroke: rgba(215, 255, 255, 0.16);
+      stroke-width: 1.1;
+      stroke-linecap: round;
+    }
 
-.body-inner-line {
-  fill: none;
-  stroke: rgba(215, 255, 255, 0.16);
-  stroke-width: 1.1;
-  stroke-linecap: round;
-}
+    .body-zone {
+      fill: transparent;
+      stroke: transparent;
+      stroke-width: 1.2;
+      opacity: 0;
+      transition:
+        fill 0.25s ease,
+        stroke 0.25s ease,
+        filter 0.25s ease,
+        opacity 0.25s ease;
+    }
 
-.body-zone {
-  fill: transparent;
-  stroke: transparent;
-  stroke-width: 1.2;
-  opacity: 0;
-  transition:
-    fill 0.25s ease,
-    stroke 0.25s ease,
-    filter 0.25s ease,
-    opacity 0.25s ease;
-}
+    .body-zone.active {
+      opacity: 1;
+    }
 
-.body-zone.active {
-  opacity: 1;
-}
+    @keyframes woundPulse {
+      0%, 100% {
+        opacity: 0.68;
+        filter: drop-shadow(0 0 6px var(--injury-color));
+      }
+      50% {
+        opacity: 1;
+        filter: drop-shadow(0 0 18px var(--injury-color));
+      }
+    }
 
-.body-zone:hover {
-  stroke: rgba(255, 255, 255, 0.9);
-}
+    .status-marker-layer {
+      pointer-events: none;
+    }
 
-@keyframes woundPulse {
-  0%, 100% {
-    opacity: 0.68;
-    filter: drop-shadow(0 0 6px var(--injury-color));
-  }
+    .status-marker line {
+      stroke: rgba(190, 255, 255, 0.72);
+      stroke-width: 1.2;
+    }
 
-  50% {
-    opacity: 1;
-    filter: drop-shadow(0 0 18px var(--injury-color));
-  }
-}
+    .status-marker-dot {
+      fill: rgba(190, 255, 255, 0.96);
+      filter: drop-shadow(0 0 6px rgba(190, 255, 255, 0.65));
+    }
 
-/* Marker direkt am Körper */
-.status-marker-layer {
-  pointer-events: none;
-}
+    .status-marker-tag {
+      fill: rgba(7, 16, 20, 0.94);
+      stroke: rgba(120, 255, 255, 0.48);
+      stroke-width: 1;
+    }
 
-.status-marker line {
-  stroke: rgba(190, 255, 255, 0.72);
-  stroke-width: 1.2;
-}
+    .status-marker-text {
+      fill: rgba(245, 255, 255, 0.96);
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
 
-.status-marker-dot {
-  fill: rgba(190, 255, 255, 0.96);
-  filter: drop-shadow(0 0 6px rgba(190, 255, 255, 0.65));
-}
+    .status-marker[data-type="bleeding"] .status-marker-tag {
+      stroke: rgba(255, 120, 120, 0.6);
+    }
 
-.status-marker-tag {
-  fill: rgba(7, 16, 20, 0.94);
-  stroke: rgba(120, 255, 255, 0.48);
-  stroke-width: 1;
-}
+    .status-marker[data-type="poisoned"] .status-marker-tag {
+      stroke: rgba(120, 255, 120, 0.6);
+    }
 
-.status-marker-text {
-  fill: rgba(245, 255, 255, 0.96);
-  font-family: "Courier New", monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
+    .status-marker[data-type="burning"] .status-marker-tag {
+      stroke: rgba(255, 177, 107, 0.6);
+    }
 
-.status-marker[data-type="bleeding"] .status-marker-tag {
-  stroke: rgba(255, 120, 120, 0.6);
-}
+    .status-marker[data-type="fractured"] .status-marker-tag {
+      stroke: rgba(240, 240, 240, 0.55);
+    }
 
-.status-marker[data-type="poisoned"] .status-marker-tag {
-  stroke: rgba(120, 255, 120, 0.6);
-}
+    .status-marker[data-type="frostbite"] .status-marker-tag {
+      stroke: rgba(143, 232, 255, 0.68);
+    }
 
-.status-marker[data-type="burning"] .status-marker-tag {
-  stroke: rgba(255, 177, 107, 0.6);
-}
-
-.status-marker[data-type="fractured"] .status-marker-tag {
-  stroke: rgba(240, 240, 240, 0.55);
-}
-
-.status-marker[data-type="frostbite"] .status-marker-tag {
-  stroke: rgba(143, 232, 255, 0.68);
-}
-
-.status-marker[data-type="necrosis"] .status-marker-tag {
-  stroke: rgba(212, 255, 122, 0.68);
-}
-
-/* Statusmarker direkt am Körper */
-.status-marker-layer {
-  pointer-events: none;
-}
-
-.status-marker line {
-  stroke: rgba(190, 255, 255, 0.7);
-  stroke-width: 1.2;
-}
-
-.status-marker-dot {
-  fill: rgba(190, 255, 255, 0.95);
-  filter: drop-shadow(0 0 6px rgba(190, 255, 255, 0.7));
-}
-
-.status-marker-tag {
-  fill: rgba(7, 16, 20, 0.92);
-  stroke: rgba(120, 255, 255, 0.45);
-  stroke-width: 1;
-  rx: 8;
-}
-
-.status-marker-text {
-  fill: rgba(240, 255, 255, 0.96);
-  font-family: "Courier New", monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.status-marker[data-type="bleeding"] .status-marker-tag {
-  stroke: rgba(255, 120, 120, 0.6);
-}
-.status-marker[data-type="poisoned"] .status-marker-tag {
-  stroke: rgba(120, 255, 120, 0.6);
-}
-.status-marker[data-type="burning"] .status-marker-tag {
-  stroke: rgba(255, 177, 107, 0.6);
-}
-.status-marker[data-type="fractured"] .status-marker-tag {
-  stroke: rgba(240, 240, 240, 0.55);
-}
-.status-marker[data-type="frostbite"] .status-marker-tag {
-  stroke: rgba(143, 232, 255, 0.65);
-}
-.status-marker[data-type="necrosis"] .status-marker-tag {
-  stroke: rgba(212, 255, 122, 0.65);
-}
+    .status-marker[data-type="necrosis"] .status-marker-tag {
+      stroke: rgba(212, 255, 122, 0.68);
+    }
 
     .condition-panel {
       display: flex;
@@ -835,14 +768,12 @@
           blur(0.9px)
           drop-shadow(0 0 3px var(--ring-color));
       }
-
       42% {
         opacity: 0.85;
         filter:
           blur(0.35px)
           drop-shadow(0 0 9px var(--ring-color));
       }
-
       68% {
         opacity: 0.55;
       }
@@ -945,162 +876,161 @@
         <div class="body-layout">
           <div class="body-map-wrap">
             <svg class="body-map scan-map" viewBox="0 0 420 520" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <path id="humanShape"
-      d="M210 45
-         C224 45 235 59 235 80
-         C235 98 226 112 218 117
-         L218 126
+              <defs>
+                <path id="humanShape"
+                  d="M210 42
+                     C226 42 239 60 239 82
+                     C239 98 233 112 221 120
+                     L221 132
+                     C239 134 254 141 267 152
+                     C279 163 286 181 289 203
+                     C292 225 294 249 300 273
+                     C303 287 312 300 310 313
+                     C309 321 303 326 295 325
+                     C284 323 278 313 274 299
+                     C268 277 263 248 260 224
+                     C258 202 255 181 247 165
 
-         C233 128 249 134 261 145
-         C275 158 282 179 287 206
-         C292 236 296 260 302 280
-         C305 292 300 302 291 305
-         C282 307 275 301 271 288
-         C264 266 259 239 255 216
-         C251 192 247 174 239 160
+                     C251 189 252 212 252 236
+                     C252 258 248 276 241 291
+                     C235 303 232 317 232 336
+                     C232 368 237 404 242 437
+                     C244 453 252 464 261 471
+                     C267 476 266 482 258 484
+                     C244 488 228 484 220 474
+                     C214 466 212 430 210 382
+                     C208 430 206 466 200 474
+                     C192 484 176 488 162 484
+                     C154 482 153 476 159 471
+                     C168 464 176 453 178 437
+                     C183 404 188 368 188 336
+                     C188 317 185 303 179 291
+                     C172 276 168 258 168 236
+                     C168 212 169 189 173 165
 
-         C242 184 244 207 244 230
-         C244 256 239 279 229 297
-         C224 307 222 319 223 338
-         C225 375 231 418 237 448
-         C240 462 248 467 258 470
-         C265 472 266 478 260 481
-         C248 487 229 484 221 474
-         C214 465 212 421 210 370
-         C208 421 206 465 199 474
-         C191 484 172 487 160 481
-         C154 478 155 472 162 470
-         C172 467 180 462 183 448
-         C189 418 195 375 197 338
-         C198 319 196 307 191 297
-         C181 279 176 256 176 230
-         C176 207 178 184 181 160
+                     C165 181 162 202 160 224
+                     C157 248 152 277 146 299
+                     C142 313 136 323 125 325
+                     C117 326 111 321 110 313
+                     C108 300 117 287 120 273
+                     C126 249 128 225 131 203
+                     C134 181 141 163 153 152
+                     C166 141 181 134 199 132
+                     L199 120
+                     C187 112 181 98 181 82
+                     C181 60 194 42 210 42 Z" />
 
-         C173 174 169 192 165 216
-         C161 239 156 266 149 288
-         C145 301 138 307 129 305
-         C120 302 115 292 118 280
-         C124 260 128 236 133 206
-         C138 179 145 158 159 145
-         C171 134 187 128 202 126
+                <clipPath id="bodyClip">
+                  <use href="#humanShape" />
+                </clipPath>
+              </defs>
 
-         L202 117
-         C194 112 185 98 185 80
-         C185 59 196 45 210 45
-         Z" />
+              <g class="scan-ui">
+                <path class="frame-line" d="M28 36 H86" />
+                <path class="frame-line" d="M334 36 H388 V52" />
+                <path class="frame-line" d="M28 36 V484 H76" />
+                <path class="frame-line" d="M344 484 H392 V436" />
 
-    <clipPath id="bodyClip">
-      <use href="#humanShape" />
-    </clipPath>
-  </defs>
+                <path class="frame-line faint" d="M54 72 H154" />
+                <path class="frame-line faint" d="M266 72 H366" />
+                <path class="frame-line faint" d="M54 450 H160" />
+                <path class="frame-line faint" d="M260 450 H366" />
 
-  <g class="scan-ui">
-    <path class="frame-line" d="M28 36 H86" />
-    <path class="frame-line" d="M334 36 H388 V52" />
-    <path class="frame-line" d="M28 36 V484 H76" />
-    <path class="frame-line" d="M344 484 H392 V436" />
+                <line class="frame-grid" x1="210" y1="54" x2="210" y2="470" />
+                <line class="frame-grid" x1="76" y1="252" x2="344" y2="252" />
 
-    <path class="frame-line faint" d="M54 72 H154" />
-    <path class="frame-line faint" d="M266 72 H366" />
-    <path class="frame-line faint" d="M54 450 H160" />
-    <path class="frame-line faint" d="M260 450 H366" />
+                <rect class="scan-box" x="306" y="78" width="72" height="72" rx="2" />
+                <text class="scan-label big" x="318" y="109">A</text>
+                <text class="scan-label small" x="343" y="109">1558</text>
+                <text class="scan-label tiny" x="318" y="127">ANALYTIC</text>
+                <text class="scan-label tiny" x="318" y="139">BIOSCAN</text>
 
-    <line class="frame-grid" x1="210" y1="54" x2="210" y2="470" />
-    <line class="frame-grid" x1="76" y1="252" x2="344" y2="252" />
+                <rect class="scan-box faint" x="46" y="88" width="54" height="132" rx="2" />
+                <text class="scan-label tiny" x="55" y="108">STAT</text>
+                <text class="scan-label tiny" x="55" y="122">SYNC</text>
+                <text class="scan-label tiny" x="55" y="136">MASS</text>
+              </g>
 
-    <rect class="scan-box" x="306" y="78" width="72" height="72" rx="2" />
-    <text class="scan-label big" x="318" y="109">A</text>
-    <text class="scan-label small" x="343" y="109">1558</text>
-    <text class="scan-label tiny" x="318" y="127">ANALYTIC</text>
-    <text class="scan-label tiny" x="318" y="139">BIOSCAN</text>
+              <use href="#humanShape" class="body-glow" />
+              <use href="#humanShape" class="body-silhouette" />
 
-    <rect class="scan-box faint" x="46" y="88" width="54" height="132" rx="2" />
-    <text class="scan-label tiny" x="55" y="108">STAT</text>
-    <text class="scan-label tiny" x="55" y="122">SYNC</text>
-    <text class="scan-label tiny" x="55" y="136">MASS</text>
-  </g>
+              <g class="body-detail-layer">
+                <path class="body-inner-line" d="M210 121 L210 382" />
+                <path class="body-inner-line" d="M177 154 C190 162 230 162 243 154" />
+                <path class="body-inner-line" d="M173 187 C190 195 230 195 247 187" />
+                <path class="body-inner-line" d="M179 221 C194 229 226 229 241 221" />
+                <path class="body-inner-line" d="M191 296 C200 302 220 302 229 296" />
+                <path class="body-inner-line" d="M197 310 C194 349 190 401 183 448" />
+                <path class="body-inner-line" d="M223 310 C226 349 230 401 237 448" />
+              </g>
 
-  <use href="#humanShape" class="body-glow" />
-  <use href="#humanShape" class="body-silhouette" />
+              <g class="body-zones-layer" clip-path="url(#bodyClip)">
+                <ellipse id="zone-head" class="body-zone" cx="210" cy="82" rx="25" ry="38" />
 
-  <g class="body-detail-layer">
-    <path class="body-inner-line" d="M210 118 L210 370" />
-    <path class="body-inner-line" d="M176 151 C190 160 230 160 244 151" />
-    <path class="body-inner-line" d="M171 183 C190 193 230 193 249 183" />
-    <path class="body-inner-line" d="M177 219 C194 228 226 228 243 219" />
-    <path class="body-inner-line" d="M190 296 C200 304 220 304 230 296" />
-    <path class="body-inner-line" d="M197 312 C195 350 190 405 183 448" />
-    <path class="body-inner-line" d="M223 312 C225 350 230 405 237 448" />
-  </g>
+                <path id="zone-chest" class="body-zone"
+                  d="M170 144
+                     C184 135 236 135 250 144
+                     C254 159 253 178 248 192
+                     C230 200 190 200 172 192
+                     C167 178 166 159 170 144 Z" />
 
-  <g class="body-zones-layer" clip-path="url(#bodyClip)">
-    <ellipse id="zone-head" class="body-zone" cx="210" cy="80" rx="25" ry="36" />
+                <path id="zone-abdomen" class="body-zone"
+                  d="M172 192
+                     C190 200 230 200 248 192
+                     C249 216 244 237 232 251
+                     C221 259 199 259 188 251
+                     C176 237 171 216 172 192 Z" />
 
-    <path id="zone-chest" class="body-zone"
-      d="M170 142
-         C184 132 236 132 250 142
-         C254 158 253 176 249 190
-         C230 199 190 199 171 190
-         C167 176 166 158 170 142 Z" />
+                <path id="zone-pelvis" class="body-zone"
+                  d="M190 251
+                     C199 258 221 258 230 251
+                     C234 264 233 281 227 295
+                     C219 302 201 302 193 295
+                     C187 281 186 264 190 251 Z" />
 
-    <path id="zone-abdomen" class="body-zone"
-      d="M171 190
-         C190 199 230 199 249 190
-         C250 216 244 237 231 250
-         C220 258 200 258 189 250
-         C176 237 170 216 171 190 Z" />
+                <path id="zone-leftArm" class="body-zone"
+                  d="M176 150
+                     C165 167 159 191 154 220
+                     C149 246 145 272 139 292
+                     C136 301 131 306 125 307
+                     C123 299 125 289 129 275
+                     C135 252 140 225 145 199
+                     C150 176 159 157 170 150 Z" />
 
-    <path id="zone-pelvis" class="body-zone"
-      d="M189 250
-         C200 258 220 258 231 250
-         C235 263 234 281 227 296
-         C218 304 202 304 193 296
-         C186 281 185 263 189 250 Z" />
+                <path id="zone-rightArm" class="body-zone"
+                  d="M244 150
+                     C255 167 261 191 266 220
+                     C271 246 275 272 281 292
+                     C284 301 289 306 295 307
+                     C297 299 295 289 291 275
+                     C285 252 280 225 275 199
+                     C270 176 261 157 250 150 Z" />
 
-    <path id="zone-leftArm" class="body-zone"
-      d="M178 148
-         C166 164 159 190 153 220
-         C148 248 143 274 136 292
-         C133 301 126 303 121 298
-         C123 291 126 284 128 274
-         C134 248 139 218 145 194
-         C151 171 161 153 172 148 Z" />
+                <ellipse id="zone-leftHand" class="body-zone" cx="126" cy="307" rx="12" ry="13" />
+                <ellipse id="zone-rightHand" class="body-zone" cx="294" cy="307" rx="12" ry="13" />
 
-    <path id="zone-rightArm" class="body-zone"
-      d="M242 148
-         C254 164 261 190 267 220
-         C272 248 277 274 284 292
-         C287 301 294 303 299 298
-         C297 291 294 284 292 274
-         C286 248 281 218 275 194
-         C269 171 259 153 248 148 Z" />
+                <path id="zone-leftLeg" class="body-zone"
+                  d="M194 296
+                     C200 312 200 345 196 388
+                     C193 421 189 447 183 460
+                     C178 466 167 468 159 464
+                     C164 454 173 444 177 420
+                     C182 379 190 333 194 296 Z" />
 
-    <ellipse id="zone-leftHand" class="body-zone" cx="128" cy="304" rx="14" ry="12" />
-    <ellipse id="zone-rightHand" class="body-zone" cx="292" cy="304" rx="14" ry="12" />
+                <path id="zone-rightLeg" class="body-zone"
+                  d="M226 296
+                     C220 312 220 345 224 388
+                     C227 421 231 447 237 460
+                     C242 466 253 468 261 464
+                     C256 454 247 444 243 420
+                     C238 379 230 333 226 296 Z" />
 
-    <path id="zone-leftLeg" class="body-zone"
-      d="M194 296
-         C201 312 201 345 197 389
-         C194 423 189 448 183 458
-         C178 466 166 467 159 462
-         C166 454 177 445 181 420
-         C187 378 191 331 194 296 Z" />
+                <ellipse id="zone-leftFoot" class="body-zone" cx="165" cy="463" rx="18" ry="9" />
+                <ellipse id="zone-rightFoot" class="body-zone" cx="255" cy="463" rx="18" ry="9" />
+              </g>
 
-    <path id="zone-rightLeg" class="body-zone"
-      d="M226 296
-         C219 312 219 345 223 389
-         C226 423 231 448 237 458
-         C242 466 254 467 261 462
-         C254 454 243 445 239 420
-         C233 378 229 331 226 296 Z" />
-
-    <ellipse id="zone-leftFoot" class="body-zone" cx="165" cy="463" rx="22" ry="9" />
-    <ellipse id="zone-rightFoot" class="body-zone" cx="255" cy="463" rx="22" ry="9" />
-  </g>
-
-  <g id="statusMarkers" class="status-marker-layer"></g>
-</svg>
+              <g id="statusMarkers" class="status-marker-layer"></g>
+            </svg>
           </div>
 
           <div class="condition-panel">
@@ -1159,18 +1089,15 @@
 
     function getText(names, fallback) {
       const nameList = Array.isArray(names) ? names : [names];
-
       for (const name of nameList) {
         const value = params.get(name);
         if (value !== null && value !== "") return value;
       }
-
       return fallback;
     }
 
     function getNumber(names, fallback) {
       const nameList = Array.isArray(names) ? names : [names];
-
       for (const name of nameList) {
         const value = params.get(name);
         if (value !== null && value !== "") {
@@ -1178,28 +1105,6 @@
           if (!Number.isNaN(parsed)) return parsed;
         }
       }
-
-      return fallback;
-    }
-
-    function getFlag(names, fallback = false) {
-      const nameList = Array.isArray(names) ? names : [names];
-
-      for (const name of nameList) {
-        const value = params.get(name);
-        if (value !== null && value !== "") {
-          const normalized = value.trim().toLowerCase();
-
-          if (["1", "true", "yes", "ja", "on", "active"].includes(normalized)) {
-            return true;
-          }
-
-          if (["0", "false", "no", "nein", "off", "inactive"].includes(normalized)) {
-            return false;
-          }
-        }
-      }
-
       return fallback;
     }
 
@@ -1215,11 +1120,9 @@
     function mixColor(colorA, colorB, amount) {
       const a = colorA.match(/\w\w/g).map(hex => parseInt(hex, 16));
       const b = colorB.match(/\w\w/g).map(hex => parseInt(hex, 16));
-
       const mixed = a.map((value, index) => {
         return Math.round(value + (b[index] - value) * amount);
       });
-
       return `rgb(${mixed[0]}, ${mixed[1]}, ${mixed[2]})`;
     }
 
@@ -1246,11 +1149,9 @@
       ];
 
       let currentStage = stages[0];
-
       for (const stage of stages) {
         if (value >= stage.min) currentStage = stage;
       }
-
       return currentStage.label;
     }
 
@@ -1262,7 +1163,6 @@
         3: "#ff6b3d",
         4: "#d90429"
       };
-
       return injuryColors[clamp(level, 0, 4)] || injuryColors[0];
     }
 
@@ -1299,6 +1199,151 @@
       el.style.opacity = "1";
       el.style.filter = `drop-shadow(0 0 ${5 + clampedLevel * 3}px ${color})`;
       el.style.animation = `woundPulse ${pulseDurations[clampedLevel]} ease-in-out infinite`;
+    }
+
+    function normalizeZoneName(zone) {
+      const normalized = zone.trim().toLowerCase().replace(/[\s_-]+/g, "");
+
+      const aliases = {
+        head: "head",
+        chest: "chest",
+        abdomen: "abdomen",
+        belly: "abdomen",
+        pelvis: "pelvis",
+
+        leftarm: "leftArm",
+        larm: "leftArm",
+        rightarm: "rightArm",
+        rarm: "rightArm",
+
+        lefthand: "leftHand",
+        lhand: "leftHand",
+        righthand: "rightHand",
+        rhand: "rightHand",
+
+        leftleg: "leftLeg",
+        lleg: "leftLeg",
+        rightleg: "rightLeg",
+        rleg: "rightLeg",
+
+        leftfoot: "leftFoot",
+        lfoot: "leftFoot",
+        rightfoot: "rightFoot",
+        rfoot: "rightFoot"
+      };
+
+      return aliases[normalized] || null;
+    }
+
+    function getConditionInput(names) {
+      const raw = getText(names, "");
+      if (!raw) return { active: false, zones: [] };
+
+      const normalized = raw.trim().toLowerCase();
+
+      if (["1", "true", "yes", "ja", "on", "active"].includes(normalized)) {
+        return { active: true, zones: [] };
+      }
+
+      if (["0", "false", "no", "nein", "off", "inactive"].includes(normalized)) {
+        return { active: false, zones: [] };
+      }
+
+      const zones = raw
+        .split(/[;,|]/)
+        .flatMap(part => part.split(","))
+        .map(part => normalizeZoneName(part))
+        .filter(Boolean);
+
+      return {
+        active: zones.length > 0,
+        zones
+      };
+    }
+
+    function toZoneId(zoneKey) {
+      return zoneKey.startsWith("zone-") ? zoneKey : `zone-${zoneKey}`;
+    }
+
+    function getZoneCenter(zoneKey) {
+      const el = document.getElementById(toZoneId(zoneKey));
+      if (!el) return null;
+
+      const box = el.getBBox();
+      return {
+        x: box.x + box.width / 2,
+        y: box.y + box.height / 2
+      };
+    }
+
+    function getMarkerOffset(zoneKey) {
+      const offsets = {
+        head:      { dx: 44, dy: -16 },
+        chest:     { dx: 60, dy: -14 },
+        abdomen:   { dx: 62, dy: 0 },
+        pelvis:    { dx: 56, dy: 10 },
+
+        leftArm:   { dx: -58, dy: -8 },
+        rightArm:  { dx: 58, dy: -8 },
+        leftHand:  { dx: -46, dy: 0 },
+        rightHand: { dx: 46, dy: 0 },
+
+        leftLeg:   { dx: -52, dy: 8 },
+        rightLeg:  { dx: 52, dy: 8 },
+        leftFoot:  { dx: -42, dy: 0 },
+        rightFoot: { dx: 42, dy: 0 }
+      };
+
+      return offsets[zoneKey] || { dx: 42, dy: 0 };
+    }
+
+    function addStatusMarker(zoneKey, code, type) {
+      const center = getZoneCenter(zoneKey);
+      if (!center) return;
+
+      const { dx, dy } = getMarkerOffset(zoneKey);
+      const tx = center.x + dx;
+      const ty = center.y + dy;
+
+      const layer = document.getElementById("statusMarkers");
+
+      const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      group.setAttribute("class", "status-marker");
+      group.setAttribute("data-type", type);
+
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", center.x);
+      line.setAttribute("y1", center.y);
+      line.setAttribute("x2", tx);
+      line.setAttribute("y2", ty);
+
+      const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      dot.setAttribute("class", "status-marker-dot");
+      dot.setAttribute("cx", center.x);
+      dot.setAttribute("cy", center.y);
+      dot.setAttribute("r", "3.2");
+
+      const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      rect.setAttribute("class", "status-marker-tag");
+      rect.setAttribute("x", tx - 18);
+      rect.setAttribute("y", ty - 11);
+      rect.setAttribute("width", "36");
+      rect.setAttribute("height", "22");
+      rect.setAttribute("rx", "6");
+
+      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text.setAttribute("class", "status-marker-text");
+      text.setAttribute("x", tx);
+      text.setAttribute("y", ty + 4);
+      text.setAttribute("text-anchor", "middle");
+      text.textContent = code;
+
+      group.appendChild(line);
+      group.appendChild(dot);
+      group.appendChild(rect);
+      group.appendChild(text);
+
+      layer.appendChild(group);
     }
 
     const stats = {
@@ -1340,13 +1385,13 @@
       },
 
       conditions: {
-  bleeding: getConditionInput(["bleeding", "blutung"]),
-  poisoned: getConditionInput(["poisoned", "vergiftet", "toxin"]),
-  burning: getConditionInput(["burning", "verbrannt", "brand"]),
-  fractured: getConditionInput(["fractured", "bruch", "fraktur"]),
-  frostbite: getConditionInput(["frostbite", "frost", "erfrierung", "erfroren"]),
-  necrosis: getConditionInput(["necrosis", "nekrose", "verderbnis"])
-}
+        bleeding: getConditionInput(["bleeding", "blutung"]),
+        poisoned: getConditionInput(["poisoned", "vergiftet", "toxin"]),
+        burning: getConditionInput(["burning", "verbrannt", "brand"]),
+        fractured: getConditionInput(["fractured", "bruch", "fraktur"]),
+        frostbite: getConditionInput(["frostbite", "frost", "erfrierung", "erfroren"]),
+        necrosis: getConditionInput(["necrosis", "nekrose", "verderbnis"])
+      }
     };
 
     document.getElementById("characterName").textContent = stats.name;
@@ -1404,14 +1449,15 @@
       { name: "CHA", value: stats.cha, link: links.cha }
     ];
 
-   const conditionConfig = [
-  { key: "bleeding",  label: "Blutung",     code: "BLD" },
-  { key: "poisoned",  label: "Vergiftung",  code: "TOX" },
-  { key: "burning",   label: "Verbrennung", code: "BRN" },
-  { key: "fractured", label: "Fraktur",     code: "FRX" },
-  { key: "frostbite", label: "Erfrierung",  code: "FRS" },
-  { key: "necrosis",  label: "Nekrose",     code: "NEC" }
-];
+    const conditionConfig = [
+      { key: "bleeding",  label: "Blutung",     code: "BLD" },
+      { key: "poisoned",  label: "Vergiftung",  code: "TOX" },
+      { key: "burning",   label: "Verbrennung", code: "BRN" },
+      { key: "fractured", label: "Fraktur",     code: "FRX" },
+      { key: "frostbite", label: "Erfrierung",  code: "FRS" },
+      { key: "necrosis",  label: "Nekrose",     code: "NEC" }
+    ];
+
     const ringsContainer = document.getElementById("rings");
 
     rings.forEach(ring => {
@@ -1459,27 +1505,28 @@
     const conditionGrid = document.getElementById("conditionGrid");
 
     conditionConfig.forEach(condition => {
-  const chip = document.createElement("div");
-  const state = stats.conditions[condition.key];
-  const active = state.active;
+      const chip = document.createElement("div");
+      const state = stats.conditions[condition.key];
+      const active = state.active;
 
-  chip.className = `condition-chip${active ? " active" : ""}`;
-  chip.dataset.type = condition.key;
-  chip.innerHTML = `
-    <span class="condition-icon">${condition.code}</span>
-    <span>${condition.label}</span>
-  `;
+      chip.className = `condition-chip${active ? " active" : ""}`;
+      chip.dataset.type = condition.key;
+      chip.innerHTML = `
+        <span class="condition-icon">${condition.code}</span>
+        <span>${condition.label}</span>
+      `;
 
-  conditionGrid.appendChild(chip);
+      conditionGrid.appendChild(chip);
 
-  if (active && state.zones.length > 0) {
-    state.zones.forEach(zoneKey => {
-      addStatusMarker(zoneKey, condition.code, condition.key);
+      if (active && state.zones.length > 0) {
+        state.zones.forEach(zoneKey => {
+          addStatusMarker(zoneKey, condition.code, condition.key);
+        });
+      }
     });
-  }
-});
 
     const activeConditionCount = Object.values(stats.conditions).filter(condition => condition.active).length;
+
     document.getElementById("bodyStatusLabel").textContent =
       activeConditionCount > 0
         ? `${activeConditionCount} Status aktiv`
@@ -1500,234 +1547,8 @@
     applyInjury("zone-leftFoot", stats.injuries.leftFoot);
     applyInjury("zone-rightFoot", stats.injuries.rightFoot);
 
-    function getZoneCenter(zoneKey) {
-  const el = document.getElementById(`zone-${zoneKey}`);
-  if (!el) return null;
-
-  const box = el.getBBox();
-
-  return {
-    x: box.x + box.width / 2,
-    y: box.y + box.height / 2
-  };
-}
-
-function getMarkerOffset(zoneKey) {
-  const offsets = {
-    head: { dx: 42, dy: -12 },
-    chest: { dx: 54, dy: -10 },
-    abdomen: { dx: 58, dy: 0 },
-    pelvis: { dx: 58, dy: 8 },
-
-    leftArm: { dx: -58, dy: -8 },
-    rightArm: { dx: 58, dy: -8 },
-    leftHand: { dx: -48, dy: 0 },
-    rightHand: { dx: 48, dy: 0 },
-
-    leftLeg: { dx: -52, dy: 8 },
-    rightLeg: { dx: 52, dy: 8 },
-    leftFoot: { dx: -48, dy: 0 },
-    rightFoot: { dx: 48, dy: 0 }
-  };
-
-  return offsets[zoneKey] || { dx: 42, dy: 0 };
-}
-
-function addStatusMarker(zoneKey, code, type) {
-  const center = getZoneCenter(zoneKey);
-  if (!center) return;
-
-  const offset = getMarkerOffset(zoneKey);
-  const tx = center.x + offset.dx;
-  const ty = center.y + offset.dy;
-
-  const layer = document.getElementById("statusMarkers");
-
-  const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  group.setAttribute("class", "status-marker");
-  group.setAttribute("data-type", type);
-
-  const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-  line.setAttribute("x1", center.x);
-  line.setAttribute("y1", center.y);
-  line.setAttribute("x2", tx);
-  line.setAttribute("y2", ty);
-
-  const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  dot.setAttribute("class", "status-marker-dot");
-  dot.setAttribute("cx", center.x);
-  dot.setAttribute("cy", center.y);
-  dot.setAttribute("r", "3.2");
-
-  const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  rect.setAttribute("class", "status-marker-tag");
-  rect.setAttribute("x", tx - 18);
-  rect.setAttribute("y", ty - 11);
-  rect.setAttribute("width", "36");
-  rect.setAttribute("height", "22");
-  rect.setAttribute("rx", "6");
-
-  const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  text.setAttribute("class", "status-marker-text");
-  text.setAttribute("x", tx);
-  text.setAttribute("y", ty + 4);
-  text.setAttribute("text-anchor", "middle");
-  text.textContent = code;
-
-  group.appendChild(line);
-  group.appendChild(dot);
-  group.appendChild(rect);
-  group.appendChild(text);
-
-  layer.appendChild(group);
-}
-
-function normalizeZoneName(zone) {
-  const normalized = zone.trim().toLowerCase().replace(/[\s_-]+/g, "");
-
-  const aliases = {
-    head: "head",
-    chest: "chest",
-    abdomen: "abdomen",
-    belly: "abdomen",
-    pelvis: "pelvis",
-
-    leftarm: "leftArm",
-    larm: "leftArm",
-    rightarm: "rightArm",
-    rarm: "rightArm",
-
-    lefthand: "leftHand",
-    lhand: "leftHand",
-    righthand: "rightHand",
-    rhand: "rightHand",
-
-    leftleg: "leftLeg",
-    lleg: "leftLeg",
-    rightleg: "rightLeg",
-    rleg: "rightLeg",
-
-    leftfoot: "leftFoot",
-    lfoot: "leftFoot",
-    rightfoot: "rightFoot",
-    rfoot: "rightFoot"
-  };
-
-  return aliases[normalized] || null;
-}
-
-function getConditionInput(names) {
-  const raw = getText(names, "");
-  if (!raw) return { active: false, zones: [] };
-
-  const normalized = raw.trim().toLowerCase();
-
-  if (["1", "true", "yes", "ja", "on", "active"].includes(normalized)) {
-    return { active: true, zones: [] };
-  }
-
-  if (["0", "false", "no", "nein", "off", "inactive"].includes(normalized)) {
-    return { active: false, zones: [] };
-  }
-
-  const zones = raw
-    .split(/[;,|]/)
-    .map(part => normalizeZoneName(part))
-    .filter(Boolean);
-
-  return {
-    active: zones.length > 0,
-    zones
-  };
-}
-
-function toZoneId(zoneKey) {
-  return zoneKey.startsWith("zone-") ? zoneKey : `zone-${zoneKey}`;
-}
-
-function getZoneCenter(zoneKey) {
-  const el = document.getElementById(toZoneId(zoneKey));
-  if (!el) return null;
-
-  const box = el.getBBox();
-  return {
-    x: box.x + box.width / 2,
-    y: box.y + box.height / 2
-  };
-}
-
-function getMarkerOffset(zoneKey) {
-  const offsets = {
-    head:      { dx: 38, dy: -16 },
-    chest:     { dx: 50, dy: -10 },
-    abdomen:   { dx: 54, dy: 0 },
-    pelvis:    { dx: 54, dy: 10 },
-
-    leftArm:   { dx: -54, dy: -10 },
-    rightArm:  { dx: 54, dy: -10 },
-    leftHand:  { dx: -48, dy: 0 },
-    rightHand: { dx: 48, dy: 0 },
-
-    leftLeg:   { dx: -48, dy: 10 },
-    rightLeg:  { dx: 48, dy: 10 },
-    leftFoot:  { dx: -48, dy: 0 },
-    rightFoot: { dx: 48, dy: 0 }
-  };
-
-  return offsets[zoneKey] || { dx: 42, dy: 0 };
-}
-
-function addStatusMarker(zoneKey, code, type) {
-  const center = getZoneCenter(zoneKey);
-  if (!center) return;
-
-  const { dx, dy } = getMarkerOffset(zoneKey);
-  const tx = center.x + dx;
-  const ty = center.y + dy;
-
-  const layer = document.getElementById("statusMarkers");
-
-  const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  group.setAttribute("class", "status-marker");
-  group.setAttribute("data-type", type);
-
-  const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-  line.setAttribute("x1", center.x);
-  line.setAttribute("y1", center.y);
-  line.setAttribute("x2", tx);
-  line.setAttribute("y2", ty);
-
-  const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  dot.setAttribute("class", "status-marker-dot");
-  dot.setAttribute("cx", center.x);
-  dot.setAttribute("cy", center.y);
-  dot.setAttribute("r", "3.2");
-
-  const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  rect.setAttribute("class", "status-marker-tag");
-  rect.setAttribute("x", tx - 18);
-  rect.setAttribute("y", ty - 11);
-  rect.setAttribute("width", "36");
-  rect.setAttribute("height", "22");
-  rect.setAttribute("rx", "6");
-
-  const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  text.setAttribute("class", "status-marker-text");
-  text.setAttribute("x", tx);
-  text.setAttribute("y", ty + 4);
-  text.setAttribute("text-anchor", "middle");
-  text.textContent = code;
-
-  group.appendChild(line);
-  group.appendChild(dot);
-  group.appendChild(rect);
-  group.appendChild(text);
-
-  layer.appendChild(group);
-}
-    
     document.getElementById("syncText").textContent = `${Math.round(syncPercent)}%`;
     document.getElementById("syncFill").style.setProperty("--sync", `${syncPercent}%`);
   </script>
 </body>
-</html>      
+</html>
