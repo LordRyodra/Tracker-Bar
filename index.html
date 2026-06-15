@@ -946,50 +946,52 @@
           <div class="body-map-wrap">
             <svg class="body-map scan-map" viewBox="0 0 420 520" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <ellipse id="headShape" cx="210" cy="82" rx="18" ry="28" />
+    <path id="humanShape"
+      d="M210 45
+         C224 45 235 59 235 80
+         C235 98 226 112 218 117
+         L218 126
 
-    <path id="bodyShape"
-      d="M176 128
-         C164 132 154 140 147 152
-         C141 163 138 181 137 200
-         L135 263
-         C134 279 130 294 123 306
-         C118 314 116 325 121 331
-         C126 337 136 335 143 327
-         C152 316 157 300 160 281
-         L166 220
-         C168 202 171 190 176 178
-         C174 198 174 221 175 240
-         C176 259 179 278 184 293
-         C188 305 190 317 190 332
-         C190 359 186 394 181 429
-         C178 448 174 460 169 467
-         C168 472 171 474 177 474
-         C188 472 196 467 201 454
-         C206 439 208 405 210 362
-         C212 405 214 439 219 454
-         C224 467 232 472 243 474
-         C249 474 252 472 251 467
-         C246 460 242 448 239 429
-         C234 394 230 359 230 332
-         C230 317 232 305 236 293
-         C241 278 244 259 245 240
-         C246 221 246 198 244 178
-         C249 190 252 202 254 220
-         L260 281
-         C263 300 268 316 277 327
-         C284 335 294 337 299 331
-         C304 325 302 314 297 306
-         C290 294 286 279 285 263
-         L283 200
-         C282 181 279 163 273 152
-         C266 140 256 132 244 128
-         C234 123 222 121 210 121
-         C198 121 186 123 176 128 Z" />
+         C233 128 249 134 261 145
+         C275 158 282 179 287 206
+         C292 236 296 260 302 280
+         C305 292 300 302 291 305
+         C282 307 275 301 271 288
+         C264 266 259 239 255 216
+         C251 192 247 174 239 160
+
+         C242 184 244 207 244 230
+         C244 256 239 279 229 297
+         C224 307 222 319 223 338
+         C225 375 231 418 237 448
+         C240 462 248 467 258 470
+         C265 472 266 478 260 481
+         C248 487 229 484 221 474
+         C214 465 212 421 210 370
+         C208 421 206 465 199 474
+         C191 484 172 487 160 481
+         C154 478 155 472 162 470
+         C172 467 180 462 183 448
+         C189 418 195 375 197 338
+         C198 319 196 307 191 297
+         C181 279 176 256 176 230
+         C176 207 178 184 181 160
+
+         C173 174 169 192 165 216
+         C161 239 156 266 149 288
+         C145 301 138 307 129 305
+         C120 302 115 292 118 280
+         C124 260 128 236 133 206
+         C138 179 145 158 159 145
+         C171 134 187 128 202 126
+
+         L202 117
+         C194 112 185 98 185 80
+         C185 59 196 45 210 45
+         Z" />
 
     <clipPath id="bodyClip">
-      <use href="#headShape" />
-      <use href="#bodyShape" />
+      <use href="#humanShape" />
     </clipPath>
   </defs>
 
@@ -1019,89 +1021,82 @@
     <text class="scan-label tiny" x="55" y="136">MASS</text>
   </g>
 
-  <use href="#headShape" class="body-glow" />
-  <use href="#bodyShape" class="body-glow" />
-
-  <use href="#headShape" class="body-silhouette" />
-  <use href="#bodyShape" class="body-silhouette" />
+  <use href="#humanShape" class="body-glow" />
+  <use href="#humanShape" class="body-silhouette" />
 
   <g class="body-detail-layer">
-    <path class="body-inner-line" d="M210 110 L210 360" />
-    <path class="body-inner-line" d="M180 154 C193 162 227 162 240 154" />
-    <path class="body-inner-line" d="M174 186 C192 194 228 194 246 186" />
-    <path class="body-inner-line" d="M178 219 C194 227 226 227 242 219" />
-    <path class="body-inner-line" d="M192 292 C199 298 221 298 228 292" />
-    <path class="body-inner-line" d="M194 301 C192 343 188 391 183 439" />
-    <path class="body-inner-line" d="M226 301 C228 343 232 391 237 439" />
+    <path class="body-inner-line" d="M210 118 L210 370" />
+    <path class="body-inner-line" d="M176 151 C190 160 230 160 244 151" />
+    <path class="body-inner-line" d="M171 183 C190 193 230 193 249 183" />
+    <path class="body-inner-line" d="M177 219 C194 228 226 228 243 219" />
+    <path class="body-inner-line" d="M190 296 C200 304 220 304 230 296" />
+    <path class="body-inner-line" d="M197 312 C195 350 190 405 183 448" />
+    <path class="body-inner-line" d="M223 312 C225 350 230 405 237 448" />
   </g>
 
   <g class="body-zones-layer" clip-path="url(#bodyClip)">
-    <ellipse id="zone-head" class="body-zone" cx="210" cy="82" rx="18" ry="28" />
+    <ellipse id="zone-head" class="body-zone" cx="210" cy="80" rx="25" ry="36" />
 
     <path id="zone-chest" class="body-zone"
-      d="M172 141
-         C185 132 235 132 248 141
-         C252 158 251 175 247 188
-         C229 195 191 195 173 188
-         C169 175 168 158 172 141 Z" />
+      d="M170 142
+         C184 132 236 132 250 142
+         C254 158 253 176 249 190
+         C230 199 190 199 171 190
+         C167 176 166 158 170 142 Z" />
 
     <path id="zone-abdomen" class="body-zone"
-      d="M173 188
-         C191 196 229 196 247 188
-         C248 213 242 233 230 246
-         C219 253 201 253 190 246
-         C178 233 172 213 173 188 Z" />
+      d="M171 190
+         C190 199 230 199 249 190
+         C250 216 244 237 231 250
+         C220 258 200 258 189 250
+         C176 237 170 216 171 190 Z" />
 
     <path id="zone-pelvis" class="body-zone"
-      d="M190 246
-         C199 253 221 253 230 246
-         C234 258 233 275 227 289
-         C219 296 201 296 193 289
-         C187 275 186 258 190 246 Z" />
+      d="M189 250
+         C200 258 220 258 231 250
+         C235 263 234 281 227 296
+         C218 304 202 304 193 296
+         C186 281 185 263 189 250 Z" />
 
     <path id="zone-leftArm" class="body-zone"
-      d="M177 150
-         C165 167 157 189 151 218
-         L144 255
-         C141 272 137 284 130 293
-         C125 290 123 283 124 274
-         L132 233
-         C138 201 147 173 159 156
-         C165 150 171 148 177 150 Z" />
-
-    <ellipse id="zone-leftHand" class="body-zone" cx="127" cy="301" rx="11" ry="13" />
+      d="M178 148
+         C166 164 159 190 153 220
+         C148 248 143 274 136 292
+         C133 301 126 303 121 298
+         C123 291 126 284 128 274
+         C134 248 139 218 145 194
+         C151 171 161 153 172 148 Z" />
 
     <path id="zone-rightArm" class="body-zone"
-      d="M243 150
-         C255 167 263 189 269 218
-         L276 255
-         C279 272 283 284 290 293
-         C295 290 297 283 296 274
-         L288 233
-         C282 201 273 173 261 156
-         C255 150 249 148 243 150 Z" />
+      d="M242 148
+         C254 164 261 190 267 220
+         C272 248 277 274 284 292
+         C287 301 294 303 299 298
+         C297 291 294 284 292 274
+         C286 248 281 218 275 194
+         C269 171 259 153 248 148 Z" />
 
-    <ellipse id="zone-rightHand" class="body-zone" cx="293" cy="301" rx="11" ry="13" />
+    <ellipse id="zone-leftHand" class="body-zone" cx="128" cy="304" rx="14" ry="12" />
+    <ellipse id="zone-rightHand" class="body-zone" cx="292" cy="304" rx="14" ry="12" />
 
     <path id="zone-leftLeg" class="body-zone"
-      d="M191 289
-         C198 302 198 336 194 383
-         C191 418 188 441 183 453
-         C178 461 169 464 160 461
-         C166 453 174 442 177 421
-         C182 379 188 332 191 289 Z" />
-
-    <ellipse id="zone-leftFoot" class="body-zone" cx="163" cy="463" rx="17" ry="8" />
+      d="M194 296
+         C201 312 201 345 197 389
+         C194 423 189 448 183 458
+         C178 466 166 467 159 462
+         C166 454 177 445 181 420
+         C187 378 191 331 194 296 Z" />
 
     <path id="zone-rightLeg" class="body-zone"
-      d="M229 289
-         C222 302 222 336 226 383
-         C229 418 232 441 237 453
-         C242 461 251 464 260 461
-         C254 453 246 442 243 421
-         C238 379 232 332 229 289 Z" />
+      d="M226 296
+         C219 312 219 345 223 389
+         C226 423 231 448 237 458
+         C242 466 254 467 261 462
+         C254 454 243 445 239 420
+         C233 378 229 331 226 296 Z" />
 
-    <ellipse id="zone-rightFoot" class="body-zone" cx="257" cy="463" rx="17" ry="8" />
+    <ellipse id="zone-leftFoot" class="body-zone" cx="165" cy="463" rx="22" ry="9" />
+    <ellipse id="zone-rightFoot" class="body-zone" cx="255" cy="463" rx="22" ry="9" />
   </g>
 
   <g id="statusMarkers" class="status-marker-layer"></g>
@@ -1505,45 +1500,48 @@
     applyInjury("zone-leftFoot", stats.injuries.leftFoot);
     applyInjury("zone-rightFoot", stats.injuries.rightFoot);
 
-    function getZoneCenter(zoneId) {
-  const el = document.getElementById(zoneId);
+    function getZoneCenter(zoneKey) {
+  const el = document.getElementById(`zone-${zoneKey}`);
   if (!el) return null;
 
-  const bbox = el.getBBox();
+  const box = el.getBBox();
+
   return {
-    x: bbox.x + bbox.width / 2,
-    y: bbox.y + bbox.height / 2
+    x: box.x + box.width / 2,
+    y: box.y + box.height / 2
   };
 }
 
-function getMarkerOffset(zoneId) {
+function getMarkerOffset(zoneKey) {
   const offsets = {
-    "zone-head":      { dx: 34, dy: -20 },
-    "zone-chest":     { dx: 42, dy: -12 },
-    "zone-abdomen":   { dx: 46, dy: 0 },
-    "zone-pelvis":    { dx: 46, dy: 10 },
-    "zone-leftArm":   { dx: -62, dy: -10 },
-    "zone-rightArm":  { dx: 62, dy: -10 },
-    "zone-leftHand":  { dx: -52, dy: 0 },
-    "zone-rightHand": { dx: 52, dy: 0 },
-    "zone-leftLeg":   { dx: -52, dy: 6 },
-    "zone-rightLeg":  { dx: 52, dy: 6 },
-    "zone-leftFoot":  { dx: -52, dy: 0 },
-    "zone-rightFoot": { dx: 52, dy: 0 }
+    head: { dx: 42, dy: -12 },
+    chest: { dx: 54, dy: -10 },
+    abdomen: { dx: 58, dy: 0 },
+    pelvis: { dx: 58, dy: 8 },
+
+    leftArm: { dx: -58, dy: -8 },
+    rightArm: { dx: 58, dy: -8 },
+    leftHand: { dx: -48, dy: 0 },
+    rightHand: { dx: 48, dy: 0 },
+
+    leftLeg: { dx: -52, dy: 8 },
+    rightLeg: { dx: 52, dy: 8 },
+    leftFoot: { dx: -48, dy: 0 },
+    rightFoot: { dx: 48, dy: 0 }
   };
 
-  return offsets[zoneId] || { dx: 40, dy: 0 };
+  return offsets[zoneKey] || { dx: 42, dy: 0 };
 }
 
-function addStatusMarker(zoneId, code, type) {
-  const center = getZoneCenter(zoneId);
+function addStatusMarker(zoneKey, code, type) {
+  const center = getZoneCenter(zoneKey);
   if (!center) return;
 
-  const offset = getMarkerOffset(zoneId);
+  const offset = getMarkerOffset(zoneKey);
   const tx = center.x + offset.dx;
   const ty = center.y + offset.dy;
 
-  const markerLayer = document.getElementById("statusMarkers");
+  const layer = document.getElementById("statusMarkers");
 
   const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
   group.setAttribute("class", "status-marker");
@@ -1559,7 +1557,7 @@ function addStatusMarker(zoneId, code, type) {
   dot.setAttribute("class", "status-marker-dot");
   dot.setAttribute("cx", center.x);
   dot.setAttribute("cy", center.y);
-  dot.setAttribute("r", "3.3");
+  dot.setAttribute("r", "3.2");
 
   const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
   rect.setAttribute("class", "status-marker-tag");
@@ -1581,7 +1579,7 @@ function addStatusMarker(zoneId, code, type) {
   group.appendChild(rect);
   group.appendChild(text);
 
-  markerLayer.appendChild(group);
+  layer.appendChild(group);
 }
 
 function normalizeZoneName(zone) {
@@ -1634,7 +1632,6 @@ function getConditionInput(names) {
 
   const zones = raw
     .split(/[;,|]/)
-    .flatMap(part => part.split(","))
     .map(part => normalizeZoneName(part))
     .filter(Boolean);
 
