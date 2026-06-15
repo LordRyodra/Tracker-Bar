@@ -430,7 +430,7 @@
     }
 
     .body-zone.active {
-      opacity: 0.48;
+      opacity: 0.38;
     }
 
     @keyframes woundPulse {
@@ -876,25 +876,25 @@
   <ellipse id="zone-head" class="body-zone" cx="307" cy="142" rx="54" ry="88" />
 
   <path id="zone-chest" class="body-zone"
-    d="M198 318
-       C232 288 382 288 416 318
-       C428 370 416 435 390 476
-       C348 496 266 496 224 476
-       C198 435 186 370 198 318 Z" />
+  d="M210 360
+     C236 332 378 332 404 360
+     C412 402 404 446 384 478
+     C348 496 266 496 230 478
+     C210 446 202 402 210 360 Z" />
 
-  <path id="zone-abdomen" class="body-zone"
-    d="M224 476
-       C266 498 348 498 390 476
-       C398 555 384 655 356 728
-       C330 752 284 752 258 728
-       C230 655 216 555 224 476 Z" />
+<path id="zone-abdomen" class="body-zone"
+  d="M232 478
+     C266 496 348 496 382 478
+     C390 532 382 606 360 668
+     C338 688 276 688 254 668
+     C232 606 224 532 232 478 Z" />
 
-  <path id="zone-pelvis" class="body-zone"
-    d="M258 728
-       C284 752 330 752 356 728
-       C376 770 370 826 344 858
-       C322 876 292 876 270 858
-       C244 826 238 770 258 728 Z" />
+<path id="zone-pelvis" class="body-zone"
+  d="M254 668
+     C276 688 338 688 360 668
+     C374 706 372 754 350 790
+     C330 806 284 806 264 790
+     C242 754 240 706 254 668 Z" />
 
   <path id="zone-leftUpperArm" class="body-zone"
     d="M178 348
@@ -1244,9 +1244,9 @@
     function getMarkerCenter(zoneKey) {
   const centers = {
     head: { x: 307, y: 142 },
-    chest: { x: 307, y: 392 },
-    abdomen: { x: 307, y: 610 },
-    pelvis: { x: 307, y: 792 },
+    chest: { x: 307, y: 428 },
+abdomen: { x: 307, y: 580 },
+pelvis: { x: 307, y: 732 },
 
     leftUpperArm: { x: 150, y: 520 },
     leftForearm: { x: 104, y: 780 },
