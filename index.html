@@ -164,21 +164,28 @@
       position: relative;
       z-index: 2;
       display: grid;
-      grid-template-columns: 290px 1fr;
-      gap: 20px;
+      grid-template-columns: 280px 1fr;
+      gap: 18px;
       margin-bottom: 20px;
+      align-items: start;
     }
 
     .rings {
       display: grid;
       grid-template-columns: 1fr;
       gap: 14px;
+      align-content: start;
+      align-self: start;
     }
 
     .ring-card {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
       min-width: 0;
-      padding: 14px 10px 12px;
+      min-height: 205px;
+      padding: 14px 10px 16px;
       border: 1px solid rgba(180, 230, 255, 0.16);
       border-radius: 18px;
       background: rgba(255, 255, 255, 0.025);
@@ -212,9 +219,9 @@
 
     .ring {
       position: relative;
-      width: clamp(98px, 16vw, 136px);
+      width: clamp(96px, 11vw, 126px);
       aspect-ratio: 1;
-      margin: 0 auto;
+      margin: 2px auto 0;
       border-radius: 50%;
       background:
         conic-gradient(
@@ -342,28 +349,91 @@
 
     .body-layout {
       display: grid;
-      grid-template-columns: minmax(260px, 1fr) 230px;
+      grid-template-columns: minmax(240px, 1fr) 230px;
       gap: 18px;
-      align-items: center;
+      align-items: start;
     }
 
     .body-map-wrap {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 440px;
-      padding: 8px 0;
+      min-height: 720px;
+      padding: 16px 12px;
+      border: 1px solid rgba(180, 230, 255, 0.10);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 50% 36%, rgba(80, 235, 255, 0.08), transparent 34%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0));
+      overflow: hidden;
+    }
+
+    .body-map-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0 28px,
+          rgba(255,255,255,0.018) 28px 29px
+        ),
+        repeating-linear-gradient(
+          to right,
+          transparent 0 28px,
+          rgba(255,255,255,0.012) 28px 29px
+        );
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    .body-map-wrap::after {
+      content: "";
+      position: absolute;
+      left: 7%;
+      right: 7%;
+      top: -10%;
+      height: 14%;
+      background: linear-gradient(
+        180deg,
+        transparent,
+        rgba(120, 245, 255, 0.22),
+        transparent
+      );
+      filter: blur(10px);
+      opacity: 0.75;
+      animation: scanSweep 5.2s ease-in-out infinite;
+      pointer-events: none;
     }
 
     .body-image-stage {
-  position: relative;
-  width: min(100%, 470px);
-  aspect-ratio: 614 / 1385;
-  margin: -20px auto -20px;
-  filter:
-    drop-shadow(0 0 12px rgba(40, 245, 255, 0.12))
-    drop-shadow(0 0 22px rgba(40, 245, 255, 0.06));
-}
+      position: relative;
+      width: min(100%, 420px);
+      aspect-ratio: 614 / 1385;
+      margin: 0 auto;
+      z-index: 2;
+      filter:
+        drop-shadow(0 0 12px rgba(40, 245, 255, 0.12))
+        drop-shadow(0 0 22px rgba(40, 245, 255, 0.06));
+      animation: bodyFloat 5.4s ease-in-out infinite;
+    }
+
+    .body-image-stage::before {
+      content: "";
+      position: absolute;
+      inset: 18% 20% 10% 20%;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(70, 240, 255, 0.10),
+        transparent 68%
+      );
+      filter: blur(26px);
+      z-index: 0;
+      animation: corePulse 4.2s ease-in-out infinite;
+      pointer-events: none;
+    }
 
     .body-base-image,
     .body-overlay {
@@ -387,11 +457,11 @@
 
     .scan-frame {
       position: absolute;
-      inset: 4px;
+      inset: 10px;
       z-index: 3;
       pointer-events: none;
-      border: 1px solid rgba(225, 240, 255, 0.18);
-      box-shadow: inset 0 0 18px rgba(143, 232, 255, 0.04);
+      border: 1px solid rgba(225, 240, 255, 0.14);
+      box-shadow: inset 0 0 18px rgba(143, 232, 255, 0.03);
     }
 
     .scan-frame::before,
@@ -430,7 +500,7 @@
     }
 
     .body-zone.active {
-      opacity: 0.38;
+      opacity: 0.34;
     }
 
     @keyframes woundPulse {
@@ -500,7 +570,8 @@
     .condition-panel {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
+      align-self: center;
     }
 
     .condition-title {
@@ -781,6 +852,44 @@
       to { transform: translateX(320%) rotate(18deg); }
     }
 
+    @keyframes scanSweep {
+      0% {
+        transform: translateY(0);
+        opacity: 0;
+      }
+      12% {
+        opacity: 0.35;
+      }
+      50% {
+        transform: translateY(540px);
+        opacity: 0.75;
+      }
+      100% {
+        transform: translateY(920px);
+        opacity: 0;
+      }
+    }
+
+    @keyframes bodyFloat {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+
+    @keyframes corePulse {
+      0%, 100% {
+        opacity: 0.34;
+        transform: scale(0.98);
+      }
+      50% {
+        opacity: 0.62;
+        transform: scale(1.02);
+      }
+    }
+
     @media (max-width: 900px) {
       .status-core {
         grid-template-columns: 1fr;
@@ -873,113 +982,113 @@
 
               <svg class="body-overlay" viewBox="0 0 614 1385" xmlns="http://www.w3.org/2000/svg">
                 <g class="body-zones-layer">
-  <ellipse id="zone-head" class="body-zone" cx="307" cy="142" rx="54" ry="88" />
+                  <ellipse id="zone-head" class="body-zone" cx="307" cy="142" rx="54" ry="88" />
 
-  <path id="zone-chest" class="body-zone"
-  d="M220 455
-     C252 430 362 430 394 455
-     C405 492 398 532 378 562
-     C344 578 270 578 236 562
-     C216 532 209 492 220 455 Z" />
+                  <path id="zone-chest" class="body-zone"
+                    d="M220 455
+                       C252 430 362 430 394 455
+                       C405 492 398 532 378 562
+                       C344 578 270 578 236 562
+                       C216 532 209 492 220 455 Z" />
 
-<path id="zone-abdomen" class="body-zone"
-  d="M236 562
-     C270 580 344 580 378 562
-     C386 622 374 694 350 746
-     C326 766 288 766 264 746
-     C240 694 228 622 236 562 Z" />
+                  <path id="zone-abdomen" class="body-zone"
+                    d="M236 562
+                       C270 580 344 580 378 562
+                       C386 622 374 694 350 746
+                       C326 766 288 766 264 746
+                       C240 694 228 622 236 562 Z" />
 
-<path id="zone-pelvis" class="body-zone"
-  d="M264 746
-     C288 766 326 766 350 746
-     C364 784 360 828 340 856
-     C320 872 294 872 274 856
-     C254 828 250 784 264 746 Z" />
+                  <path id="zone-pelvis" class="body-zone"
+                    d="M264 746
+                       C288 766 326 766 350 746
+                       C364 784 360 828 340 856
+                       C320 872 294 872 274 856
+                       C254 828 250 784 264 746 Z" />
 
-  <path id="zone-leftUpperArm" class="body-zone"
-    d="M178 348
-       C150 390 138 488 126 600
-       C122 636 118 666 112 696
-       C134 704 154 694 162 668
-       C170 596 180 488 202 372
-       C198 352 188 344 178 348 Z" />
+                  <path id="zone-leftUpperArm" class="body-zone"
+                    d="M178 348
+                       C150 390 138 488 126 600
+                       C122 636 118 666 112 696
+                       C134 704 154 694 162 668
+                       C170 596 180 488 202 372
+                       C198 352 188 344 178 348 Z" />
 
-  <path id="zone-leftForearm" class="body-zone"
-    d="M112 696
-       C104 732 90 768 78 804
-       C68 836 70 862 86 878
-       C110 864 128 824 142 778
-       C152 742 158 704 162 668
-       C154 694 134 704 112 696 Z" />
+                  <path id="zone-leftForearm" class="body-zone"
+                    d="M112 696
+                       C104 732 90 768 78 804
+                       C68 836 70 862 86 878
+                       C110 864 128 824 142 778
+                       C152 742 158 704 162 668
+                       C154 694 134 704 112 696 Z" />
 
-  <path id="zone-leftHand" class="body-zone"
-    d="M78 804
-       C54 826 48 878 62 918
-       C74 952 104 952 112 916
-       C106 892 110 860 124 834
-       C106 840 88 830 78 804 Z" />
+                  <path id="zone-leftHand" class="body-zone"
+                    d="M78 804
+                       C54 826 48 878 62 918
+                       C74 952 104 952 112 916
+                       C106 892 110 860 124 834
+                       C106 840 88 830 78 804 Z" />
 
-  <path id="zone-rightUpperArm" class="body-zone"
-    d="M436 348
-       C464 390 476 488 488 600
-       C492 636 496 666 502 696
-       C480 704 460 694 452 668
-       C444 596 434 488 412 372
-       C416 352 426 344 436 348 Z" />
+                  <path id="zone-rightUpperArm" class="body-zone"
+                    d="M436 348
+                       C464 390 476 488 488 600
+                       C492 636 496 666 502 696
+                       C480 704 460 694 452 668
+                       C444 596 434 488 412 372
+                       C416 352 426 344 436 348 Z" />
 
-  <path id="zone-rightForearm" class="body-zone"
-    d="M502 696
-       C510 732 524 768 536 804
-       C546 836 544 862 528 878
-       C504 864 486 824 472 778
-       C462 742 456 704 452 668
-       C460 694 480 704 502 696 Z" />
+                  <path id="zone-rightForearm" class="body-zone"
+                    d="M502 696
+                       C510 732 524 768 536 804
+                       C546 836 544 862 528 878
+                       C504 864 486 824 472 778
+                       C462 742 456 704 452 668
+                       C460 694 480 704 502 696 Z" />
 
-  <path id="zone-rightHand" class="body-zone"
-    d="M536 804
-       C560 826 566 878 552 918
-       C540 952 510 952 502 916
-       C508 892 504 860 490 834
-       C508 840 526 830 536 804 Z" />
+                  <path id="zone-rightHand" class="body-zone"
+                    d="M536 804
+                       C560 826 566 878 552 918
+                       C540 952 510 952 502 916
+                       C508 892 504 860 490 834
+                       C508 840 526 830 536 804 Z" />
 
-  <path id="zone-leftThigh" class="body-zone"
-    d="M250 820
-       C284 852 286 950 264 1090
-       C238 1108 205 1096 190 1062
-       C196 960 214 864 250 820 Z" />
+                  <path id="zone-leftThigh" class="body-zone"
+                    d="M250 820
+                       C284 852 286 950 264 1090
+                       C238 1108 205 1096 190 1062
+                       C196 960 214 864 250 820 Z" />
 
-  <path id="zone-leftLowerLeg" class="body-zone"
-    d="M190 1062
-       C205 1096 238 1108 264 1090
-       C258 1190 240 1284 218 1330
-       C190 1350 154 1334 142 1302
-       C150 1214 166 1128 190 1062 Z" />
+                  <path id="zone-leftLowerLeg" class="body-zone"
+                    d="M190 1062
+                       C205 1096 238 1108 264 1090
+                       C258 1190 240 1284 218 1330
+                       C190 1350 154 1334 142 1302
+                       C150 1214 166 1128 190 1062 Z" />
 
-  <path id="zone-leftFoot" class="body-zone"
-    d="M142 1302
-       C154 1334 190 1350 218 1330
-       C244 1358 218 1378 170 1372
-       C124 1366 112 1330 142 1302 Z" />
+                  <path id="zone-leftFoot" class="body-zone"
+                    d="M142 1302
+                       C154 1334 190 1350 218 1330
+                       C244 1358 218 1378 170 1372
+                       C124 1366 112 1330 142 1302 Z" />
 
-  <path id="zone-rightThigh" class="body-zone"
-    d="M364 820
-       C330 852 328 950 350 1090
-       C376 1108 409 1096 424 1062
-       C418 960 400 864 364 820 Z" />
+                  <path id="zone-rightThigh" class="body-zone"
+                    d="M364 820
+                       C330 852 328 950 350 1090
+                       C376 1108 409 1096 424 1062
+                       C418 960 400 864 364 820 Z" />
 
-  <path id="zone-rightLowerLeg" class="body-zone"
-    d="M424 1062
-       C409 1096 376 1108 350 1090
-       C356 1190 374 1284 396 1330
-       C424 1350 460 1334 472 1302
-       C464 1214 448 1128 424 1062 Z" />
+                  <path id="zone-rightLowerLeg" class="body-zone"
+                    d="M424 1062
+                       C409 1096 376 1108 350 1090
+                       C356 1190 374 1284 396 1330
+                       C424 1350 460 1334 472 1302
+                       C464 1214 448 1128 424 1062 Z" />
 
-  <path id="zone-rightFoot" class="body-zone"
-    d="M472 1302
-       C460 1334 424 1350 396 1330
-       C370 1358 396 1378 444 1372
-       C490 1366 502 1330 472 1302 Z" />
-</g>
+                  <path id="zone-rightFoot" class="body-zone"
+                    d="M472 1302
+                       C460 1334 424 1350 396 1330
+                       C370 1358 396 1378 444 1372
+                       C490 1366 502 1330 472 1302 Z" />
+                </g>
 
                 <g id="statusMarkers" class="status-marker-layer"></g>
               </svg>
@@ -1242,31 +1351,31 @@
     }
 
     function getMarkerCenter(zoneKey) {
-  const centers = {
-    head: { x: 307, y: 142 },
-    chest: { x: 307, y: 512 },
-abdomen: { x: 307, y: 652 },
-pelvis: { x: 307, y: 805 },
+      const centers = {
+        head: { x: 307, y: 142 },
+        chest: { x: 307, y: 512 },
+        abdomen: { x: 307, y: 652 },
+        pelvis: { x: 307, y: 805 },
 
-    leftUpperArm: { x: 150, y: 520 },
-    leftForearm: { x: 104, y: 780 },
-    leftHand: { x: 84, y: 880 },
+        leftUpperArm: { x: 150, y: 520 },
+        leftForearm: { x: 104, y: 780 },
+        leftHand: { x: 84, y: 880 },
 
-    rightUpperArm: { x: 464, y: 520 },
-    rightForearm: { x: 510, y: 780 },
-    rightHand: { x: 530, y: 880 },
+        rightUpperArm: { x: 464, y: 520 },
+        rightForearm: { x: 510, y: 780 },
+        rightHand: { x: 530, y: 880 },
 
-    leftThigh: { x: 232, y: 960 },
-    leftLowerLeg: { x: 198, y: 1190 },
-    leftFoot: { x: 178, y: 1340 },
+        leftThigh: { x: 232, y: 960 },
+        leftLowerLeg: { x: 198, y: 1190 },
+        leftFoot: { x: 178, y: 1340 },
 
-    rightThigh: { x: 382, y: 960 },
-    rightLowerLeg: { x: 416, y: 1190 },
-    rightFoot: { x: 436, y: 1340 }
-  };
+        rightThigh: { x: 382, y: 960 },
+        rightLowerLeg: { x: 416, y: 1190 },
+        rightFoot: { x: 436, y: 1340 }
+      };
 
-  return centers[zoneKey] || null;
-}
+      return centers[zoneKey] || null;
+    }
 
     function getMarkerOffset(zoneKey) {
       const offsets = {
