@@ -1113,109 +1113,6 @@
         grid-template-columns: 1fr;
       }
     }
-  
-    /* ------------------------------
-       Zonen-Editor / Kalibrierungsmodus
-       Aktivieren mit: ?edit=1
-    ------------------------------ */
-
-    .zone-editor-panel {
-      position: fixed;
-      right: 16px;
-      bottom: 16px;
-      z-index: 9999;
-      width: min(360px, calc(100vw - 32px));
-      padding: 14px;
-      border: 1px solid rgba(180, 230, 255, 0.24);
-      border-radius: 16px;
-      background: rgba(5, 13, 16, 0.94);
-      box-shadow:
-        0 0 22px rgba(100, 240, 255, 0.14),
-        inset 0 0 18px rgba(120, 240, 255, 0.05);
-      color: var(--text);
-      font-family: var(--font-main);
-      backdrop-filter: blur(10px);
-    }
-
-    .zone-editor-panel strong {
-      display: block;
-      margin-bottom: 8px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-size: 12px;
-      color: rgba(235, 248, 255, 0.92);
-    }
-
-    .zone-editor-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 8px;
-      align-items: center;
-    }
-
-    .zone-editor-panel select,
-    .zone-editor-panel textarea,
-    .zone-editor-panel button {
-      border: 1px solid rgba(180, 230, 255, 0.18);
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.045);
-      color: var(--text);
-      font-family: inherit;
-    }
-
-    .zone-editor-panel select {
-      width: 100%;
-      padding: 8px 10px;
-    }
-
-    .zone-editor-panel button {
-      padding: 7px 9px;
-      cursor: pointer;
-    }
-
-    .zone-editor-panel button:hover {
-      background: rgba(120, 240, 255, 0.10);
-      border-color: rgba(180, 230, 255, 0.38);
-    }
-
-    .zone-editor-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      margin-bottom: 8px;
-    }
-
-    .zone-editor-panel textarea {
-      width: 100%;
-      height: 94px;
-      padding: 8px;
-      resize: vertical;
-      font-family: "Courier New", monospace;
-      font-size: 10px;
-      color: rgba(225, 250, 255, 0.9);
-    }
-
-    .zone-editor-help {
-      margin-top: 7px;
-      font-size: 11px;
-      line-height: 1.35;
-      color: rgba(220, 240, 255, 0.62);
-    }
-
-    .zone-edit-mode .body-zone {
-      opacity: 0.16 !important;
-      animation: none !important;
-    }
-
-    .zone-edit-mode .body-zone.zone-selected {
-      opacity: 0.78 !important;
-      stroke: rgba(255, 255, 255, 0.95) !important;
-      stroke-width: 3.5 !important;
-      filter:
-        drop-shadow(0 0 8px var(--injury-color, #ff6b3d))
-        drop-shadow(0 0 18px var(--injury-color, #ff6b3d)) !important;
-    }
-
   </style>
 </head>
 
@@ -1308,120 +1205,24 @@
 
               <svg class="body-overlay" viewBox="0 0 1024 1336" xmlns="http://www.w3.org/2000/svg">
                 <g class="body-zones-layer">
-                  <path id="zone-head" class="body-zone"
-                    d="M512 44
-                       C538 44 555 63 560 92
-                       C564 119 560 146 549 171
-                       C541 189 528 201 512 205
-                       C496 201 483 189 475 171
-                       C464 146 460 119 464 92
-                       C469 63 486 44 512 44 Z" />
-
-                  <path id="zone-chest" class="body-zone"
-                    d="M414 312
-                       C450 290 574 290 610 312
-                       C624 344 622 382 600 408
-                       C566 424 458 424 424 408
-                       C402 382 400 344 414 312 Z" />
-
-                  <path id="zone-abdomen" class="body-zone"
-                    d="M434 408
-                       C464 424 560 424 590 408
-                       C598 456 592 514 570 556
-                       C540 578 484 578 454 556
-                       C432 514 426 456 434 408 Z" />
-
-                  <path id="zone-pelvis" class="body-zone"
-                    d="M460 556
-                       C486 570 538 570 564 556
-                       C578 592 576 640 556 676
-                       C532 694 492 694 468 676
-                       C448 640 446 592 460 556 Z" />
-
-                  <path id="zone-leftUpperArm" class="body-zone"
-                    d="M350 348
-                       C326 390 310 450 300 508
-                       C296 542 292 572 284 600
-                       C294 610 306 610 314 590
-                       C326 538 342 462 370 380
-                       C366 362 358 350 350 348 Z" />
-
-                  <path id="zone-leftForearm" class="body-zone"
-                    d="M284 600
-                       C274 648 254 716 232 772
-                       C220 806 220 842 234 862
-                       C254 854 274 810 292 756
-                       C304 712 314 654 314 590
-                       C306 610 294 610 284 600 Z" />
-
-                  <path id="zone-leftHand" class="body-zone"
-                    d="M232 772
-                       C214 792 206 828 212 862
-                       C220 888 240 894 250 868
-                       C250 842 254 818 266 796
-                       C252 798 240 792 232 772 Z" />
-
-                  <path id="zone-rightUpperArm" class="body-zone"
-                    d="M674 348
-                       C698 390 714 450 724 508
-                       C728 542 732 572 740 600
-                       C730 610 718 610 710 590
-                       C698 538 682 462 654 380
-                       C658 362 666 350 674 348 Z" />
-
-                  <path id="zone-rightForearm" class="body-zone"
-                    d="M740 600
-                       C750 648 770 716 792 772
-                       C804 806 804 842 790 862
-                       C770 854 750 810 732 756
-                       C720 712 710 654 710 590
-                       C718 610 730 610 740 600 Z" />
-
-                  <path id="zone-rightHand" class="body-zone"
-                    d="M792 772
-                       C810 792 818 828 812 862
-                       C804 888 784 894 774 868
-                       C774 842 770 818 758 796
-                       C772 798 784 792 792 772 Z" />
-
-                  <path id="zone-leftThigh" class="body-zone"
-                    d="M456 700
-                       C474 738 474 832 460 934
-                       C444 956 420 952 406 928
-                       C406 852 420 772 456 700 Z" />
-
-                  <path id="zone-leftLowerLeg" class="body-zone"
-                    d="M406 928
-                       C420 952 444 956 460 934
-                       C458 1028 450 1110 434 1198
-                       C414 1212 394 1204 386 1180
-                       C388 1120 394 1048 406 928 Z" />
-
-                  <path id="zone-leftFoot" class="body-zone"
-                    d="M386 1180
-                       C394 1204 414 1212 434 1198
-                       C454 1216 438 1238 406 1246
-                       C376 1250 358 1218 386 1180 Z" />
-
-                  <path id="zone-rightThigh" class="body-zone"
-                    d="M568 700
-                       C550 738 550 832 564 934
-                       C580 956 604 952 618 928
-                       C618 852 604 772 568 700 Z" />
-
-                  <path id="zone-rightLowerLeg" class="body-zone"
-                    d="M618 928
-                       C604 952 580 956 564 934
-                       C566 1028 574 1110 590 1198
-                       C610 1212 630 1204 638 1180
-                       C636 1120 630 1048 618 928 Z" />
-
-                  <path id="zone-rightFoot" class="body-zone"
-                    d="M638 1180
-                       C630 1204 610 1212 590 1198
-                       C570 1216 586 1238 618 1246
-                       C648 1250 666 1218 638 1180 Z" />
-                </g>                </g>
+                  <polygon id="zone-head" class="body-zone" points="511.92,7.29 530.65,11.58 536.89,14.8 550.27,27.11 553.91,33.25 559.26,52.51 560.51,60.62 561.58,83.09 561.37,91.1 559.24,109.83 557.67,117.22 551.79,136.47 547.83,143.24 533.39,158.75 527.56,162.71 512.05,167.52 505.91,167.42 489.85,162.07 484.34,158.95 472.03,148.25 468.39,142.84 461.98,125.72 460.11,118.64 456.89,99.38 456.27,91.57 456.27,70.71 456.69,63.43 458.82,46.84 460.28,41.64 465.63,31.48 468.75,27.52 479.45,17.36 485.27,14.13 504.53,7.71" />
+                  <polygon id="zone-neck" class="body-zone" points="491.04,162.18 507.1,167.31 513.59,167.19 530.93,161.41 536.67,157.92 548.88,145.71 551,146.84 549.71,164.81 550.08,170.43 553.3,181.36 558.54,186.35 582.31,201.12 592.05,206.74 618.38,220.87 615.38,224.24 573.64,227.46 560.52,228.45 534.84,230.38 526.92,232.6 511.92,242.15 506.92,242.4 496.24,234.14 489.41,231.54 465.01,226.4 457.76,226.15 444.93,230 435.44,229.63 399.46,223.84 400.71,218.35 443.1,195.88 453.59,189.14 465.15,176.93 467.28,170.69 466.63,150.78 469.51,148.91 484.92,159.18" />
+                  <polygon id="zone-chest" class="body-zone" points="613.33,259.35 626.17,279.69 630.13,286.97 637.61,304.09 638.03,310.54 632.68,326.59 630.7,336.37 625.89,370.61 618.92,376.33 587.88,371.52 578.21,369.96 559.48,366.74 551.99,364.35 532.2,355.26 523.88,353.49 500.86,353.49 491.71,354.53 467.63,359.88 458.89,361.75 438.03,366.04 426.79,367.49 389.88,370.71 382.7,366.75 382.7,343.21 381.76,335.72 376.95,320.73 376.01,313.97 376.01,294.18 377.99,286.48 388.15,266.68 394.5,258.98 416.97,239.19 426.75,234.19 454.57,228.31 464.35,227.89 486.82,231.64 493.58,234.14 505.89,243.23 511.3,242.92 526.81,232.22 534.3,229.72 557.32,227.58 565.53,228.41 584.79,234.83 591.66,238.78 607.71,252.7" />
+                  <polygon id="zone-abdomen" class="body-zone" points="392.54,373.57 427.85,369.83 438.57,368.37 458.36,364.63 466.89,362.86 490.97,357.5 500.23,356.46 523.77,356.46 531.99,358.12 550.72,366.69 558.62,369.08 580.56,372.83 590.33,374.5 618.7,379.3 621.3,390.12 606.31,440.96 603.19,453.86 602.13,469.37 602.75,476.45 607.03,497.31 607.86,505.84 607.86,528.85 579.04,533.01 430.84,531.4 402.23,528.07 403.3,512.56 404.24,506.11 407.98,488.45 408.81,480.65 409.35,458.18 406.12,442.68 389,385.43" />
+                  <polygon id="zone-pelvis" class="body-zone" points="430.73,532.79 578.41,533.86 607.95,538.96 612.23,564.1 615.14,579.6 625.84,634.18 610.86,650.1 523.12,677.38 488.79,677.28 399.97,649.46 384.78,633.96 395.48,582.06 398.18,566.46 401.4,538.09" />
+                  <polygon id="zone-leftUpperArm" class="body-zone" points="440.51,229.48 424.46,233.77 416.55,238.55 391.95,258.88 385.29,266.78 375.65,287.12 373.78,295.54 373.78,318.55 375.03,325.41 381.45,337.73 382.8,344.8 383.34,368.88 381.98,377.82 374.5,399.76 370.75,408.81 358.98,433.42 355.34,441.02 348.38,455.46 343.49,457.85 325.3,455.72 320.51,453.95 314.1,446.99 310.87,442.31 300.71,425.19 299.77,417.91 305.12,397.57 307.2,389.46 312.55,368.06 314.63,361.19 319.98,347.28 321.02,340.93 321.02,322.21 320.92,315.34 320.38,298.76 321.11,292.3 325.39,275.72 328.09,269.27 337.73,252.68 342.51,246.86 357.5,233.48 364.57,229.32 385.97,221.29 397.62,220.98 436.14,227.4" />
+                  <polygon id="zone-leftForearm" class="body-zone" points="300.29,423.39 308.32,438.9 311.44,443.9 319.46,454.06 324.56,456.46 342.75,458.59 345.56,462.96 341.82,483.3 340.26,490.68 335.97,508.34 333.58,515.31 325.55,533.5 322.01,540.27 311.86,556.85 307.8,563.72 297.09,582.44 293.24,588.78 284.15,602.7 280.61,610.91 271.52,639.28 265.48,642.71 243.55,632.01 240.22,626.6 245.03,609.48 246.91,601.88 251.72,579.95 253.18,570.69 255.85,545 257.41,535.12 262.76,509.98 265.46,500.62 274.03,477.6 277.04,470.01 284,453.96 287.22,446.57 296.86,424.64" />
+                  <polygon id="zone-leftHand" class="body-zone" points="244.18,634.77 265.59,644.41 270.58,648.78 274.86,661.61 275.59,667.54 275.05,685.2 274.43,690.71 271.75,701.41 271.34,706.3 271.88,720.75 271.36,724.5 268.14,729.31 266.58,729.73 261.77,727.05 260.62,724.66 259.55,715.03 259.13,710.87 258.07,699.1 256.61,698.79 250.19,708.95 249.25,713.74 250.86,728.18 252.63,732.97 260.11,743.13 261.15,745.63 259.02,748.3 257.77,748.09 253.49,744.35 253.08,745.18 255.21,753.21 256.15,755.39 258.82,758.61 259.34,759.85 259.34,763.07 258.4,765.25 253.6,773.27 251.2,773.17 243.71,764.6 241.63,760.96 238.41,750.8 236.85,746.95 232.05,737.32 230.28,730.66 225.99,706.06 227.24,691.7 237.94,642.47" />
+                  <polygon id="zone-rightUpperArm" class="body-zone" points="636.65,223.62 658.58,232.19 665.24,236.24 677.55,248.55 681.09,253.02 686.97,263.73 688.95,269.03 693.23,285.62 694.16,292.79 694.7,313.13 694.7,321.14 694.16,342 694.79,347.83 698.53,356.92 699.88,361.6 703.1,376.59 704.66,383.87 709.47,406.34 711.76,413.94 718.72,430.52 718.41,436.87 709.84,452.92 705.58,457.18 692.2,463.07 685.86,462.75 666.6,455.27 661.08,450.38 651.99,432.72 648.66,425.96 640.63,408.84 637.41,401.04 628.84,378.03 627.8,367.32 631.02,335.21 632.89,325.64 639.31,308.52 639.1,301.96 631.61,285.38 627.97,278.61 616.73,260.43 611.53,254.08 596.02,239.63 589.05,235.36 568.71,227.88 574.23,225.8 622.91,222.58" />
+                  <polygon id="zone-rightForearm" class="body-zone" points="666.7,456.11 686.5,464.14 693.16,464.24 707.6,456.76 711.76,452.28 718.72,436.77 722.15,437.6 732.85,457.39 736.49,464.99 744.52,484.25 747.02,492.67 751.83,516.75 753.39,526.01 756.6,549.55 757.74,558.81 760.42,582.89 761.46,591.11 764.14,609.3 765.8,616.06 771.69,632.65 768.15,637.22 744.07,644.18 738.45,641.68 733.64,621.89 731.04,614.4 722.47,595.67 718.83,589.01 708.67,573.5 704.51,566.94 693.27,548.75 689.32,540.95 680.23,519.01 677.11,510.8 670.15,490.46 667.97,482.04 663.68,459.02" />
+                  <polygon id="zone-rightHand" class="body-zone" points="744.07,644.28 768.15,637.87 773.66,641.61 777.95,667.29 779.72,676.23 784.52,696.57 784.84,705.72 781.62,732.48 780.17,739.66 775.89,749.82 772.98,755.13 762.28,772.25 759.37,774.23 755.08,767.27 753.73,765.4 751.06,762.72 752.1,759.91 760.12,748.14 761.68,744.91 761.68,740.1 760.33,740.51 753.37,747.47 751.4,748.51 748.18,746.91 749.02,744.94 756.51,736.37 758.59,733.36 761.81,726.4 762.22,722.66 761.15,710.34 759.9,706.49 754.55,699.01 753.09,701.5 750.96,721.84 749.81,726.52 746.07,730.26 744.61,730.26 740.86,726.52 740.24,723.81 740.77,713.65 740.88,709.8 740.88,700.16 740.36,696.63 737.68,688.06 736.95,684.53 735.88,674.9 735.88,670.84 736.95,659.61 737.47,655.76 739.08,647.19" />
+                  <polygon id="zone-leftThigh" class="body-zone" points="504.91,682.23 499.03,691.32 497.78,697.77 497.24,721.85 495.48,733.71 486.91,770.63 483.38,783.01 473.74,809.76 470.93,820.47 466.12,848.84 464.56,859.14 461.35,883.74 460,891.86 456.25,908.98 454.27,915.43 447.86,931.48 444.74,931.06 435.1,912.88 431.67,907.15 423.64,895.92 419.58,892.79 406.75,887.98 402.06,888.08 390.83,893.43 387.08,894.47 379.06,894.47 377.71,889.58 378.77,864.44 377.94,856.12 372.59,838.45 370.82,827.32 367.08,787.73 366.56,773.79 367.63,741.69 368.46,728.48 371.68,692.63 373.65,680.04 380.61,651.15 399.33,650.42 488.69,675.57" />
+                  <polygon id="zone-leftLowerLeg" class="body-zone" points="404.72,887.34 418.64,892.69 423,896.12 431.57,908.43 435.21,914.36 445.37,932.55 446.62,939.21 442.88,955.26 442.04,962.75 441.5,985.22 441.71,993.65 443.32,1014.51 443.42,1022 442.36,1039.66 440.69,1047.36 433.2,1069.29 430.39,1078.24 423.43,1102.32 421.35,1111.89 417.61,1137.04 416.36,1146.72 413.69,1171.32 413.38,1180.17 414.44,1201.03 414.96,1207.69 416.57,1221.07 416.36,1226.79 413.69,1242.84 407.34,1244.82 377.38,1238.93 371.13,1236.33 369,1228.84 368.89,1224.78 370.5,1211.41 371.23,1206 373.36,1191.55 373.36,1182.08 371.23,1147.84 369.67,1131.82 363.78,1083.66 362.02,1069.51 358.8,1044.91 358.18,1035.13 358.18,1009.44 358.91,999.98 362.65,976.97 364.63,968.44 371.05,947.58 372.61,940.61 374.22,925.62 374.74,918.97 375.8,899.71 377.67,895.86 386.24,895.32 389.88,893.97 400.04,887.55" />
+                  <polygon id="zone-leftFoot" class="body-zone" points="376.74,1238.51 407.24,1245.99 413.9,1250.15 417.64,1264.07 418.06,1268.95 416.45,1280.19 415,1283.52 409.11,1289.4 408.18,1293.25 409.24,1307.17 408.2,1312.37 401.78,1325.2 398.55,1328.43 388.4,1332.18 384.23,1332.91 373,1332.91 366.65,1331.45 345.25,1323.96 340.67,1320.32 338.53,1309.08 339.98,1303.99 349.62,1289 353.05,1282.45 361.08,1263.72 363.78,1256.86 369.67,1240.27" />
+                  <polygon id="zone-rightThigh" class="body-zone" points="523.76,675.26 610.96,648.5 629.07,648.81 634.95,677.18 637.04,688.31 641.85,717.2 642.89,727.08 643.43,749.02 643.43,756.3 642.89,771.81 642.58,775.98 641.51,781.86 641.3,784.36 641.3,791.32 640.47,797.04 636.19,819.51 634.32,829.71 628.96,859.66 628.13,869.55 629.2,890.41 627.64,894.47 618.55,894.47 614.7,893.22 604,886.81 599.42,886.39 586.58,890.67 582.62,893.58 575.14,904.28 572.02,910.42 563.45,931.28 560.96,933.57 556.67,924.48 554.59,918.13 548.18,894.59 546.41,885.12 543.73,859.98 542.07,849.89 536.18,823.13 533.27,812.52 524.17,784.7 521.05,772.11 514.09,735.2 512.74,722.92 512.74,696.71 511.91,690.05 507.63,682.02" />
+                  <polygon id="zone-rightLowerLeg" class="body-zone" points="603.36,885.63 614.59,893.66 618.55,895.01 627.64,893.94 629.72,899.24 631.33,927.6 633.3,938.31 641.87,965.07 644.57,975.58 649.92,1002.86 650.86,1011.91 650.32,1031.17 649.91,1038.46 648.3,1056.65 646.95,1065.29 641.6,1091.5 640.04,1104.19 637.36,1143.25 636.53,1154.69 634.92,1174.49 634.82,1182.19 635.89,1201.98 636.52,1208.33 638.65,1221.17 638.86,1225.44 637.79,1234.53 631.13,1237.34 597.96,1242.69 591.2,1241.23 589.59,1228.4 589.7,1222.36 591.84,1204.17 592.05,1194.8 590.98,1164.85 589.73,1151.53 584.38,1113.01 581.36,1098.24 571.2,1060.78 568.49,1051 564.75,1038.16 564.02,1030.25 564.02,1002.43 564.33,992.03 565.94,966.34 565.73,957.92 563.05,940.26 563.99,932.77 571.47,911.91 574.49,905.66 582.52,894.43 586.47,891.1 598.78,885.21" />
+                  <polygon id="zone-rightFoot" class="body-zone" points="639.56,1244.67 649.72,1276.23 653.68,1285.18 663.84,1299.63 666.13,1304.42 667.74,1314.58 666.39,1318.22 657.82,1326.79 652.1,1329.07 631.24,1332.29 624.68,1332.81 611.85,1332.27 607.69,1329.35 599.12,1314.91 597.25,1308.77 596.18,1291.65 594.83,1286.34 588.94,1276.18 588.11,1270.25 589.72,1249.91 596.69,1244.92 630.92,1239.57" />
+                </g>
                 <g id="statusMarkers" class="status-marker-layer"></g>
               </svg>    
             </div>
@@ -1468,6 +1269,16 @@
 
   <script>
     const params = new URLSearchParams(window.location.search);
+
+    /*
+      Beispiele:
+      ?head=4
+      ?neck=3&bleeding=neck
+      ?chest=3&blutung=brust
+      ?leftForearm=2&frostbite=leftForearm
+      ?rechterunterschenkel=4&blutung=rechterunterschenkel
+    */
+
 
     const OVERLAY_SCALE_X = 1;
     const OVERLAY_SCALE_Y = 1;
@@ -1614,46 +1425,76 @@
 
       const aliases = {
         head: ["head"],
+        kopf: ["head"],
+
+        neck: ["neck"],
+        hals: ["neck"],
+        nacken: ["neck"],
+        throat: ["neck"],
+
         chest: ["chest"],
+        brust: ["chest"],
+
         abdomen: ["abdomen"],
         belly: ["abdomen"],
+        bauch: ["abdomen"],
+
         pelvis: ["pelvis"],
+        becken: ["pelvis"],
 
         leftarm: ["leftUpperArm", "leftForearm"],
         larm: ["leftUpperArm", "leftForearm"],
+        linkerarm: ["leftUpperArm", "leftForearm"],
         leftupperarm: ["leftUpperArm"],
         luparm: ["leftUpperArm"],
+        linkeroberarm: ["leftUpperArm"],
         leftforearm: ["leftForearm"],
         lforearm: ["leftForearm"],
+        linkerunterarm: ["leftForearm"],
         lefthand: ["leftHand"],
         lhand: ["leftHand"],
+        linkehand: ["leftHand"],
 
         rightarm: ["rightUpperArm", "rightForearm"],
         rarm: ["rightUpperArm", "rightForearm"],
+        rechterarm: ["rightUpperArm", "rightForearm"],
         rightupperarm: ["rightUpperArm"],
         ruparm: ["rightUpperArm"],
+        rechteroberarm: ["rightUpperArm"],
         rightforearm: ["rightForearm"],
         rforearm: ["rightForearm"],
+        rechterunterarm: ["rightForearm"],
         righthand: ["rightHand"],
         rhand: ["rightHand"],
+        rechtehand: ["rightHand"],
 
         leftleg: ["leftThigh", "leftLowerLeg"],
         lleg: ["leftThigh", "leftLowerLeg"],
+        linkesbein: ["leftThigh", "leftLowerLeg"],
         leftthigh: ["leftThigh"],
         lthigh: ["leftThigh"],
+        linkeroberschenkel: ["leftThigh"],
         leftlowerleg: ["leftLowerLeg"],
         llowerleg: ["leftLowerLeg"],
+        linkerunterschenkel: ["leftLowerLeg"],
         leftfoot: ["leftFoot"],
         lfoot: ["leftFoot"],
+        linkerfuss: ["leftFoot"],
+        linkerfuß: ["leftFoot"],
 
         rightleg: ["rightThigh", "rightLowerLeg"],
         rleg: ["rightThigh", "rightLowerLeg"],
+        rechtesbein: ["rightThigh", "rightLowerLeg"],
         rightthigh: ["rightThigh"],
         rthigh: ["rightThigh"],
+        rechteroberschenkel: ["rightThigh"],
         rightlowerleg: ["rightLowerLeg"],
         rlowerleg: ["rightLowerLeg"],
+        rechterunterschenkel: ["rightLowerLeg"],
         rightfoot: ["rightFoot"],
-        rfoot: ["rightFoot"]
+        rfoot: ["rightFoot"],
+        rechterfuss: ["rightFoot"],
+        rechterfuß: ["rightFoot"]
       };
 
       return aliases[normalized] || [];
@@ -1686,36 +1527,22 @@
     }
 
     function getMarkerCenter(zoneKey) {
-      const centers = {
-        head: { x: 512, y: 122 },
-        chest: { x: 512, y: 352 },
-        abdomen: { x: 512, y: 488 },
-        pelvis: { x: 512, y: 622 },
+      const zone = document.getElementById(`zone-${zoneKey}`);
+      if (!zone) return null;
 
-        leftUpperArm: { x: 322, y: 474 },
-        leftForearm: { x: 262, y: 728 },
-        leftHand: { x: 232, y: 836 },
+      const box = zone.getBBox();
 
-        rightUpperArm: { x: 702, y: 474 },
-        rightForearm: { x: 762, y: 728 },
-        rightHand: { x: 792, y: 836 },
-
-        leftThigh: { x: 430, y: 842 },
-        leftLowerLeg: { x: 420, y: 1070 },
-        leftFoot: { x: 406, y: 1222 },
-
-        rightThigh: { x: 594, y: 842 },
-        rightLowerLeg: { x: 604, y: 1070 },
-        rightFoot: { x: 618, y: 1222 }
+      return {
+        x: box.x + box.width / 2,
+        y: box.y + box.height / 2
       };
-
-      return centers[zoneKey] || null;
     }
 
     function getMarkerOffset(zoneKey) {
       const offsets = {
         head: { dx: 110, dy: -24 },
-        chest: { dx: 120, dy: -20 },
+        neck: { dx: 105, dy: -18 },
+        chest: { dx: 118, dy: -18 },
         abdomen: { dx: 125, dy: 0 },
         pelvis: { dx: 115, dy: 22 },
 
@@ -1815,10 +1642,11 @@
       cha: getNumber("cha", 12),
 
       injuries: {
-        head: getNumber("head", 0),
-        chest: getNumber("chest", 0),
-        abdomen: getNumber("abdomen", 0),
-        pelvis: getNumber("pelvis", 0),
+        head: getNumber(["head", "kopf"], 0),
+        neck: getNumber(["neck", "hals", "nacken", "throat"], 0),
+        chest: getNumber(["chest", "brust"], 0),
+        abdomen: getNumber(["abdomen", "belly", "bauch"], 0),
+        pelvis: getNumber(["pelvis", "becken"], 0),
 
         leftUpperArm: getNumber(["leftUpperArm", "leftupperarm", "luparm"], legacyLeftArm),
         leftForearm: getNumber(["leftForearm", "leftforearm", "lforearm"], legacyLeftArm),
@@ -1992,350 +1820,6 @@
 
     document.getElementById("syncText").textContent = `${Math.round(syncPercent)}%`;
     document.getElementById("syncFill").style.setProperty("--sync", `${syncPercent}%`);
-  
-    /* ------------------------------
-       Live-Zonen-Editor
-       Nutzung:
-       - Seite lokal öffnen oder auf GitHub mit ?edit=1
-       - Zone auswählen
-       - Pfeiltasten = bewegen
-       - Shift + Pfeiltasten = schneller bewegen
-       - A/D = Breite ändern
-       - W/S = Höhe ändern
-       - +/- = insgesamt skalieren
-       - R = ausgewählte Zone zurücksetzen
-       - C = JSON kopieren
-    ------------------------------ */
-
-    const zoneEditorKeys = [
-      "head",
-      "chest",
-      "abdomen",
-      "pelvis",
-      "leftUpperArm",
-      "leftForearm",
-      "leftHand",
-      "rightUpperArm",
-      "rightForearm",
-      "rightHand",
-      "leftThigh",
-      "leftLowerLeg",
-      "leftFoot",
-      "rightThigh",
-      "rightLowerLeg",
-      "rightFoot"
-    ];
-
-    const zoneEditorLabels = {
-      head: "Kopf",
-      chest: "Brust",
-      abdomen: "Bauch",
-      pelvis: "Becken",
-      leftUpperArm: "Linker Oberarm",
-      leftForearm: "Linker Unterarm",
-      leftHand: "Linke Hand",
-      rightUpperArm: "Rechter Oberarm",
-      rightForearm: "Rechter Unterarm",
-      rightHand: "Rechte Hand",
-      leftThigh: "Linker Oberschenkel",
-      leftLowerLeg: "Linker Unterschenkel",
-      leftFoot: "Linker Fuß",
-      rightThigh: "Rechter Oberschenkel",
-      rightLowerLeg: "Rechter Unterschenkel",
-      rightFoot: "Rechter Fuß"
-    };
-
-    const zoneEditorDefaultTransforms = {
-      head: { dx: 0, dy: 0, sx: 1, sy: 1 },
-      chest: { dx: 0, dy: 0, sx: 1, sy: 1 },
-      abdomen: { dx: 0, dy: 0, sx: 1, sy: 1 },
-      pelvis: { dx: 0, dy: 0, sx: 1, sy: 1 },
-      leftUpperArm: { dx: 0, dy: 0, sx: 1, sy: 1 },
-      leftForearm: { dx: 0, dy: 0, sx: 1, sy: 1 },
-      leftHand: { dx: 0, dy: 0, sx: 1, sy: 1 },
-      rightUpperArm: { dx: 0, dy: 0, sx: 1, sy: 1 },
-      rightForearm: { dx: 0, dy: 0, sx: 1, sy: 1 },
-      rightHand: { dx: 0, dy: 0, sx: 1, sy: 1 },
-      leftThigh: { dx: 0, dy: 0, sx: 1, sy: 1 },
-      leftLowerLeg: { dx: 0, dy: 0, sx: 1, sy: 1 },
-      leftFoot: { dx: 0, dy: 0, sx: 1, sy: 1 },
-      rightThigh: { dx: 0, dy: 0, sx: 1, sy: 1 },
-      rightLowerLeg: { dx: 0, dy: 0, sx: 1, sy: 1 },
-      rightFoot: { dx: 0, dy: 0, sx: 1, sy: 1 }
-    };
-
-    function cloneZoneTransform(value) {
-      return {
-        dx: Number(value?.dx || 0),
-        dy: Number(value?.dy || 0),
-        sx: Number(value?.sx || 1),
-        sy: Number(value?.sy || 1)
-      };
-    }
-
-    function loadZoneEditorTransforms() {
-      let saved = {};
-
-      try {
-        saved = JSON.parse(localStorage.getItem("statusTrackerZoneTransforms") || "{}");
-      } catch {
-        saved = {};
-      }
-
-      const transforms = {};
-
-      zoneEditorKeys.forEach(key => {
-        transforms[key] = {
-          ...cloneZoneTransform(zoneEditorDefaultTransforms[key]),
-          ...cloneZoneTransform(saved[key])
-        };
-      });
-
-      return transforms;
-    }
-
-    let zoneEditorTransforms = loadZoneEditorTransforms();
-    let selectedZoneKey = "head";
-
-    function saveZoneEditorTransforms() {
-      localStorage.setItem(
-        "statusTrackerZoneTransforms",
-        JSON.stringify(zoneEditorTransforms)
-      );
-    }
-
-    function applyZoneEditorTransforms() {
-      zoneEditorKeys.forEach(key => {
-        const el = document.getElementById(`zone-${key}`);
-        const center = getMarkerCenter(key);
-        const transform = zoneEditorTransforms[key];
-
-        if (!el || !center || !transform) return;
-
-        el.setAttribute(
-          "transform",
-          [
-            `translate(${center.x + transform.dx} ${center.y + transform.dy})`,
-            `scale(${transform.sx} ${transform.sy})`,
-            `translate(${-center.x} ${-center.y})`
-          ].join(" ")
-        );
-      });
-    }
-
-    function forceZoneEditorVisibility() {
-      zoneEditorKeys.forEach(key => {
-        const el = document.getElementById(`zone-${key}`);
-        if (!el) return;
-
-        el.classList.add("active");
-        el.style.setProperty("--injury-color", key === selectedZoneKey ? "#ff6b3d" : "#ffe066");
-        el.style.fill = key === selectedZoneKey ? "#ff6b3d" : "#ffe066";
-        el.style.stroke = "rgba(255, 248, 248, 0.72)";
-        el.classList.toggle("zone-selected", key === selectedZoneKey);
-      });
-    }
-
-    function updateZoneEditorOutput() {
-      const output = document.getElementById("zoneEditorOutput");
-      if (!output) return;
-
-      const cleaned = {};
-
-      zoneEditorKeys.forEach(key => {
-        const t = zoneEditorTransforms[key];
-
-        if (
-          Math.abs(t.dx) > 0.01 ||
-          Math.abs(t.dy) > 0.01 ||
-          Math.abs(t.sx - 1) > 0.001 ||
-          Math.abs(t.sy - 1) > 0.001
-        ) {
-          cleaned[key] = {
-            dx: Number(t.dx.toFixed(2)),
-            dy: Number(t.dy.toFixed(2)),
-            sx: Number(t.sx.toFixed(3)),
-            sy: Number(t.sy.toFixed(3))
-          };
-        }
-      });
-
-      output.value = JSON.stringify(cleaned, null, 2);
-    }
-
-    function setSelectedZone(key) {
-      selectedZoneKey = key;
-      const select = document.getElementById("zoneEditorSelect");
-      if (select) select.value = key;
-      forceZoneEditorVisibility();
-      updateZoneEditorOutput();
-    }
-
-    function adjustSelectedZone(change) {
-      const t = zoneEditorTransforms[selectedZoneKey];
-      if (!t) return;
-
-      t.dx += change.dx || 0;
-      t.dy += change.dy || 0;
-      t.sx = Math.max(0.15, t.sx + (change.sx || 0));
-      t.sy = Math.max(0.15, t.sy + (change.sy || 0));
-
-      saveZoneEditorTransforms();
-      applyZoneEditorTransforms();
-      forceZoneEditorVisibility();
-      updateZoneEditorOutput();
-    }
-
-    function resetSelectedZone() {
-      zoneEditorTransforms[selectedZoneKey] = cloneZoneTransform(zoneEditorDefaultTransforms[selectedZoneKey]);
-      saveZoneEditorTransforms();
-      applyZoneEditorTransforms();
-      forceZoneEditorVisibility();
-      updateZoneEditorOutput();
-    }
-
-    function resetAllZones() {
-      zoneEditorTransforms = loadZoneEditorTransforms();
-      zoneEditorKeys.forEach(key => {
-        zoneEditorTransforms[key] = cloneZoneTransform(zoneEditorDefaultTransforms[key]);
-      });
-      saveZoneEditorTransforms();
-      applyZoneEditorTransforms();
-      forceZoneEditorVisibility();
-      updateZoneEditorOutput();
-    }
-
-    function createZoneEditorPanel() {
-      const panel = document.createElement("div");
-      panel.className = "zone-editor-panel";
-      panel.innerHTML = `
-        <strong>Zonen-Editor</strong>
-
-        <div class="zone-editor-row">
-          <select id="zoneEditorSelect">
-            ${zoneEditorKeys.map(key => `<option value="${key}">${zoneEditorLabels[key]}</option>`).join("")}
-          </select>
-        </div>
-
-        <div class="zone-editor-grid">
-          <button type="button" data-zone-action="up">↑</button>
-          <button type="button" data-zone-action="down">↓</button>
-          <button type="button" data-zone-action="left">←</button>
-          <button type="button" data-zone-action="right">→</button>
-
-          <button type="button" data-zone-action="narrow">Schmaler</button>
-          <button type="button" data-zone-action="wider">Breiter</button>
-          <button type="button" data-zone-action="shorter">Kürzer</button>
-          <button type="button" data-zone-action="taller">Höher</button>
-
-          <button type="button" data-zone-action="smaller">Kleiner</button>
-          <button type="button" data-zone-action="bigger">Größer</button>
-          <button type="button" data-zone-action="reset">Reset</button>
-          <button type="button" data-zone-action="copy">Copy</button>
-        </div>
-
-        <textarea id="zoneEditorOutput" spellcheck="false"></textarea>
-
-        <div class="zone-editor-help">
-          Pfeile = bewegen · Shift = schneller · A/D = Breite · W/S = Höhe · +/- = Größe · R = Reset · C = Copy
-        </div>
-      `;
-
-      document.body.appendChild(panel);
-
-      const select = document.getElementById("zoneEditorSelect");
-      select.addEventListener("change", event => {
-        setSelectedZone(event.target.value);
-      });
-
-      panel.addEventListener("click", event => {
-        const button = event.target.closest("button[data-zone-action]");
-        if (!button) return;
-
-        const action = button.dataset.zoneAction;
-
-        const actions = {
-          up: () => adjustSelectedZone({ dy: -3 }),
-          down: () => adjustSelectedZone({ dy: 3 }),
-          left: () => adjustSelectedZone({ dx: -3 }),
-          right: () => adjustSelectedZone({ dx: 3 }),
-          narrow: () => adjustSelectedZone({ sx: -0.025 }),
-          wider: () => adjustSelectedZone({ sx: 0.025 }),
-          shorter: () => adjustSelectedZone({ sy: -0.025 }),
-          taller: () => adjustSelectedZone({ sy: 0.025 }),
-          smaller: () => adjustSelectedZone({ sx: -0.025, sy: -0.025 }),
-          bigger: () => adjustSelectedZone({ sx: 0.025, sy: 0.025 }),
-          reset: resetSelectedZone,
-          copy: () => {
-            updateZoneEditorOutput();
-            const output = document.getElementById("zoneEditorOutput");
-            output.select();
-            navigator.clipboard?.writeText(output.value);
-          }
-        };
-
-        actions[action]?.();
-      });
-    }
-
-    function initZoneEditor() {
-      applyZoneEditorTransforms();
-
-      if (params.get("edit") !== "1") return;
-
-      document.body.classList.add("zone-edit-mode");
-
-      // Im Editor-Modus alle Zonen sichtbar machen, unabhängig von URL-Werten.
-      zoneEditorKeys.forEach(key => {
-        applyInjury(`zone-${key}`, 1);
-      });
-
-      createZoneEditorPanel();
-      forceZoneEditorVisibility();
-      updateZoneEditorOutput();
-
-      document.addEventListener("keydown", event => {
-        const tag = document.activeElement?.tagName?.toLowerCase();
-        if (tag === "textarea" || tag === "select" || tag === "input") return;
-
-        const fast = event.shiftKey ? 10 : 3;
-
-        if (event.key === "ArrowUp") {
-          event.preventDefault();
-          adjustSelectedZone({ dy: -fast });
-        } else if (event.key === "ArrowDown") {
-          event.preventDefault();
-          adjustSelectedZone({ dy: fast });
-        } else if (event.key === "ArrowLeft") {
-          event.preventDefault();
-          adjustSelectedZone({ dx: -fast });
-        } else if (event.key === "ArrowRight") {
-          event.preventDefault();
-          adjustSelectedZone({ dx: fast });
-        } else if (event.key.toLowerCase() === "a") {
-          adjustSelectedZone({ sx: -0.025 });
-        } else if (event.key.toLowerCase() === "d") {
-          adjustSelectedZone({ sx: 0.025 });
-        } else if (event.key.toLowerCase() === "w") {
-          adjustSelectedZone({ sy: 0.025 });
-        } else if (event.key.toLowerCase() === "s") {
-          adjustSelectedZone({ sy: -0.025 });
-        } else if (event.key === "+" || event.key === "=") {
-          adjustSelectedZone({ sx: 0.025, sy: 0.025 });
-        } else if (event.key === "-" || event.key === "_") {
-          adjustSelectedZone({ sx: -0.025, sy: -0.025 });
-        } else if (event.key.toLowerCase() === "r") {
-          resetSelectedZone();
-        } else if (event.key.toLowerCase() === "c") {
-          updateZoneEditorOutput();
-          const output = document.getElementById("zoneEditorOutput");
-          navigator.clipboard?.writeText(output.value);
-        }
-      });
-    }
-
-    initZoneEditor();
-
   </script>
 </body>
 </html>
