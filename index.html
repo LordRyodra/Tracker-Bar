@@ -1113,6 +1113,109 @@
         grid-template-columns: 1fr;
       }
     }
+  
+    /* ------------------------------
+       Zonen-Editor / Kalibrierungsmodus
+       Aktivieren mit: ?edit=1
+    ------------------------------ */
+
+    .zone-editor-panel {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 9999;
+      width: min(360px, calc(100vw - 32px));
+      padding: 14px;
+      border: 1px solid rgba(180, 230, 255, 0.24);
+      border-radius: 16px;
+      background: rgba(5, 13, 16, 0.94);
+      box-shadow:
+        0 0 22px rgba(100, 240, 255, 0.14),
+        inset 0 0 18px rgba(120, 240, 255, 0.05);
+      color: var(--text);
+      font-family: var(--font-main);
+      backdrop-filter: blur(10px);
+    }
+
+    .zone-editor-panel strong {
+      display: block;
+      margin-bottom: 8px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: rgba(235, 248, 255, 0.92);
+    }
+
+    .zone-editor-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+
+    .zone-editor-panel select,
+    .zone-editor-panel textarea,
+    .zone-editor-panel button {
+      border: 1px solid rgba(180, 230, 255, 0.18);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.045);
+      color: var(--text);
+      font-family: inherit;
+    }
+
+    .zone-editor-panel select {
+      width: 100%;
+      padding: 8px 10px;
+    }
+
+    .zone-editor-panel button {
+      padding: 7px 9px;
+      cursor: pointer;
+    }
+
+    .zone-editor-panel button:hover {
+      background: rgba(120, 240, 255, 0.10);
+      border-color: rgba(180, 230, 255, 0.38);
+    }
+
+    .zone-editor-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .zone-editor-panel textarea {
+      width: 100%;
+      height: 94px;
+      padding: 8px;
+      resize: vertical;
+      font-family: "Courier New", monospace;
+      font-size: 10px;
+      color: rgba(225, 250, 255, 0.9);
+    }
+
+    .zone-editor-help {
+      margin-top: 7px;
+      font-size: 11px;
+      line-height: 1.35;
+      color: rgba(220, 240, 255, 0.62);
+    }
+
+    .zone-edit-mode .body-zone {
+      opacity: 0.16 !important;
+      animation: none !important;
+    }
+
+    .zone-edit-mode .body-zone.zone-selected {
+      opacity: 0.78 !important;
+      stroke: rgba(255, 255, 255, 0.95) !important;
+      stroke-width: 3.5 !important;
+      filter:
+        drop-shadow(0 0 8px var(--injury-color, #ff6b3d))
+        drop-shadow(0 0 18px var(--injury-color, #ff6b3d)) !important;
+    }
+
   </style>
 </head>
 
@@ -1889,6 +1992,350 @@
 
     document.getElementById("syncText").textContent = `${Math.round(syncPercent)}%`;
     document.getElementById("syncFill").style.setProperty("--sync", `${syncPercent}%`);
+  
+    /* ------------------------------
+       Live-Zonen-Editor
+       Nutzung:
+       - Seite lokal öffnen oder auf GitHub mit ?edit=1
+       - Zone auswählen
+       - Pfeiltasten = bewegen
+       - Shift + Pfeiltasten = schneller bewegen
+       - A/D = Breite ändern
+       - W/S = Höhe ändern
+       - +/- = insgesamt skalieren
+       - R = ausgewählte Zone zurücksetzen
+       - C = JSON kopieren
+    ------------------------------ */
+
+    const zoneEditorKeys = [
+      "head",
+      "chest",
+      "abdomen",
+      "pelvis",
+      "leftUpperArm",
+      "leftForearm",
+      "leftHand",
+      "rightUpperArm",
+      "rightForearm",
+      "rightHand",
+      "leftThigh",
+      "leftLowerLeg",
+      "leftFoot",
+      "rightThigh",
+      "rightLowerLeg",
+      "rightFoot"
+    ];
+
+    const zoneEditorLabels = {
+      head: "Kopf",
+      chest: "Brust",
+      abdomen: "Bauch",
+      pelvis: "Becken",
+      leftUpperArm: "Linker Oberarm",
+      leftForearm: "Linker Unterarm",
+      leftHand: "Linke Hand",
+      rightUpperArm: "Rechter Oberarm",
+      rightForearm: "Rechter Unterarm",
+      rightHand: "Rechte Hand",
+      leftThigh: "Linker Oberschenkel",
+      leftLowerLeg: "Linker Unterschenkel",
+      leftFoot: "Linker Fuß",
+      rightThigh: "Rechter Oberschenkel",
+      rightLowerLeg: "Rechter Unterschenkel",
+      rightFoot: "Rechter Fuß"
+    };
+
+    const zoneEditorDefaultTransforms = {
+      head: { dx: 0, dy: 0, sx: 1, sy: 1 },
+      chest: { dx: 0, dy: 0, sx: 1, sy: 1 },
+      abdomen: { dx: 0, dy: 0, sx: 1, sy: 1 },
+      pelvis: { dx: 0, dy: 0, sx: 1, sy: 1 },
+      leftUpperArm: { dx: 0, dy: 0, sx: 1, sy: 1 },
+      leftForearm: { dx: 0, dy: 0, sx: 1, sy: 1 },
+      leftHand: { dx: 0, dy: 0, sx: 1, sy: 1 },
+      rightUpperArm: { dx: 0, dy: 0, sx: 1, sy: 1 },
+      rightForearm: { dx: 0, dy: 0, sx: 1, sy: 1 },
+      rightHand: { dx: 0, dy: 0, sx: 1, sy: 1 },
+      leftThigh: { dx: 0, dy: 0, sx: 1, sy: 1 },
+      leftLowerLeg: { dx: 0, dy: 0, sx: 1, sy: 1 },
+      leftFoot: { dx: 0, dy: 0, sx: 1, sy: 1 },
+      rightThigh: { dx: 0, dy: 0, sx: 1, sy: 1 },
+      rightLowerLeg: { dx: 0, dy: 0, sx: 1, sy: 1 },
+      rightFoot: { dx: 0, dy: 0, sx: 1, sy: 1 }
+    };
+
+    function cloneZoneTransform(value) {
+      return {
+        dx: Number(value?.dx || 0),
+        dy: Number(value?.dy || 0),
+        sx: Number(value?.sx || 1),
+        sy: Number(value?.sy || 1)
+      };
+    }
+
+    function loadZoneEditorTransforms() {
+      let saved = {};
+
+      try {
+        saved = JSON.parse(localStorage.getItem("statusTrackerZoneTransforms") || "{}");
+      } catch {
+        saved = {};
+      }
+
+      const transforms = {};
+
+      zoneEditorKeys.forEach(key => {
+        transforms[key] = {
+          ...cloneZoneTransform(zoneEditorDefaultTransforms[key]),
+          ...cloneZoneTransform(saved[key])
+        };
+      });
+
+      return transforms;
+    }
+
+    let zoneEditorTransforms = loadZoneEditorTransforms();
+    let selectedZoneKey = "head";
+
+    function saveZoneEditorTransforms() {
+      localStorage.setItem(
+        "statusTrackerZoneTransforms",
+        JSON.stringify(zoneEditorTransforms)
+      );
+    }
+
+    function applyZoneEditorTransforms() {
+      zoneEditorKeys.forEach(key => {
+        const el = document.getElementById(`zone-${key}`);
+        const center = getMarkerCenter(key);
+        const transform = zoneEditorTransforms[key];
+
+        if (!el || !center || !transform) return;
+
+        el.setAttribute(
+          "transform",
+          [
+            `translate(${center.x + transform.dx} ${center.y + transform.dy})`,
+            `scale(${transform.sx} ${transform.sy})`,
+            `translate(${-center.x} ${-center.y})`
+          ].join(" ")
+        );
+      });
+    }
+
+    function forceZoneEditorVisibility() {
+      zoneEditorKeys.forEach(key => {
+        const el = document.getElementById(`zone-${key}`);
+        if (!el) return;
+
+        el.classList.add("active");
+        el.style.setProperty("--injury-color", key === selectedZoneKey ? "#ff6b3d" : "#ffe066");
+        el.style.fill = key === selectedZoneKey ? "#ff6b3d" : "#ffe066";
+        el.style.stroke = "rgba(255, 248, 248, 0.72)";
+        el.classList.toggle("zone-selected", key === selectedZoneKey);
+      });
+    }
+
+    function updateZoneEditorOutput() {
+      const output = document.getElementById("zoneEditorOutput");
+      if (!output) return;
+
+      const cleaned = {};
+
+      zoneEditorKeys.forEach(key => {
+        const t = zoneEditorTransforms[key];
+
+        if (
+          Math.abs(t.dx) > 0.01 ||
+          Math.abs(t.dy) > 0.01 ||
+          Math.abs(t.sx - 1) > 0.001 ||
+          Math.abs(t.sy - 1) > 0.001
+        ) {
+          cleaned[key] = {
+            dx: Number(t.dx.toFixed(2)),
+            dy: Number(t.dy.toFixed(2)),
+            sx: Number(t.sx.toFixed(3)),
+            sy: Number(t.sy.toFixed(3))
+          };
+        }
+      });
+
+      output.value = JSON.stringify(cleaned, null, 2);
+    }
+
+    function setSelectedZone(key) {
+      selectedZoneKey = key;
+      const select = document.getElementById("zoneEditorSelect");
+      if (select) select.value = key;
+      forceZoneEditorVisibility();
+      updateZoneEditorOutput();
+    }
+
+    function adjustSelectedZone(change) {
+      const t = zoneEditorTransforms[selectedZoneKey];
+      if (!t) return;
+
+      t.dx += change.dx || 0;
+      t.dy += change.dy || 0;
+      t.sx = Math.max(0.15, t.sx + (change.sx || 0));
+      t.sy = Math.max(0.15, t.sy + (change.sy || 0));
+
+      saveZoneEditorTransforms();
+      applyZoneEditorTransforms();
+      forceZoneEditorVisibility();
+      updateZoneEditorOutput();
+    }
+
+    function resetSelectedZone() {
+      zoneEditorTransforms[selectedZoneKey] = cloneZoneTransform(zoneEditorDefaultTransforms[selectedZoneKey]);
+      saveZoneEditorTransforms();
+      applyZoneEditorTransforms();
+      forceZoneEditorVisibility();
+      updateZoneEditorOutput();
+    }
+
+    function resetAllZones() {
+      zoneEditorTransforms = loadZoneEditorTransforms();
+      zoneEditorKeys.forEach(key => {
+        zoneEditorTransforms[key] = cloneZoneTransform(zoneEditorDefaultTransforms[key]);
+      });
+      saveZoneEditorTransforms();
+      applyZoneEditorTransforms();
+      forceZoneEditorVisibility();
+      updateZoneEditorOutput();
+    }
+
+    function createZoneEditorPanel() {
+      const panel = document.createElement("div");
+      panel.className = "zone-editor-panel";
+      panel.innerHTML = `
+        <strong>Zonen-Editor</strong>
+
+        <div class="zone-editor-row">
+          <select id="zoneEditorSelect">
+            ${zoneEditorKeys.map(key => `<option value="${key}">${zoneEditorLabels[key]}</option>`).join("")}
+          </select>
+        </div>
+
+        <div class="zone-editor-grid">
+          <button type="button" data-zone-action="up">↑</button>
+          <button type="button" data-zone-action="down">↓</button>
+          <button type="button" data-zone-action="left">←</button>
+          <button type="button" data-zone-action="right">→</button>
+
+          <button type="button" data-zone-action="narrow">Schmaler</button>
+          <button type="button" data-zone-action="wider">Breiter</button>
+          <button type="button" data-zone-action="shorter">Kürzer</button>
+          <button type="button" data-zone-action="taller">Höher</button>
+
+          <button type="button" data-zone-action="smaller">Kleiner</button>
+          <button type="button" data-zone-action="bigger">Größer</button>
+          <button type="button" data-zone-action="reset">Reset</button>
+          <button type="button" data-zone-action="copy">Copy</button>
+        </div>
+
+        <textarea id="zoneEditorOutput" spellcheck="false"></textarea>
+
+        <div class="zone-editor-help">
+          Pfeile = bewegen · Shift = schneller · A/D = Breite · W/S = Höhe · +/- = Größe · R = Reset · C = Copy
+        </div>
+      `;
+
+      document.body.appendChild(panel);
+
+      const select = document.getElementById("zoneEditorSelect");
+      select.addEventListener("change", event => {
+        setSelectedZone(event.target.value);
+      });
+
+      panel.addEventListener("click", event => {
+        const button = event.target.closest("button[data-zone-action]");
+        if (!button) return;
+
+        const action = button.dataset.zoneAction;
+
+        const actions = {
+          up: () => adjustSelectedZone({ dy: -3 }),
+          down: () => adjustSelectedZone({ dy: 3 }),
+          left: () => adjustSelectedZone({ dx: -3 }),
+          right: () => adjustSelectedZone({ dx: 3 }),
+          narrow: () => adjustSelectedZone({ sx: -0.025 }),
+          wider: () => adjustSelectedZone({ sx: 0.025 }),
+          shorter: () => adjustSelectedZone({ sy: -0.025 }),
+          taller: () => adjustSelectedZone({ sy: 0.025 }),
+          smaller: () => adjustSelectedZone({ sx: -0.025, sy: -0.025 }),
+          bigger: () => adjustSelectedZone({ sx: 0.025, sy: 0.025 }),
+          reset: resetSelectedZone,
+          copy: () => {
+            updateZoneEditorOutput();
+            const output = document.getElementById("zoneEditorOutput");
+            output.select();
+            navigator.clipboard?.writeText(output.value);
+          }
+        };
+
+        actions[action]?.();
+      });
+    }
+
+    function initZoneEditor() {
+      applyZoneEditorTransforms();
+
+      if (params.get("edit") !== "1") return;
+
+      document.body.classList.add("zone-edit-mode");
+
+      // Im Editor-Modus alle Zonen sichtbar machen, unabhängig von URL-Werten.
+      zoneEditorKeys.forEach(key => {
+        applyInjury(`zone-${key}`, 1);
+      });
+
+      createZoneEditorPanel();
+      forceZoneEditorVisibility();
+      updateZoneEditorOutput();
+
+      document.addEventListener("keydown", event => {
+        const tag = document.activeElement?.tagName?.toLowerCase();
+        if (tag === "textarea" || tag === "select" || tag === "input") return;
+
+        const fast = event.shiftKey ? 10 : 3;
+
+        if (event.key === "ArrowUp") {
+          event.preventDefault();
+          adjustSelectedZone({ dy: -fast });
+        } else if (event.key === "ArrowDown") {
+          event.preventDefault();
+          adjustSelectedZone({ dy: fast });
+        } else if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          adjustSelectedZone({ dx: -fast });
+        } else if (event.key === "ArrowRight") {
+          event.preventDefault();
+          adjustSelectedZone({ dx: fast });
+        } else if (event.key.toLowerCase() === "a") {
+          adjustSelectedZone({ sx: -0.025 });
+        } else if (event.key.toLowerCase() === "d") {
+          adjustSelectedZone({ sx: 0.025 });
+        } else if (event.key.toLowerCase() === "w") {
+          adjustSelectedZone({ sy: 0.025 });
+        } else if (event.key.toLowerCase() === "s") {
+          adjustSelectedZone({ sy: -0.025 });
+        } else if (event.key === "+" || event.key === "=") {
+          adjustSelectedZone({ sx: 0.025, sy: 0.025 });
+        } else if (event.key === "-" || event.key === "_") {
+          adjustSelectedZone({ sx: -0.025, sy: -0.025 });
+        } else if (event.key.toLowerCase() === "r") {
+          resetSelectedZone();
+        } else if (event.key.toLowerCase() === "c") {
+          updateZoneEditorOutput();
+          const output = document.getElementById("zoneEditorOutput");
+          navigator.clipboard?.writeText(output.value);
+        }
+      });
+    }
+
+    initZoneEditor();
+
   </script>
 </body>
 </html>
