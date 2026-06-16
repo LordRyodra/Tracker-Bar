@@ -1007,6 +1007,87 @@
       animation: barSweep 2.7s linear infinite;
     }
 
+    .resonance-ticker {
+      position: relative;
+      margin-top: 9px;
+      height: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(180, 230, 255, 0.10);
+      border-radius: 999px;
+      background:
+        linear-gradient(90deg, rgba(143, 232, 255, 0.045), transparent 30%, rgba(143, 232, 255, 0.035)),
+        rgba(255, 255, 255, 0.018);
+      box-shadow:
+        inset 0 0 10px rgba(0, 0, 0, 0.38),
+        0 0 8px rgba(143, 232, 255, 0.035);
+    }
+
+    .resonance-ticker::before,
+    .resonance-ticker::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 42px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .resonance-ticker::before {
+      left: 0;
+      background: linear-gradient(90deg, rgba(4, 8, 11, 0.95), transparent);
+    }
+
+    .resonance-ticker::after {
+      right: 0;
+      background: linear-gradient(270deg, rgba(4, 8, 11, 0.95), transparent);
+    }
+
+    .resonance-track {
+      display: inline-flex;
+      align-items: center;
+      height: 100%;
+      white-space: nowrap;
+      will-change: transform;
+      animation: resonanceTicker var(--resonance-speed, 28s) linear infinite;
+    }
+
+    .resonance-text {
+      padding-right: 0;
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(220, 250, 255, 0.58);
+      text-shadow:
+        0 0 6px rgba(143, 232, 255, 0.22),
+        0 0 12px rgba(143, 232, 255, 0.08);
+    }
+
+    .resonance-name {
+      color: rgba(245, 255, 255, 0.78);
+    }
+
+    .resonance-value {
+      color: rgba(170, 255, 230, 0.80);
+    }
+
+    @keyframes resonanceTicker {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-25%);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .resonance-track {
+        animation: none;
+      }
+    }
+
     @keyframes ringSweep {
       from { --sweep-angle: 0deg; }
       to { --sweep-angle: 360deg; }
@@ -1294,6 +1375,9 @@
         </div>
         <div class="sync-bar">
           <div class="sync-fill" id="syncFill"></div>
+        </div>
+        <div class="resonance-ticker" aria-label="Resonanzen">
+          <div class="resonance-track" id="resonanceTrack"></div>
         </div>
       </a>
     </section>
@@ -1764,6 +1848,13 @@
       stamina: getNumber(["ausdauer", "stamina"], 100),
       sync: getNumber(["sync", "synchronisation"], 20),
 
+      resonances: [
+        { name: getText(["res1name", "r1name"], "Bollwerk"), value: getNumber(["bollwerk", "res1", "r1"], 50) },
+        { name: getText(["res2name", "r2name"], "Wächterherz"), value: getNumber(["waechterherz", "wächterherz", "res2", "r2"], 100) },
+        { name: getText(["res3name", "r3name"], "Der Suchende"), value: getNumber(["dersuchende", "suchende", "res3", "r3"], 5) },
+        { name: getText(["res4name", "r4name"], "Drachenblut"), value: getNumber(["drachenblut", "res4", "r4"], 0) }
+      ],
+
       str: getNumber("str", 13),
       dex: getNumber("dex", 14),
       con: getNumber("con", 12),
@@ -1951,8 +2042,35 @@
       applyInjury(`zone-${zoneKey}`, level);
     });
 
+    function renderResonanceTicker() {
+      const track = document.getElementById("resonanceTrack");
+      if (!track) return;
+
+      const items = stats.resonances
+        .filter(item => item.name && item.name.trim() !== "")
+        .map(item => {
+          const value = clamp(item.value, 0, 100);
+          return `<span class="resonance-name">${item.name}</span>: <span class="resonance-value">${Math.round(value)}%</span>`;
+        });
+
+      const text = items.length > 0
+        ? `${items.join(" <span aria-hidden=\"true\">|</span> ")} <span aria-hidden=\"true\">|</span>&nbsp;`
+        : `<span class="resonance-name">Keine Resonanzdaten</span> <span aria-hidden="true">|</span>&nbsp;`;
+
+      track.innerHTML = `
+        <span class="resonance-text">${text}</span>
+        <span class="resonance-text" aria-hidden="true">${text}</span>
+        <span class="resonance-text" aria-hidden="true">${text}</span>
+        <span class="resonance-text" aria-hidden="true">${text}</span>
+      `;
+
+      const speed = Math.max(20, items.join("").length * 0.7);
+      track.style.setProperty("--resonance-speed", `${speed}s`);
+    }
+
     document.getElementById("syncText").textContent = `${Math.round(syncPercent)}%`;
     document.getElementById("syncFill").style.setProperty("--sync", `${syncPercent}%`);
+    renderResonanceTicker();
   </script>
 </body>
 </html>
