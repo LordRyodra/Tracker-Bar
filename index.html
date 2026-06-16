@@ -181,6 +181,48 @@
       color: rgba(255, 214, 170, 0.92);
     }
 
+    .database-link-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 11px;
+      border: 1px solid rgba(180, 230, 255, 0.20);
+      border-radius: 999px;
+      background:
+        linear-gradient(135deg, rgba(143, 232, 255, 0.08), rgba(255, 255, 255, 0.025)),
+        rgba(255, 255, 255, 0.035);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      text-shadow: 0 0 6px rgba(143, 232, 255, 0.22);
+      box-shadow:
+        inset 0 0 10px rgba(143, 232, 255, 0.035),
+        0 0 8px rgba(143, 232, 255, 0.035);
+      transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease;
+    }
+
+    .database-link-button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(220, 245, 255, 0.38);
+      background:
+        linear-gradient(135deg, rgba(143, 232, 255, 0.14), rgba(255, 255, 255, 0.045)),
+        rgba(255, 255, 255, 0.055);
+      box-shadow:
+        0 0 12px rgba(143, 232, 255, 0.12),
+        inset 0 0 12px rgba(255, 255, 255, 0.035);
+    }
+
+    .database-link-button::before {
+      content: "↗";
+      font-size: 12px;
+      opacity: 0.82;
+    }
+
     .status-core {
       position: relative;
       z-index: 2;
@@ -1265,6 +1307,14 @@
         </span>
         <span class="meta-pill" id="characterSpecies">Mensch (nicht bestätigt)</span>
         <span class="meta-pill api-status-pill" id="apiStatus">URL</span>
+        <a
+          class="database-link-button"
+          id="databaseLink"
+          href="https://app.notion.com/p/Ryo-37e07d209dc0800886f6e8c8c6594bb1?source=copy_link"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Ryo Status-Datenbank in Notion öffnen"
+        >Datenbank</a>
       </div>
     </section>
 
