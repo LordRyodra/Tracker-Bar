@@ -1679,6 +1679,8 @@
       return offsets[zoneKey] || { dx: 100, dy: 0 };
     }
 
+    const markerStackCounter = {};
+
     function addStatusMarker(zoneKey, code, type) {
       const center = getMarkerCenter(zoneKey);
       if (!center) return;
