@@ -164,6 +164,23 @@
       text-shadow: 0 0 6px rgba(143, 232, 255, 0.18);
     }
 
+    .api-status-pill {
+      opacity: 0.72;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .api-status-pill.online {
+      border-color: rgba(120, 255, 210, 0.28);
+      color: rgba(190, 255, 230, 0.92);
+    }
+
+    .api-status-pill.offline {
+      border-color: rgba(255, 177, 107, 0.28);
+      color: rgba(255, 214, 170, 0.92);
+    }
+
     .status-core {
       position: relative;
       z-index: 2;
@@ -1247,6 +1264,7 @@
           Level <strong id="characterLevel">???</strong>
         </span>
         <span class="meta-pill" id="characterSpecies">Mensch (nicht bestätigt)</span>
+        <span class="meta-pill api-status-pill" id="apiStatus">URL</span>
       </div>
     </section>
 
@@ -1834,7 +1852,8 @@
     const legacyLeftLeg = getNumber(["rightleg", "rleg"], 0);
     const legacyRightLeg = getNumber(["leftleg", "lleg"], 0);
 
-    const stats = {
+    function getUrlStats() {
+      return {
       name: getText("name", "Ryo"),
       level: getText("level", "???"),
       species: getText(["species", "spezies"], "Mensch (nicht bestätigt)"),
@@ -1895,6 +1914,96 @@
         necrosis: getConditionInput(["necrosis", "nekrose", "verderbnis"])
       }
     };
+    }
+
+    
+
+    const DEFAULT_API_URL = "https://ryo-status-api.ryodra26.workers.dev/status";
+
+    function normalizeConditionFromApi(input) {
+      if (!input) {
+        return { active: false, zones: [] };
+      }
+
+      const rawZones = Array.isArray(input)
+        ? input
+        : String(input).split(/[;,|]/).flatMap(part => part.split(","));
+
+      const zones = rawZones
+        .flatMap(zone => expandZoneToken(String(zone)))
+        .filter(Boolean);
+
+      return {
+        active: zones.length > 0,
+        zones: [...new Set(zones)]
+      };
+    }
+
+    function normalizeApiStatus(apiStatus, fallback) {
+      const apiAttributes = apiStatus.attributes || {};
+      const apiInjuries = apiStatus.injuries || {};
+      const apiConditions = apiStatus.conditions || {};
+
+      return {
+        ...fallback,
+
+        name: apiStatus.name ?? fallback.name,
+        level: apiStatus.level ?? fallback.level,
+        species: apiStatus.species ?? fallback.species,
+
+        hp: Number(apiStatus.hp ?? fallback.hp),
+        hpMax: Number(apiStatus.hpMax ?? fallback.hpMax),
+        mana: Number(apiStatus.mana ?? fallback.mana),
+        manaMax: Number(apiStatus.manaMax ?? fallback.manaMax),
+        stamina: Number(apiStatus.stamina ?? fallback.stamina),
+        sync: Number(apiStatus.sync ?? fallback.sync),
+
+        str: Number(apiAttributes.str ?? fallback.str),
+        dex: Number(apiAttributes.dex ?? fallback.dex),
+        con: Number(apiAttributes.con ?? fallback.con),
+        int: Number(apiAttributes.int ?? fallback.int),
+        wis: Number(apiAttributes.wis ?? fallback.wis),
+        cha: Number(apiAttributes.cha ?? fallback.cha),
+
+        injuries: {
+          ...fallback.injuries,
+          ...Object.fromEntries(
+            Object.entries(apiInjuries).map(([key, value]) => [key, Number(value) || 0])
+          )
+        },
+
+        conditions: {
+          bleeding: normalizeConditionFromApi(apiConditions.bleeding),
+          poisoned: normalizeConditionFromApi(apiConditions.poisoned),
+          burning: normalizeConditionFromApi(apiConditions.burning),
+          fractured: normalizeConditionFromApi(apiConditions.fractured),
+          frostbite: normalizeConditionFromApi(apiConditions.frostbite),
+          necrosis: normalizeConditionFromApi(apiConditions.necrosis)
+        },
+
+        resonances: Array.isArray(apiStatus.resonances) && apiStatus.resonances.length > 0
+          ? apiStatus.resonances.map(item => ({
+              name: item.name || "",
+              value: Number(item.value) || 0
+            }))
+          : fallback.resonances
+      };
+    }
+
+    function setApiStatus(mode, message) {
+      const el = document.getElementById("apiStatus");
+      if (!el) return;
+
+      el.classList.remove("online", "offline");
+      el.classList.add(mode === "online" ? "online" : "offline");
+      el.textContent = message;
+    }
+
+function renderTracker(stats) {
+      document.getElementById("rings").innerHTML = "";
+      document.getElementById("attributes").innerHTML = "";
+      document.getElementById("conditionGrid").innerHTML = "";
+      document.getElementById("statusMarkers").innerHTML = "";
 
     document.getElementById("characterName").textContent = stats.name;
     document.getElementById("characterLevel").textContent = stats.level;
@@ -2071,6 +2180,42 @@
     document.getElementById("syncText").textContent = `${Math.round(syncPercent)}%`;
     document.getElementById("syncFill").style.setProperty("--sync", `${syncPercent}%`);
     renderResonanceTicker();
-  </script>
+    }
+
+    async function initTracker() {
+      const urlStats = getUrlStats();
+      let finalStats = urlStats;
+
+      const apiUrl = getText(["api", "apiUrl"], DEFAULT_API_URL);
+      const apiDisabled = ["0", "false", "off", "aus", "none"].includes(String(apiUrl).toLowerCase());
+
+      if (!apiDisabled) {
+        try {
+          setApiStatus("offline", "Lädt…");
+
+          const response = await fetch(apiUrl, {
+            cache: "no-store"
+          });
+
+          if (!response.ok) {
+            throw new Error(`API ${response.status}`);
+          }
+
+          const apiStatus = await response.json();
+          finalStats = normalizeApiStatus(apiStatus, urlStats);
+          setApiStatus("online", "Notion");
+        } catch (error) {
+          console.warn("Notion/Worker Status konnte nicht geladen werden. URL-Werte werden benutzt.", error);
+          setApiStatus("offline", "URL");
+        }
+      } else {
+        setApiStatus("offline", "URL");
+      }
+
+      renderTracker(finalStats);
+    }
+
+    initTracker();
+</script>
 </body>
 </html>
