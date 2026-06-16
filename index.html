@@ -683,17 +683,17 @@
 
     .status-marker line {
       stroke: var(--marker-color);
-      stroke-width: 1.5;
+      stroke-width: 1.8;
       stroke-linecap: round;
-      opacity: 0.72;
+      opacity: 0.78;
       filter: drop-shadow(0 0 4px var(--marker-color));
     }
 
     .status-marker-dot {
-      fill: rgba(220, 255, 255, 0.96);
+      fill: rgba(220, 255, 255, 0.98);
       stroke: rgba(4, 10, 13, 0.92);
-      stroke-width: 1.25;
-      filter: drop-shadow(0 0 6px var(--marker-color));
+      stroke-width: 1.35;
+      filter: drop-shadow(0 0 7px var(--marker-color));
     }
 
     .status-marker-pulse {
@@ -705,20 +705,20 @@
     }
 
     .status-marker-tag {
-      fill: rgba(5, 13, 16, 0.94);
+      fill: rgba(5, 13, 16, 0.96);
       stroke: var(--marker-color);
-      stroke-width: 1.35;
+      stroke-width: 1.55;
       filter:
-        drop-shadow(0 0 5px rgba(0, 0, 0, 0.7))
-        drop-shadow(0 0 6px var(--marker-color));
+        drop-shadow(0 0 6px rgba(0, 0, 0, 0.76))
+        drop-shadow(0 0 7px var(--marker-color));
     }
 
     .status-marker-text {
-      fill: rgba(245, 255, 255, 0.96);
+      fill: rgba(245, 255, 255, 0.98);
       font-family: "Courier New", monospace;
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: 0.05em;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 0.045em;
     }
 
     .status-marker[data-type="bleeding"] {
@@ -1572,33 +1572,31 @@
 
     function getMarkerOffset(zoneKey) {
       const offsets = {
-        head: { dx: 82, dy: -26 },
-        neck: { dx: 92, dy: -18 },
-        chest: { dx: 98, dy: -24 },
-        abdomen: { dx: 112, dy: 0 },
-        pelvis: { dx: 100, dy: 26 },
+        head: { dx: 95, dy: -28 },
+        neck: { dx: 105, dy: -18 },
+        chest: { dx: 108, dy: -24 },
+        abdomen: { dx: 118, dy: 0 },
+        pelvis: { dx: 108, dy: 24 },
 
-        leftUpperArm: { dx: -82, dy: -18 },
-        leftForearm: { dx: -86, dy: 6 },
-        leftHand: { dx: -74, dy: 4 },
+        leftUpperArm: { dx: -122, dy: -30 },
+        leftForearm: { dx: -106, dy: 4 },
+        leftHand: { dx: -90, dy: 0 },
 
-        rightUpperArm: { dx: 82, dy: -18 },
-        rightForearm: { dx: 86, dy: 6 },
-        rightHand: { dx: 74, dy: 4 },
+        rightUpperArm: { dx: 122, dy: -30 },
+        rightForearm: { dx: 106, dy: 4 },
+        rightHand: { dx: 90, dy: 0 },
 
-        leftThigh: { dx: -94, dy: 10 },
-        leftLowerLeg: { dx: -88, dy: 18 },
-        leftFoot: { dx: -74, dy: -16 },
+        leftThigh: { dx: -108, dy: 8 },
+        leftLowerLeg: { dx: -102, dy: 16 },
+        leftFoot: { dx: -88, dy: -16 },
 
-        rightThigh: { dx: 94, dy: 10 },
-        rightLowerLeg: { dx: 88, dy: 18 },
-        rightFoot: { dx: 74, dy: -16 }
+        rightThigh: { dx: 108, dy: 8 },
+        rightLowerLeg: { dx: 102, dy: 16 },
+        rightFoot: { dx: 88, dy: -16 }
       };
 
-      return offsets[zoneKey] || { dx: 92, dy: 0 };
+      return offsets[zoneKey] || { dx: 100, dy: 0 };
     }
-
-    const markerStackCounter = {};
 
     function addStatusMarker(zoneKey, code, type) {
       const center = getMarkerCenter(zoneKey);
@@ -1610,7 +1608,7 @@
       const stackIndex = markerStackCounter[stackKey] || 0;
       markerStackCounter[stackKey] = stackIndex + 1;
 
-      const stackShift = stackIndex * 28;
+      const stackShift = stackIndex * 34;
       const verticalDirection = dy < -8 ? -1 : 1;
 
       const tx = center.x + dx;
@@ -1638,20 +1636,20 @@
       dot.setAttribute("class", "status-marker-dot");
       dot.setAttribute("cx", center.x);
       dot.setAttribute("cy", center.y);
-      dot.setAttribute("r", "4.6");
+      dot.setAttribute("r", "5.2");
 
       const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
       rect.setAttribute("class", "status-marker-tag");
-      rect.setAttribute("x", tx - 24);
-      rect.setAttribute("y", ty - 12);
-      rect.setAttribute("width", "48");
-      rect.setAttribute("height", "24");
-      rect.setAttribute("rx", "7");
+      rect.setAttribute("x", tx - 31);
+      rect.setAttribute("y", ty - 15);
+      rect.setAttribute("width", "62");
+      rect.setAttribute("height", "30");
+      rect.setAttribute("rx", "8");
 
       const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
       text.setAttribute("class", "status-marker-text");
       text.setAttribute("x", tx);
-      text.setAttribute("y", ty + 5);
+      text.setAttribute("y", ty + 6);
       text.setAttribute("text-anchor", "middle");
       text.textContent = code;
 
