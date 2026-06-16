@@ -216,7 +216,7 @@
 
     .ring-label {
       margin-bottom: 10px;
-      font-size: 17px;
+      font-size: 18px;
       color: var(--text);
       text-shadow: 0 0 8px var(--ring-color);
     }
@@ -716,7 +716,7 @@
     .status-marker-text {
       fill: rgba(245, 255, 255, 0.98);
       font-family: "Courier New", monospace;
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 900;
       letter-spacing: 0.045em;
     }
@@ -961,7 +961,7 @@
       display: flex;
       justify-content: space-between;
       margin-bottom: 8px;
-      font-size: 17px;
+      font-size: 18px;
       text-shadow: 0 0 8px rgba(255, 255, 255, 0.06);
     }
 
@@ -1309,11 +1309,37 @@
       ?chest=3&blutung=brust
       ?leftForearm=2&frostbite=leftForearm
       ?rechterunterschenkel=4&blutung=rechterunterschenkel
+      ?bleeding=all
+      ?bleeding=screenleftupperarm,screenrightupperarm
     */
 
 
     const OVERLAY_SCALE_X = 1;
     const OVERLAY_SCALE_Y = 1;
+
+    const ALL_ZONES = [
+      "head",
+      "neck",
+      "chest",
+      "abdomen",
+      "pelvis",
+
+      "leftUpperArm",
+      "leftForearm",
+      "leftHand",
+
+      "rightUpperArm",
+      "rightForearm",
+      "rightHand",
+
+      "leftThigh",
+      "leftLowerLeg",
+      "leftFoot",
+
+      "rightThigh",
+      "rightLowerLeg",
+      "rightFoot"
+    ];
 
     const links = {
       hp: "https://app.notion.com/p/HP-37e07d209dc08040ab7afe7e2c54058b?source=copy_link",
@@ -1455,6 +1481,18 @@
     function expandZoneToken(zone) {
       const normalized = zone.trim().toLowerCase().replace(/[\s_-]+/g, "");
 
+      if (
+        normalized === "all" ||
+        normalized === "alle" ||
+        normalized === "*" ||
+        normalized === "fullbody" ||
+        normalized === "wholebody" ||
+        normalized === "ganzerkörper" ||
+        normalized === "ganzerkorper"
+      ) {
+        return ALL_ZONES;
+      }
+
       const aliases = {
         head: ["head"],
         kopf: ["head"],
@@ -1527,6 +1565,25 @@
         rfoot: ["rightFoot"],
         rechterfuss: ["rightFoot"],
         rechterfuß: ["rightFoot"]
+
+        // Ansicht-von-vorne-Aliase: screenleft = im Bild links, screenright = im Bild rechts
+        screenleftarm: ["rightUpperArm", "rightForearm"],
+        screenleftupperarm: ["rightUpperArm"],
+        screenleftforearm: ["rightForearm"],
+        screenlefthand: ["rightHand"],
+        screenleftleg: ["rightThigh", "rightLowerLeg"],
+        screenleftthigh: ["rightThigh"],
+        screenleftlowerleg: ["rightLowerLeg"],
+        screenleftfoot: ["rightFoot"],
+
+        screenrightarm: ["leftUpperArm", "leftForearm"],
+        screenrightupperarm: ["leftUpperArm"],
+        screenrightforearm: ["leftForearm"],
+        screenrighthand: ["leftHand"],
+        screenrightleg: ["leftThigh", "leftLowerLeg"],
+        screenrightthigh: ["leftThigh"],
+        screenrightlowerleg: ["leftLowerLeg"],
+        screenrightfoot: ["leftFoot"],
       };
 
       return aliases[normalized] || [];
@@ -1559,6 +1616,41 @@
     }
 
     function getMarkerCenter(zoneKey) {
+      /*
+        Marker-Anker sind bewusst NICHT immer die geometrische Mitte.
+        Dadurch landen die Oberarm-/Beinmarker eher auf dem sichtbaren Körperteil
+        statt in der Mitte der oft sehr langen Polygone.
+      */
+      const anchors = {
+        head: { x: 512, y: 88 },
+        neck: { x: 512, y: 206 },
+        chest: { x: 512, y: 302 },
+        abdomen: { x: 512, y: 452 },
+        pelvis: { x: 512, y: 600 },
+
+        /*
+          Die Polygone sind aktuell aus Charakter-Sicht benannt:
+          left* liegt im Bild rechts, right* liegt im Bild links.
+        */
+        rightUpperArm: { x: 350, y: 350 },
+        rightForearm: { x: 282, y: 540 },
+        rightHand: { x: 248, y: 705 },
+
+        leftUpperArm: { x: 674, y: 350 },
+        leftForearm: { x: 742, y: 540 },
+        leftHand: { x: 776, y: 705 },
+
+        rightThigh: { x: 430, y: 780 },
+        rightLowerLeg: { x: 400, y: 1060 },
+        rightFoot: { x: 380, y: 1290 },
+
+        leftThigh: { x: 594, y: 780 },
+        leftLowerLeg: { x: 624, y: 1060 },
+        leftFoot: { x: 644, y: 1290 }
+      };
+
+      if (anchors[zoneKey]) return anchors[zoneKey];
+
       const zone = document.getElementById(`zone-${zoneKey}`);
       if (!zone) return null;
 
@@ -1572,26 +1664,30 @@
 
     function getMarkerOffset(zoneKey) {
       const offsets = {
-        head: { dx: 95, dy: -28 },
-        neck: { dx: 105, dy: -18 },
-        chest: { dx: 108, dy: -24 },
-        abdomen: { dx: 118, dy: 0 },
-        pelvis: { dx: 108, dy: 24 },
+        head: { dx: 92, dy: -26 },
+        neck: { dx: 104, dy: -12 },
+        chest: { dx: 112, dy: -18 },
+        abdomen: { dx: 120, dy: 0 },
+        pelvis: { dx: 112, dy: 26 },
 
-        rightUpperArm: { dx: -122, dy: -30 },
-        rightForearm: { dx: -106, dy: 4 },
-        rightHand: { dx: -90, dy: 0 },
+        /*
+          left* = Charakter links = Bild rechts.
+          right* = Charakter rechts = Bild links.
+        */
+        rightUpperArm: { dx: -128, dy: -24 },
+        rightForearm: { dx: -118, dy: 4 },
+        rightHand: { dx: -94, dy: 0 },
 
-        leftUpperArm: { dx: 122, dy: -30 },
-        leftForearm: { dx: 106, dy: 4 },
-        leftHand: { dx: 90, dy: 0 },
+        leftUpperArm: { dx: 128, dy: -24 },
+        leftForearm: { dx: 118, dy: 4 },
+        leftHand: { dx: 94, dy: 0 },
 
-        rightThigh: { dx: -108, dy: 8 },
-        rightLowerLeg: { dx: -102, dy: 16 },
+        rightThigh: { dx: -112, dy: 8 },
+        rightLowerLeg: { dx: -106, dy: 16 },
         rightFoot: { dx: -88, dy: -16 },
 
-        leftThigh: { dx: 108, dy: 8 },
-        leftLowerLeg: { dx: 102, dy: 16 },
+        leftThigh: { dx: 112, dy: 8 },
+        leftLowerLeg: { dx: 106, dy: 16 },
         leftFoot: { dx: 88, dy: -16 }
       };
 
@@ -1640,16 +1736,16 @@
 
       const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
       rect.setAttribute("class", "status-marker-tag");
-      rect.setAttribute("x", tx - 31);
-      rect.setAttribute("y", ty - 15);
-      rect.setAttribute("width", "62");
-      rect.setAttribute("height", "30");
+      rect.setAttribute("x", tx - 34);
+      rect.setAttribute("y", ty - 16);
+      rect.setAttribute("width", "68");
+      rect.setAttribute("height", "32");
       rect.setAttribute("rx", "8");
 
       const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
       text.setAttribute("class", "status-marker-text");
       text.setAttribute("x", tx);
-      text.setAttribute("y", ty + 6);
+      text.setAttribute("y", ty + 6.5);
       text.setAttribute("text-anchor", "middle");
       text.textContent = code;
 
