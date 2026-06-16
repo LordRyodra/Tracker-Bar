@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Body Zone Polygon Editor</title>
+  <style>
+    :root {
+      --bg: #071014;
+      --panel: rgba(9, 19, 24, 0.96);
+      --panel-soft: rgba(255,255,255,0.04);
+      --line: rgba(160, 235, 255, 0.22);
+      --text: #ebfbff;
+      --muted: rgba(235, 251, 255, 0.64);
+      --accent: #53e6ff;
+      --accent-2: #9fffb7;
+      --danger: #ff7d7d;
+      --zone: rgba(255, 196, 77, 0.28);
+      --zone-stroke: rgba(255, 247, 215, 0.8);
+      --zone-active: rgba(255, 121, 77, 0.40);
+      --handle: #aef6ff;
+      --handle-active: #ffffff;
+      --font: Inter, Calibri, Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(83,230,255,0.08), transparent 30%),
+        radial-gradient(circle at 90% 100%, rgba(122,255,171,0.05), transparent 26%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+    }
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: inset -10px 0 30px rgba(83,230,255,0.04);
+    }
+    .title { font-size: 20px; font-weight: 700; letter-spacing: 0.04em; }
+    .subtitle { font-size: 13px; color: var(--muted); line-height: 1.45; }
+    .block {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel-soft);
+    }
+    .block h3 {
+      margin: 0 0 10px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+    select, textarea, input, button {
+      font: inherit;
+    }
+    select, textarea, input[type="text"] {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    textarea {
+      min-height: 160px;
+      resize: vertical;
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .btn-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    button {
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: background .15s ease, transform .15s ease, border-color .15s ease;
+    }
+    button:hover { background: rgba(83,230,255,0.09); border-color: rgba(160,235,255,0.42); }
+    button:active { transform: translateY(1px); }
+    button.active { background: rgba(83,230,255,0.14); border-color: rgba(160,235,255,0.55); }
+    .small { font-size: 12px; color: var(--muted); line-height: 1.45; }
+    .kv { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; font-size: 12px; color: var(--muted); }
+    .stage {
+      position: relative;
+      min-width: 0;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+    .canvas-wrap {
+      width: min(92vw, 920px);
+      aspect-ratio: 1024 / 1336;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.02), transparent 26%),
+        rgba(255,255,255,0.02);
+      box-shadow:
+        0 0 30px rgba(83,230,255,0.08),
+        inset 0 0 24px rgba(83,230,255,0.04);
+      overflow: hidden;
+      position: relative;
+    }
+    svg { width: 100%; height: 100%; display: block; }
+    .grid line {
+      stroke: rgba(180,240,255,0.07);
+      stroke-width: 1;
+    }
+    .frame line, .frame path {
+      stroke: rgba(240,250,255,0.45);
+      stroke-width: 2;
+      fill: none;
+    }
+    .zone {
+      fill: var(--zone);
+      stroke: var(--zone-stroke);
+      stroke-width: 3;
+      cursor: pointer;
+      transition: fill .15s ease, opacity .15s ease, filter .15s ease;
+      filter: drop-shadow(0 0 10px rgba(255,196,77,0.25));
+    }
+    .zone:hover { opacity: 0.9; }
+    .zone.selected {
+      fill: var(--zone-active);
+      filter: drop-shadow(0 0 14px rgba(255,121,77,0.4));
+    }
+    .handle {
+      fill: var(--handle);
+      stroke: #09222a;
+      stroke-width: 2;
+      cursor: grab;
+    }
+    .handle.selected { fill: var(--handle-active); stroke: #ffb36b; }
+    .handle:active { cursor: grabbing; }
+    .handle-index {
+      fill: white;
+      font-size: 15px;
+      font-weight: 700;
+      text-shadow: 0 0 3px black;
+      pointer-events: none;
+    }
+    .hint {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(5,13,16,0.82);
+      font-size: 12px;
+      color: var(--muted);
+      max-width: 320px;
+      backdrop-filter: blur(8px);
+    }
+    @media (max-width: 1100px) {
+      body { grid-template-columns: 1fr; }
+      .sidebar { border-right: none; border-bottom: 1px solid var(--line); }
+      .canvas-wrap { width: min(96vw, 760px); }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div>
+      <div class="title">Body Zone Polygon Editor</div>
+      <div class="subtitle">
+        Damit geht es viel schneller: Zonen direkt mit der Maus anpassen, Punkte verschieben, neue Punkte hinzufügen und als JSON oder SVG kopieren.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Bild</h3>
+      <div class="small" style="margin-bottom:8px;">Lege diese HTML-Datei idealerweise in denselben Ordner wie dein Körperbild. Standard-Dateiname:</div>
+      <input id="imagePathInput" type="text" value="body-base-v3.png" />
+      <div class="btn-grid" style="margin-top:8px;">
+        <button id="reloadImageBtn">Bild neu laden</button>
+        <button id="toggleGridBtn">Raster an/aus</button>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Zone</h3>
+      <select id="zoneSelect"></select>
+      <div class="btn-grid" style="margin-top:8px;">
+        <button id="prevZoneBtn">Vorige</button>
+        <button id="nextZoneBtn">Nächste</button>
+        <button id="addPointBtn">Punkt hinzufügen</button>
+        <button id="deletePointBtn">Punkt löschen</button>
+        <button id="resetZoneBtn">Zone reset</button>
+        <button id="resetAllBtn">Alles reset</button>
+      </div>
+      <div class="small" style="margin-top:10px;">
+        <b>Maus:</b> Punkt greifen und ziehen.<br>
+        <b>Doppelklick</b> auf eine Kante = Punkt dazwischen einfügen.<br>
+        <b>Entf / Backspace</b> = ausgewählten Punkt löschen.
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Export</h3>
+      <div class="btn-grid" style="margin-bottom:8px;">
+        <button id="copyJsonBtn">JSON kopieren</button>
+        <button id="copySvgBtn">SVG kopieren</button>
+        <button id="downloadJsonBtn">JSON herunterladen</button>
+        <button id="clearStorageBtn">LocalStorage löschen</button>
+      </div>
+      <textarea id="exportOutput" spellcheck="false"></textarea>
+    </div>
+
+    <div class="block">
+      <h3>Status</h3>
+      <div class="kv">
+        <div>Aktive Zone</div><div id="statusZone">—</div>
+        <div>Ausgewählter Punkt</div><div id="statusPoint">—</div>
+        <div>Punkte in Zone</div><div id="statusPointCount">—</div>
+        <div>Modus</div><div id="statusMode">Normal</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="stage">
+    <div class="canvas-wrap">
+      <svg id="editorSvg" viewBox="0 0 1024 1336" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="scanGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="12" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        <g class="grid" id="gridGroup"></g>
+        <image id="bodyImage" href="body-base-v3.png" x="0" y="0" width="1024" height="1336" preserveAspectRatio="xMidYMid meet"/>
+
+        <g class="frame">
+          <path d="M30 40 H160" />
+          <path d="M30 40 V180" />
+          <path d="M994 40 H864" />
+          <path d="M994 40 V180" />
+          <path d="M30 1296 H160" />
+          <path d="M30 1296 V1156" />
+          <path d="M994 1296 H864" />
+          <path d="M994 1296 V1156" />
+        </g>
+
+        <g id="zonesLayer"></g>
+        <g id="handlesLayer"></g>
+      </svg>
+      <div class="hint">
+        Ziel: Zonen so ziehen, dass sie exakt der Kontur folgen. Danach einfach den JSON-Block kopieren und zurückschicken.
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'bodyZonePolygonEditor_v1';
+    const zoneLabels = {
+      head: 'Kopf',
+      chest: 'Brust',
+      abdomen: 'Bauch',
+      pelvis: 'Becken',
+      leftUpperArm: 'Linker Oberarm',
+      leftForearm: 'Linker Unterarm',
+      leftHand: 'Linke Hand',
+      rightUpperArm: 'Rechter Oberarm',
+      rightForearm: 'Rechter Unterarm',
+      rightHand: 'Rechte Hand',
+      leftThigh: 'Linker Oberschenkel',
+      leftLowerLeg: 'Linker Unterschenkel',
+      leftFoot: 'Linker Fuß',
+      rightThigh: 'Rechter Oberschenkel',
+      rightLowerLeg: 'Rechter Unterschenkel',
+      rightFoot: 'Rechter Fuß'
+    };
+
+    const defaultZones = {
+      head: [
+        [512, 46],[550, 58],[572, 94],[573, 139],[556, 185],[528, 209],[496, 209],[468, 185],[451, 139],[452, 94],[474, 58]
+      ],
+      chest: [
+        [405, 315],[438, 292],[586, 292],[619, 314],[623, 390],[595, 424],[429, 424],[401, 390]
+      ],
+      abdomen: [
+        [433, 423],[591, 423],[605, 490],[590, 565],[561, 592],[463, 592],[434, 564],[419, 489]
+      ],
+      pelvis: [
+        [458, 592],[566, 592],[577, 671],[548, 721],[476, 721],[447, 671]
+      ],
+      leftUpperArm: [
+        [347, 349],[374, 379],[356, 470],[324, 598],[296, 603],[291, 561],[309, 463],[326, 388]
+      ],
+      leftForearm: [
+        [296, 603],[324, 599],[311, 708],[283, 810],[252, 874],[225, 857],[238, 784],[268, 690]
+      ],
+      leftHand: [
+        [224, 857],[251, 876],[253, 932],[231, 989],[204, 975],[190, 926],[197, 886]
+      ],
+      rightUpperArm: [
+        [677, 349],[698, 388],[715, 463],[733, 561],[728, 603],[700, 598],[668, 470],[650, 379]
+      ],
+      rightForearm: [
+        [700, 598],[728, 603],[756, 690],[786, 784],[799, 857],[772, 874],[741, 810],[713, 708]
+      ],
+      rightHand: [
+        [772, 874],[799, 857],[806, 886],[813, 926],[799, 975],[772, 989],[750, 932],[752, 876]
+      ],
+      leftThigh: [
+        [456, 721],[440, 830],[431, 954],[407, 1030],[377, 998],[384, 894],[405, 790],[429, 735]
+      ],
+      leftLowerLeg: [
+        [407, 1030],[431, 1056],[427, 1181],[411, 1274],[382, 1262],[368, 1178],[377, 1071]
+      ],
+      leftFoot: [
+        [381, 1262],[410, 1276],[432, 1301],[425, 1328],[384, 1333],[353, 1320],[347, 1288]
+      ],
+      rightThigh: [
+        [568, 721],[595, 735],[619, 790],[640, 894],[647, 998],[617, 1030],[593, 954],[584, 830]
+      ],
+      rightLowerLeg: [
+        [617, 1030],[647, 1071],[656, 1178],[642, 1262],[613, 1274],[597, 1181],[593, 1056]
+      ],
+      rightFoot: [
+        [642, 1262],[676, 1288],[671, 1320],[640, 1333],[599, 1328],[592, 1301],[614, 1276]
+      ]
+    };
+
+    const svg = document.getElementById('editorSvg');
+    const zonesLayer = document.getElementById('zonesLayer');
+    const handlesLayer = document.getElementById('handlesLayer');
+    const zoneSelect = document.getElementById('zoneSelect');
+    const exportOutput = document.getElementById('exportOutput');
+    const imagePathInput = document.getElementById('imagePathInput');
+    const bodyImage = document.getElementById('bodyImage');
+    const gridGroup = document.getElementById('gridGroup');
+
+    let zones = loadZones();
+    let selectedZone = Object.keys(defaultZones)[0];
+    let selectedPointIndex = null;
+    let dragging = null;
+    let addPointMode = false;
+    let showGrid = true;
+
+    function loadZones() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        return mergeWithDefaults(saved);
+      } catch {
+        return mergeWithDefaults({});
+      }
+    }
+
+    function mergeWithDefaults(saved) {
+      const merged = {};
+      for (const [key, points] of Object.entries(defaultZones)) {
+        const source = saved[key] && Array.isArray(saved[key]) && saved[key].length >= 3 ? saved[key] : points;
+        merged[key] = source.map(p => [Number(p[0]), Number(p[1])]);
+      }
+      return merged;
+    }
+
+    function saveZones() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(zones));
+    }
+
+    function pointsToString(points) {
+      return points.map(([x,y]) => `${x},${y}`).join(' ');
+    }
+
+    function renderZoneSelect() {
+      zoneSelect.innerHTML = Object.keys(defaultZones).map(key =>
+        `<option value="${key}">${zoneLabels[key]}</option>`
+      ).join('');
+      zoneSelect.value = selectedZone;
+    }
+
+    function renderGrid() {
+      gridGroup.innerHTML = '';
+      if (!showGrid) return;
+      for (let x = 0; x <= 1024; x += 64) {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', x); line.setAttribute('y1', 0);
+        line.setAttribute('x2', x); line.setAttribute('y2', 1336);
+        gridGroup.appendChild(line);
+      }
+      for (let y = 0; y <= 1336; y += 64) {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', 0); line.setAttribute('y1', y);
+        line.setAttribute('x2', 1024); line.setAttribute('y2', y);
+        gridGroup.appendChild(line);
+      }
+    }
+
+    function renderZones() {
+      zonesLayer.innerHTML = '';
+      Object.entries(zones).forEach(([key, points]) => {
+        const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        poly.setAttribute('points', pointsToString(points));
+        poly.setAttribute('class', `zone${key === selectedZone ? ' selected' : ''}`);
+        poly.dataset.zone = key;
+        poly.addEventListener('click', (event) => {
+          event.stopPropagation();
+          selectedZone = key;
+          selectedPointIndex = null;
+          addPointMode = false;
+          syncButtons();
+          renderAll();
+        });
+        poly.addEventListener('dblclick', (event) => {
+          event.stopPropagation();
+          const pt = getMousePosition(event);
+          insertPointOnNearestEdge(key, pt.x, pt.y);
+        });
+        zonesLayer.appendChild(poly);
+      });
+    }
+
+    function renderHandles() {
+      handlesLayer.innerHTML = '';
+      const points = zones[selectedZone];
+      points.forEach(([x,y], index) => {
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', x);
+        circle.setAttribute('cy', y);
+        circle.setAttribute('r', index === selectedPointIndex ? 9 : 7);
+        circle.setAttribute('class', `handle${index === selectedPointIndex ? ' selected' : ''}`);
+        circle.dataset.index = index;
+        circle.addEventListener('pointerdown', (event) => {
+          event.stopPropagation();
+          selectedPointIndex = index;
+          dragging = { zone: selectedZone, index };
+          circle.setPointerCapture(event.pointerId);
+          renderAll();
+        });
+        handlesLayer.appendChild(circle);
+
+        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        label.setAttribute('x', x + 12);
+        label.setAttribute('y', y - 10);
+        label.setAttribute('class', 'handle-index');
+        label.textContent = index + 1;
+        handlesLayer.appendChild(label);
+      });
+    }
+
+    function renderExport() {
+      const data = {};
+      Object.keys(zones).forEach(key => {
+        data[key] = zones[key].map(([x,y]) => [round(x), round(y)]);
+      });
+      exportOutput.value = JSON.stringify(data, null, 2);
+    }
+
+    function renderStatus() {
+      document.getElementById('statusZone').textContent = zoneLabels[selectedZone] || selectedZone;
+      document.getElementById('statusPoint').textContent = selectedPointIndex === null ? '—' : String(selectedPointIndex + 1);
+      document.getElementById('statusPointCount').textContent = String(zones[selectedZone].length);
+      document.getElementById('statusMode').textContent = addPointMode ? 'Punkt hinzufügen' : 'Normal';
+    }
+
+    function renderAll() {
+      renderGrid();
+      renderZoneSelect();
+      renderZones();
+      renderHandles();
+      renderExport();
+      renderStatus();
+      saveZones();
+    }
+
+    function getMousePosition(event) {
+      const pt = svg.createSVGPoint();
+      pt.x = event.clientX;
+      pt.y = event.clientY;
+      const transformed = pt.matrixTransform(svg.getScreenCTM().inverse());
+      return { x: clamp(transformed.x, 0, 1024), y: clamp(transformed.y, 0, 1336) };
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function round(value) {
+      return Math.round(value * 100) / 100;
+    }
+
+    function distancePointToSegment(px, py, ax, ay, bx, by) {
+      const dx = bx - ax;
+      const dy = by - ay;
+      if (dx === 0 && dy === 0) return Math.hypot(px - ax, py - ay);
+      const t = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)));
+      const cx = ax + t * dx;
+      const cy = ay + t * dy;
+      return { dist: Math.hypot(px - cx, py - cy), t, x: cx, y: cy };
+    }
+
+    function insertPointOnNearestEdge(zoneKey, x, y) {
+      const pts = zones[zoneKey];
+      let best = { dist: Infinity, insertIndex: pts.length };
+      for (let i = 0; i < pts.length; i++) {
+        const a = pts[i];
+        const b = pts[(i + 1) % pts.length];
+        const result = distancePointToSegment(x, y, a[0], a[1], b[0], b[1]);
+        if (result.dist < best.dist) {
+          best = { dist: result.dist, insertIndex: i + 1, x: result.x, y: result.y };
+        }
+      }
+      pts.splice(best.insertIndex, 0, [x, y]);
+      selectedPointIndex = best.insertIndex;
+      renderAll();
+    }
+
+    function deleteSelectedPoint() {
+      const pts = zones[selectedZone];
+      if (selectedPointIndex === null || pts.length <= 3) return;
+      pts.splice(selectedPointIndex, 1);
+      selectedPointIndex = null;
+      renderAll();
+    }
+
+    function resetSelectedZone() {
+      zones[selectedZone] = defaultZones[selectedZone].map(p => [...p]);
+      selectedPointIndex = null;
+      renderAll();
+    }
+
+    function resetAllZones() {
+      zones = mergeWithDefaults({});
+      selectedPointIndex = null;
+      renderAll();
+    }
+
+    function syncButtons() {
+      document.getElementById('addPointBtn').classList.toggle('active', addPointMode);
+    }
+
+    svg.addEventListener('pointermove', (event) => {
+      if (!dragging) return;
+      const pt = getMousePosition(event);
+      zones[dragging.zone][dragging.index] = [pt.x, pt.y];
+      selectedPointIndex = dragging.index;
+      renderAll();
+    });
+
+    svg.addEventListener('pointerup', () => {
+      dragging = null;
+    });
+
+    svg.addEventListener('pointerleave', () => {
+      dragging = null;
+    });
+
+    svg.addEventListener('click', (event) => {
+      if (!addPointMode) return;
+      const pt = getMousePosition(event);
+      const pts = zones[selectedZone];
+      if (selectedPointIndex === null) {
+        pts.push([pt.x, pt.y]);
+        selectedPointIndex = pts.length - 1;
+      } else {
+        pts.splice(selectedPointIndex + 1, 0, [pt.x, pt.y]);
+        selectedPointIndex += 1;
+      }
+      addPointMode = false;
+      syncButtons();
+      renderAll();
+    });
+
+    zoneSelect.addEventListener('change', (event) => {
+      selectedZone = event.target.value;
+      selectedPointIndex = null;
+      renderAll();
+    });
+
+    document.getElementById('prevZoneBtn').addEventListener('click', () => {
+      const keys = Object.keys(defaultZones);
+      const idx = keys.indexOf(selectedZone);
+      selectedZone = keys[(idx - 1 + keys.length) % keys.length];
+      selectedPointIndex = null;
+      renderAll();
+    });
+
+    document.getElementById('nextZoneBtn').addEventListener('click', () => {
+      const keys = Object.keys(defaultZones);
+      const idx = keys.indexOf(selectedZone);
+      selectedZone = keys[(idx + 1) % keys.length];
+      selectedPointIndex = null;
+      renderAll();
+    });
+
+    document.getElementById('addPointBtn').addEventListener('click', () => {
+      addPointMode = !addPointMode;
+      syncButtons();
+      renderStatus();
+    });
+
+    document.getElementById('deletePointBtn').addEventListener('click', deleteSelectedPoint);
+    document.getElementById('resetZoneBtn').addEventListener('click', resetSelectedZone);
+    document.getElementById('resetAllBtn').addEventListener('click', resetAllZones);
+
+    document.getElementById('copyJsonBtn').addEventListener('click', async () => {
+      renderExport();
+      await navigator.clipboard.writeText(exportOutput.value);
+    });
+
+    document.getElementById('copySvgBtn').addEventListener('click', async () => {
+      const svgCode = Object.keys(zones).map(key => {
+        return `<polygon id="zone-${key}" class="body-zone" points="${zones[key].map(([x,y]) => `${round(x)},${round(y)}`).join(' ')}" />`;
+      }).join('\n');
+      exportOutput.value = svgCode;
+      await navigator.clipboard.writeText(svgCode);
+    });
+
+    document.getElementById('downloadJsonBtn').addEventListener('click', () => {
+      const blob = new Blob([exportOutput.value], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'body-zone-polygons.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('clearStorageBtn').addEventListener('click', () => {
+      localStorage.removeItem(STORAGE_KEY);
+      zones = mergeWithDefaults({});
+      selectedPointIndex = null;
+      renderAll();
+    });
+
+    document.getElementById('reloadImageBtn').addEventListener('click', () => {
+      bodyImage.setAttribute('href', imagePathInput.value.trim() || 'body-base-v3.png');
+    });
+
+    document.getElementById('toggleGridBtn').addEventListener('click', () => {
+      showGrid = !showGrid;
+      renderGrid();
+    });
+
+    imagePathInput.addEventListener('change', () => {
+      bodyImage.setAttribute('href', imagePathInput.value.trim() || 'body-base-v3.png');
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Delete' || event.key === 'Backspace') {
+        if (document.activeElement === exportOutput || document.activeElement === imagePathInput) return;
+        event.preventDefault();
+        deleteSelectedPoint();
+      }
+      if (event.key === 'Escape') {
+        addPointMode = false;
+        selectedPointIndex = null;
+        syncButtons();
+        renderAll();
+      }
+    });
+
+    renderAll();
+    syncButtons();
+  </script>
+</body>
+</html>
