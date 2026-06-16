@@ -658,18 +658,18 @@
     }
 
     .body-zone.active {
-      opacity: 0.23;
+      opacity: 0.14;
     }
 
     @keyframes woundPulse {
       0%, 100% {
-        opacity: 0.62;
-        filter: drop-shadow(0 0 8px var(--injury-color));
+        opacity: 0.34;
+        filter: drop-shadow(0 0 5px var(--injury-color));
       }
 
       50% {
-        opacity: 0.95;
-        filter: drop-shadow(0 0 22px var(--injury-color));
+        opacity: 0.56;
+        filter: drop-shadow(0 0 14px var(--injury-color));
       }
     }
 
@@ -677,52 +677,84 @@
       pointer-events: none;
     }
 
+    .status-marker {
+      --marker-color: rgba(190, 255, 255, 0.82);
+    }
+
     .status-marker line {
-      stroke: rgba(190, 255, 255, 0.76);
-      stroke-width: 2;
+      stroke: var(--marker-color);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      opacity: 0.72;
+      filter: drop-shadow(0 0 4px var(--marker-color));
     }
 
     .status-marker-dot {
-      fill: rgba(190, 255, 255, 0.96);
-      filter: drop-shadow(0 0 8px rgba(190, 255, 255, 0.75));
+      fill: rgba(220, 255, 255, 0.96);
+      stroke: rgba(4, 10, 13, 0.92);
+      stroke-width: 1.25;
+      filter: drop-shadow(0 0 6px var(--marker-color));
+    }
+
+    .status-marker-pulse {
+      fill: transparent;
+      stroke: var(--marker-color);
+      stroke-width: 1.4;
+      opacity: 0.55;
+      animation: markerPulse 2.4s ease-in-out infinite;
     }
 
     .status-marker-tag {
-      fill: rgba(7, 16, 20, 0.94);
-      stroke: rgba(120, 255, 255, 0.52);
-      stroke-width: 1.5;
+      fill: rgba(5, 13, 16, 0.94);
+      stroke: var(--marker-color);
+      stroke-width: 1.35;
+      filter:
+        drop-shadow(0 0 5px rgba(0, 0, 0, 0.7))
+        drop-shadow(0 0 6px var(--marker-color));
     }
 
     .status-marker-text {
       fill: rgba(245, 255, 255, 0.96);
       font-family: "Courier New", monospace;
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
     }
 
-    .status-marker[data-type="bleeding"] .status-marker-tag {
-      stroke: rgba(255, 120, 120, 0.75);
+    .status-marker[data-type="bleeding"] {
+      --marker-color: rgba(255, 120, 120, 0.86);
     }
 
-    .status-marker[data-type="poisoned"] .status-marker-tag {
-      stroke: rgba(120, 255, 120, 0.75);
+    .status-marker[data-type="poisoned"] {
+      --marker-color: rgba(120, 255, 120, 0.82);
     }
 
-    .status-marker[data-type="burning"] .status-marker-tag {
-      stroke: rgba(255, 177, 107, 0.75);
+    .status-marker[data-type="burning"] {
+      --marker-color: rgba(255, 177, 107, 0.86);
     }
 
-    .status-marker[data-type="fractured"] .status-marker-tag {
-      stroke: rgba(240, 240, 240, 0.65);
+    .status-marker[data-type="fractured"] {
+      --marker-color: rgba(240, 240, 240, 0.76);
     }
 
-    .status-marker[data-type="frostbite"] .status-marker-tag {
-      stroke: rgba(143, 232, 255, 0.8);
+    .status-marker[data-type="frostbite"] {
+      --marker-color: rgba(143, 232, 255, 0.86);
     }
 
-    .status-marker[data-type="necrosis"] .status-marker-tag {
-      stroke: rgba(212, 255, 122, 0.75);
+    .status-marker[data-type="necrosis"] {
+      --marker-color: rgba(212, 255, 122, 0.82);
+    }
+
+    @keyframes markerPulse {
+      0%, 100% {
+        r: 7;
+        opacity: 0.18;
+      }
+
+      50% {
+        r: 15;
+        opacity: 0.54;
+      }
     }
 
     .condition-panel {
@@ -1415,8 +1447,8 @@
       el.style.setProperty("--injury-color", color);
       el.style.fill = color;
       el.style.stroke = "rgba(255, 248, 248, 0.92)";
-      el.style.opacity = "1";
-      el.style.filter = `drop-shadow(0 0 ${5 + clampedLevel * 3}px ${color})`;
+      el.style.opacity = "0.42";
+      el.style.filter = `drop-shadow(0 0 ${4 + clampedLevel * 2}px ${color})`;
       el.style.animation = `woundPulse ${pulseDurations[clampedLevel]} ease-in-out infinite`;
     }
 
@@ -1540,39 +1572,49 @@
 
     function getMarkerOffset(zoneKey) {
       const offsets = {
-        head: { dx: 110, dy: -24 },
-        neck: { dx: 105, dy: -18 },
-        chest: { dx: 118, dy: -18 },
-        abdomen: { dx: 125, dy: 0 },
-        pelvis: { dx: 115, dy: 22 },
+        head: { dx: 82, dy: -26 },
+        neck: { dx: 92, dy: -18 },
+        chest: { dx: 98, dy: -24 },
+        abdomen: { dx: 112, dy: 0 },
+        pelvis: { dx: 100, dy: 26 },
 
-        leftUpperArm: { dx: -95, dy: -16 },
-        leftForearm: { dx: -95, dy: 10 },
-        leftHand: { dx: -80, dy: 0 },
+        leftUpperArm: { dx: -82, dy: -18 },
+        leftForearm: { dx: -86, dy: 6 },
+        leftHand: { dx: -74, dy: 4 },
 
-        rightUpperArm: { dx: 95, dy: -16 },
-        rightForearm: { dx: 95, dy: 10 },
-        rightHand: { dx: 80, dy: 0 },
+        rightUpperArm: { dx: 82, dy: -18 },
+        rightForearm: { dx: 86, dy: 6 },
+        rightHand: { dx: 74, dy: 4 },
 
-        leftThigh: { dx: -105, dy: 12 },
-        leftLowerLeg: { dx: -95, dy: 18 },
-        leftFoot: { dx: -80, dy: -14 },
+        leftThigh: { dx: -94, dy: 10 },
+        leftLowerLeg: { dx: -88, dy: 18 },
+        leftFoot: { dx: -74, dy: -16 },
 
-        rightThigh: { dx: 105, dy: 12 },
-        rightLowerLeg: { dx: 95, dy: 18 },
-        rightFoot: { dx: 80, dy: -14 }
+        rightThigh: { dx: 94, dy: 10 },
+        rightLowerLeg: { dx: 88, dy: 18 },
+        rightFoot: { dx: 74, dy: -16 }
       };
 
-      return offsets[zoneKey] || { dx: 100, dy: 0 };
+      return offsets[zoneKey] || { dx: 92, dy: 0 };
     }
+
+    const markerStackCounter = {};
 
     function addStatusMarker(zoneKey, code, type) {
       const center = getMarkerCenter(zoneKey);
       if (!center) return;
 
       const { dx, dy } = getMarkerOffset(zoneKey);
+
+      const stackKey = `${zoneKey}:${Math.sign(dx) || 1}`;
+      const stackIndex = markerStackCounter[stackKey] || 0;
+      markerStackCounter[stackKey] = stackIndex + 1;
+
+      const stackShift = stackIndex * 28;
+      const verticalDirection = dy < -8 ? -1 : 1;
+
       const tx = center.x + dx;
-      const ty = center.y + dy;
+      const ty = center.y + dy + stackShift * verticalDirection;
 
       const layer = document.getElementById("statusMarkers");
 
@@ -1586,28 +1628,35 @@
       line.setAttribute("x2", tx);
       line.setAttribute("y2", ty);
 
+      const pulse = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      pulse.setAttribute("class", "status-marker-pulse");
+      pulse.setAttribute("cx", center.x);
+      pulse.setAttribute("cy", center.y);
+      pulse.setAttribute("r", "7");
+
       const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
       dot.setAttribute("class", "status-marker-dot");
       dot.setAttribute("cx", center.x);
       dot.setAttribute("cy", center.y);
-      dot.setAttribute("r", "6");
+      dot.setAttribute("r", "4.6");
 
       const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
       rect.setAttribute("class", "status-marker-tag");
-      rect.setAttribute("x", tx - 32);
-      rect.setAttribute("y", ty - 18);
-      rect.setAttribute("width", "64");
-      rect.setAttribute("height", "36");
-      rect.setAttribute("rx", "9");
+      rect.setAttribute("x", tx - 24);
+      rect.setAttribute("y", ty - 12);
+      rect.setAttribute("width", "48");
+      rect.setAttribute("height", "24");
+      rect.setAttribute("rx", "7");
 
       const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
       text.setAttribute("class", "status-marker-text");
       text.setAttribute("x", tx);
-      text.setAttribute("y", ty + 7);
+      text.setAttribute("y", ty + 5);
       text.setAttribute("text-anchor", "middle");
       text.textContent = code;
 
       group.appendChild(line);
+      group.appendChild(pulse);
       group.appendChild(dot);
       group.appendChild(rect);
       group.appendChild(text);
