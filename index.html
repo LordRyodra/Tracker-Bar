@@ -1310,6 +1310,7 @@
       ?leftForearm=2&frostbite=leftForearm
       ?rechterunterschenkel=4&blutung=rechterunterschenkel
       ?bleeding=all
+      ?blutung=alle
       ?bleeding=screenleftupperarm,screenrightupperarm
     */
 
@@ -1318,27 +1319,11 @@
     const OVERLAY_SCALE_Y = 1;
 
     const ALL_ZONES = [
-      "head",
-      "neck",
-      "chest",
-      "abdomen",
-      "pelvis",
-
-      "leftUpperArm",
-      "leftForearm",
-      "leftHand",
-
-      "rightUpperArm",
-      "rightForearm",
-      "rightHand",
-
-      "leftThigh",
-      "leftLowerLeg",
-      "leftFoot",
-
-      "rightThigh",
-      "rightLowerLeg",
-      "rightFoot"
+      "head", "neck", "chest", "abdomen", "pelvis",
+      "leftUpperArm", "leftForearm", "leftHand",
+      "rightUpperArm", "rightForearm", "rightHand",
+      "leftThigh", "leftLowerLeg", "leftFoot",
+      "rightThigh", "rightLowerLeg", "rightFoot"
     ];
 
     const links = {
@@ -1512,6 +1497,11 @@
         pelvis: ["pelvis"],
         becken: ["pelvis"],
 
+        /*
+          Anatomische Namen aus Sicht des Charakters:
+          left* = linker Arm / linkes Bein des Charakters.
+          Da die Figur frontal zu uns schaut, liegt left* im Bild rechts.
+        */
         leftarm: ["leftUpperArm", "leftForearm"],
         larm: ["leftUpperArm", "leftForearm"],
         linkerarm: ["leftUpperArm", "leftForearm"],
@@ -1566,7 +1556,11 @@
         rechterfuss: ["rightFoot"],
         rechterfuß: ["rightFoot"],
 
-        // Ansicht-von-vorne-Aliase: screenleft = im Bild links, screenright = im Bild rechts
+        /*
+          Bildschirm-Aliase:
+          screenleft* = links im Bild.
+          screenright* = rechts im Bild.
+        */
         screenleftarm: ["rightUpperArm", "rightForearm"],
         screenleftupperarm: ["rightUpperArm"],
         screenleftforearm: ["rightForearm"],
@@ -1583,7 +1577,7 @@
         screenrightleg: ["leftThigh", "leftLowerLeg"],
         screenrightthigh: ["leftThigh"],
         screenrightlowerleg: ["leftLowerLeg"],
-        screenrightfoot: ["leftFoot"],
+        screenrightfoot: ["leftFoot"]
       };
 
       return aliases[normalized] || [];
@@ -1617,9 +1611,8 @@
 
     function getMarkerCenter(zoneKey) {
       /*
-        Marker-Anker sind bewusst NICHT immer die geometrische Mitte.
-        Dadurch landen die Oberarm-/Beinmarker eher auf dem sichtbaren Körperteil
-        statt in der Mitte der oft sehr langen Polygone.
+        Marker-Anker sind manuell gesetzt, damit sie nicht aus langen Polygonen
+        in ungünstige Mittelpunkte rutschen.
       */
       const anchors = {
         head: { x: 512, y: 88 },
@@ -1628,10 +1621,6 @@
         abdomen: { x: 512, y: 452 },
         pelvis: { x: 512, y: 600 },
 
-        /*
-          Die Polygone sind aktuell aus Charakter-Sicht benannt:
-          left* liegt im Bild rechts, right* liegt im Bild links.
-        */
         rightUpperArm: { x: 350, y: 350 },
         rightForearm: { x: 282, y: 540 },
         rightHand: { x: 248, y: 705 },
@@ -1670,10 +1659,6 @@
         abdomen: { dx: 120, dy: 0 },
         pelvis: { dx: 112, dy: 26 },
 
-        /*
-          left* = Charakter links = Bild rechts.
-          right* = Charakter rechts = Bild links.
-        */
         rightUpperArm: { dx: -128, dy: -24 },
         rightForearm: { dx: -118, dy: 4 },
         rightHand: { dx: -94, dy: 0 },
@@ -1883,6 +1868,7 @@
     ];
 
     const ringsContainer = document.getElementById("rings");
+ = document.getElementById("rings");
 
     rings.forEach(ring => {
       const card = document.createElement("a");
@@ -1930,7 +1916,7 @@
 
     conditionConfig.forEach(condition => {
       const chip = document.createElement("div");
-      const state = stats.conditions[condition.key];
+      const state = stats.conditions[condition.key] || { active: false, zones: [] };
       const active = state.active;
 
       chip.className = `condition-chip${active ? " active" : ""}`;
@@ -1940,8 +1926,11 @@
         <span>${condition.label}</span>
       `;
 
+      // Wichtig: Alle Status-Chips werden immer angezeigt.
       conditionGrid.appendChild(chip);
 
+      // Marker erscheinen nur, wenn konkrete Zonen angegeben sind,
+      // z.B. ?bleeding=chest oder ?bleeding=all.
       if (active && state.zones.length > 0) {
         state.zones.forEach(zoneKey => {
           addStatusMarker(zoneKey, condition.code, condition.key);
