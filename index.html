@@ -2250,12 +2250,48 @@ function renderTracker(stats) {
     });
 
     const activeConditionCount = Object.values(stats.conditions)
-      .filter(condition => condition.active).length;
+  .filter(condition => condition.active).length;
 
-    document.getElementById("bodyStatusLabel").textContent =
-      activeConditionCount > 0
-        ? `${activeConditionCount} Status aktiv`
-        : "Stabil";
+const injuryLevels = Object.values(stats.injuries)
+  .map(value => Number(value) || 0);
+
+const maxInjuryLevel = Math.max(0, ...injuryLevels);
+const injuredZoneCount = injuryLevels.filter(level => level > 0).length;
+
+function getBodyStatusLabel() {
+  const statusText =
+    activeConditionCount > 0
+      ? `${activeConditionCount} Status aktiv`
+      : "";
+
+  let injuryText = "";
+
+  if (maxInjuryLevel >= 4) {
+    injuryText = "Kritischer Zustand";
+  } else if (maxInjuryLevel >= 3) {
+    injuryText = "Schwer verletzt";
+  } else if (maxInjuryLevel >= 2) {
+    injuryText = "Verletzt";
+  } else if (maxInjuryLevel >= 1) {
+    injuryText = "Leicht verletzt";
+  }
+
+  if (injuryText && statusText) {
+    return `${injuryText} · ${statusText}`;
+  }
+
+  if (injuryText) {
+    return injuryText;
+  }
+
+  if (statusText) {
+    return statusText;
+  }
+
+  return "Stabil";
+}
+
+document.getElementById("bodyStatusLabel").textContent = getBodyStatusLabel();
 
     Object.entries(stats.injuries).forEach(([zoneKey, level]) => {
       applyInjury(`zone-${zoneKey}`, level);
